@@ -32,6 +32,5 @@
     "concurrently": "^3.6.1",
     "nodemon": "^1.18.3",
     "webpack": "^4.17.0"
-  },
-  "proxy": "http://localhost:3001"
+  }
 }
