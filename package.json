@@ -30,8 +30,10 @@
     "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "concurrently \"cd server && nodemon server\" \"react-scripts start\"",
+    "start": "cd server && node server",
+    "dev": "concurrently \"cd server && nodemon server\" \"react-scripts start\"",
     "build": "react-scripts build",
+    "heroku-postbuild": "yarn && yarn run build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
