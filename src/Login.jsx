@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { doLogin } from './actions';
-
-const mapDispatchToProps = dispatch => {
-  return {
-    doLogin: user => dispatch(doLogin(user))
-  }
-}
+import * as actions from './actions';
 
 class Login extends Component {
   constructor(props) {
@@ -27,14 +21,16 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let user = {
-      name: 'Person 1',
-      username: 'p1p1p1',
-      email: this.state.email
+      email: this.state.email,
+      password: this.state.password
     }
-    this.props.doLogin(user);
+    this.props.doLogin(user, () => {
+      this.props.history.push('/games');
+    });
   }
 
   render() {
+    const {errorMessage} = this.props;
     return (
       <div className='Login'>
         <Helmet>
@@ -43,6 +39,7 @@ class Login extends Component {
         <link rel='canonical' href='https://hockeycompass.com/login' />
         </Helmet>
         <form onSubmit={this.handleSubmit}>
+          {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='email'>Email: </label>
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' onChange={this.handleChange} />
@@ -58,4 +55,8 @@ class Login extends Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Login);
+function mapStateToProps(state) {
+  return { errorMessage: state.user.errorMessage };
+}
+
+export default connect(mapStateToProps, actions)(Login);

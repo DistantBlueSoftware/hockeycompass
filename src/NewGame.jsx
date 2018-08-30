@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import moment from 'moment';
-import { newGame } from './actions';
+import * as actions from './actions';
+import requireAuth from './requireAuth';
 
 const mapStateToProps = state => {
   return {...state};
-}
-const mapDispatchToProps = dispatch => {
-  return {
-    newGame: game => dispatch(newGame(game))
-  }
 }
 
 class NewGame extends Component {
@@ -33,19 +29,27 @@ class NewGame extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let game = this.state;
-    game.host = this.props.user.name;
-    this.props.newGame(game);
-    this.props.history.push('/games');
+    game.host = this.props.user.username;
+    game.date = moment(game.date + ' ' + game.time);
+    this.props.newGame(game, () => {
+      console.log('game!')
+      this.props.history.push('/games');
+    });
   }
 
   render() {
     const { user } = this.props;
+    console.log(this.props)
    return (
       <div>
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label htmlFor='date'>Date: </label>
             <input className='form-control' type='date' name='date' id='date' defaultValue={this.state.date} onChange={this.handleChange} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='time'>Time: </label>
+            <input className='form-control' type='time' name='time' id='time' defaultValue={this.state.time} onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='location'>Location: </label>
@@ -83,4 +87,4 @@ class NewGame extends Component {
     )
   }
 }
-export default connect (mapStateToProps, mapDispatchToProps)(NewGame);
+export default connect(mapStateToProps, actions)(requireAuth(NewGame));

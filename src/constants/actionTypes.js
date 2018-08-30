@@ -1,5 +1,9 @@
-export const REGISTER = 'REGISTER';
+export const USER_AUTH = 'USER_AUTH';
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const UPDATE_ERROR = 'UPDATE_ERROR';
 export const ADD_PLAYER = 'ADD_PLAYER';
 export const NEW_GAME = 'NEW_GAME';
+export const LIST_GAMES = 'LIST_GAMES';
+export const SEND_EMAILS = 'SEND_EMAILS';

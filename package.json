@@ -3,8 +3,20 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "axios": "^0.18.0",
+    "bcrypt-nodejs": "^0.0.3",
+    "cors": "^2.8.4",
+    "email-templates": "^4.0.4",
+    "express": "^4.16.3",
+    "jwt-simple": "^0.5.1",
     "moment": "^2.22.2",
+    "mongoose": "^5.2.9",
+    "nexmo": "^2.3.2",
     "nodemailer": "^4.6.8",
+    "passport": "^0.4.0",
+    "passport-jwt": "^4.0.0",
+    "passport-local": "^1.0.0",
+    "pug": "^2.0.3",
     "react": "^16.4.2",
     "react-dom": "^16.4.2",
     "react-helmet": "^5.2.0",
@@ -13,12 +25,21 @@
     "react-router-dom": "^4.3.1",
     "react-scripts": "1.1.4",
     "redux": "^4.0.0",
-    "redux-persist": "^5.10.0"
+    "redux-logger": "^3.0.6",
+    "redux-persist": "^5.10.0",
+    "redux-thunk": "^2.3.0"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "concurrently \"cd server && nodemon server\" \"react-scripts start\"",
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "devDependencies": {
+    "autoprefixer": "^9.1.2",
+    "concurrently": "^3.6.1",
+    "nodemon": "^1.18.3",
+    "webpack": "^4.17.0"
+  },
+  "proxy": "http://localhost:3001"
 }

@@ -1,13 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
-import { doRegister } from './actions';
-
-const mapDispatchToProps = dispatch => {
-  return {
-    doRegister: user => dispatch(doRegister(user))
-  }
-}
+import * as actions from './actions';
 
 class Register extends Component {
   constructor(props) {
@@ -26,10 +20,12 @@ class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.doRegister(this.state);
-    this.props.history.push('/games');
+    this.props.doRegister(this.state, () => {
+      this.props.history.push('/games');
+    });
   }
   render() {
+    const {errorMessage} = this.props;
     return (
       <div>
         <Helmet>
@@ -38,6 +34,7 @@ class Register extends Component {
         <link rel='canonical' href='https://hockeycompass.com/register' />
         </Helmet>
         <form onSubmit={this.handleSubmit}>
+          {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='email'>Email: </label>
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' onChange={this.handleChange} />
@@ -61,4 +58,8 @@ class Register extends Component {
   }
 }
 
-export default connect(null, mapDispatchToProps)(Register);
+function mapStateToProps(state) {
+  return { errorMessage: state.user.errorMessage };
+}
+
+export default connect(mapStateToProps, actions)(Register);

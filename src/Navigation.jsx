@@ -2,17 +2,12 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import logo from './logo.png';
-import { doLogout } from './actions';
+import * as actions from './actions';
 
 const mapStateToProps = state => {
   return state;
 }
 
-const mapDispatchToProps = dispatch => {
-  return {
-    doLogout: () => dispatch(doLogout())
-  }
-}
 
 const Navigation = ({user, doLogout}) => (
   <nav className='navbar navbar-expand-lg navbar-light bg-light'>
@@ -25,11 +20,15 @@ const Navigation = ({user, doLogout}) => (
       <NavLink className='nav-link' to='/'><li className='nav-item'>Home</li></NavLink>
       <NavLink className='nav-link' to='/games'><li className='nav-item'>Games</li></NavLink>
     </ul>
-    {user &&
-      <button className='btn btn-outline-success' type='button' onClick={doLogout}>Logout</button>
+    {user.authenticated ?
+      <button className='btn btn-outline-success' type='button' onClick={doLogout}>Logout</button> :
+        <React.Fragment>
+        <NavLink className='nav-link' to='/login'><span>Login</span></NavLink>
+        <NavLink className='nav-link' to='/register'><span>Register</span></NavLink>
+        </React.Fragment>
     }
   </div>
   </nav>
 )
 
-export default connect(mapStateToProps, mapDispatchToProps)(Navigation);
+export default connect(mapStateToProps, actions)(Navigation);

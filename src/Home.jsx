@@ -18,7 +18,7 @@ const Home = ({user}) => (
     <p className='Home-intro'>
       Welcome to Hockey Compass
     </p>
-    {!user &&
+    {!user.authenticated &&
       <React.Fragment>
         <Link to='/login'><button className='btn btn-primary'>Login</button></Link>
         <Link to='/register'><button className='btn btn-success'>Register</button></Link>
