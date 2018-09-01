@@ -34,7 +34,7 @@ if (process.env.REACT_APP_ENV !=='localhost') {
 app.use(express.static(path.join(__dirname, 'client/build')));
 
 app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '..', '/client/build/index.html'));
+  res.sendFile(path.join(__dirname, '/client/build/index.html'));
 });
 }
 //To prevent errors from Cross Origin Resource Sharing, we will set our headers to allow CORS with middleware like so:

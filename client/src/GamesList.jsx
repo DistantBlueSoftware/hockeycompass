@@ -10,10 +10,6 @@ const mapStateToProps = state => {
 }
 
 class GamesList extends Component {
-  constructor(props) {
-    super(props);
-  }
-
   componentDidMount() {
     this.props.listGames();
   }
@@ -46,10 +42,10 @@ class GamesList extends Component {
               <tr key={index}>
                 <td style={{textAlign: 'center'}}>
                   {user.authenticated ?
-                    game.players.indexOf(user.username) === -1 ?
-                    <button className='btn btn-success' onClick={e => addPlayer(game)}>Play</button> :
-                    <button disabled className='btn btn-disabled'>Joined</button> :
-                    <span style={{color: 'green'}}>Open</span>
+                    game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers ?
+                    <button className='btn btn-success' onClick={e => addPlayer(game, user)}>Play</button> :
+                    game.players.indexOf(user.username) === -1 ? <span style={{color: 'red'}}>Full</span> : <button disabled className='btn btn-disabled'>Joined</button> :
+                    game.players.length < game.maxPlayers ? <span style={{color: 'green'}}>Open</span> : <span style={{color: 'red'}}>Full</span>
                     }
                 </td>
                 <td>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>

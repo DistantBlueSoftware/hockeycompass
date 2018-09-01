@@ -17,11 +17,12 @@
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
     "passport-local": "^1.0.0",
-    "pug": "^2.0.3"
+    "pug": "^2.0.3",
+    "react-scripts": "1.1.4"
   },
   "scripts": {
     "start": "node server",
-    "dev": "concurrently \"nodemon server\" \"cd client && react-scripts start\"",
+    "dev": "concurrently \"nodemon server\" \"cd ./client && react-scripts start\"",
     "build": "react-scripts build",
     "heroku-postbuild": "cd client && yarn && yarn run build",
     "test": "react-scripts test --env=jsdom",

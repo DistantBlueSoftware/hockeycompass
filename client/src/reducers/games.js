@@ -1,4 +1,4 @@
-import { ADD_PLAYER, NEW_GAME, LIST_GAMES, UPDATE_ERROR } from '../constants/actionTypes';
+import { ADD_PLAYER, NEW_GAME, LIST_GAMES, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   games: [],
@@ -8,22 +8,20 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case ADD_PLAYER:
-      const gameIndex = state.games.map(g => g.id).indexOf(action.payload.id);
-      return {...state, games: state.games.map((game, index) => {
-        if (index === gameIndex) {
-          if (game.players.indexOf(state.user.username) === -1) {
-            game.players = [...game.players, state.user.username];
-          }
+    case NEW_GAME:
+      const updatedGames = state.games.map(game => {
+        if (game._id === action.payload._id) {
+          return {...action.payload};
         }
         return game;
-      })}
-    case NEW_GAME:
-      return {...state, games: [...state.games, action.payload]}
+      })
+      return {...state, games: updatedGames, lastUpdate: new Date()};
     case LIST_GAMES:
-      console.log(action.payload)
-      return {...state, games: [...action.payload.data]}
+      return {...state, games: [...action.payload.data]};
     case UPDATE_ERROR:
-      return {...state, errorMessage: action.payload}
+      return {...state, errorMessage: action.payload};
+    case SEND_EMAILS:
+      return state;
     default:
       return state;
   }

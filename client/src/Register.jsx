@@ -48,6 +48,10 @@ class Register extends Component {
             <input className='form-control' type='text' name='name' id='name' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
+            <label htmlFor='name'>Phone: </label>
+            <input className='form-control' type='tel' name='phone' id='phone' onChange={this.handleChange} />
+          </div>
+          <div className='form-group'>
             <label htmlFor='password'>Password: </label>
             <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
           </div>

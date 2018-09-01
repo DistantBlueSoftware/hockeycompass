@@ -21,11 +21,14 @@ const Navigation = ({user, doLogout}) => (
       <NavLink className='nav-link' to='/games'><li className='nav-item'>Games</li></NavLink>
     </ul>
     {user.authenticated ?
-      <button className='btn btn-outline-success' type='button' onClick={doLogout}>Logout</button> :
-        <React.Fragment>
+      <React.Fragment>
+        <span className='navbar-text' style={{marginRight: '20px'}}>Welcome, {user.username}</span>
+        <button className='btn btn-outline-success' type='button' onClick={doLogout}>Logout</button>
+      </React.Fragment> :
+      <React.Fragment>
         <NavLink className='nav-link' to='/login'><span>Login</span></NavLink>
         <NavLink className='nav-link' to='/register'><span>Register</span></NavLink>
-        </React.Fragment>
+      </React.Fragment>
     }
   </div>
   </nav>
