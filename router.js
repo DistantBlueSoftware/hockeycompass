@@ -1,8 +1,17 @@
 const express = require('express');
 const router = express.Router();
-const nodemailer = require('nodemailer');
 const Nexmo = require('nexmo');
 const Email = require('email-templates');
+const mailgunTransport = require('nodemailer-mailgun-transport');
+
+const mailgunOptions = {
+  auth: {
+    api_key: process.env.MAILGUN_API_KEY,
+    domain: process.env.MAILGUN_DOMAIN,
+  }
+}
+const transport = mailgunTransport(mailgunOptions);
+
 const passport = require('passport');
 const moment = require('moment');
 
@@ -77,16 +86,14 @@ router.post('/games/:id/notification', (req, res, next) => {
                             .map(user => user.email)
                             .toString();
 
-      const mg = new Mailgun(process.env.MAILGUN_API_KEY);
+      //const mg = new Mailgun(process.env.MAILGUN_API_KEY);
       const email = new Email({
         message: {
           from: '"Hockey Compass" <no-reply@hockeycompass.com>'
         },
         // uncomment below to send emails in development/test env:
-        send: true,
-        transport: {
-          jsonTransport: true
-        }
+        //send: true,
+        transport
       });
 
       email.send({
