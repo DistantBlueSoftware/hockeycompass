@@ -4,17 +4,37 @@ import Helmet from 'react-helmet';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
+import { AdBanner } from './AdBanner';
+import PaymentModal from './PaymentModal';
 
 const mapStateToProps = state => {
   return {...state};
 }
 
 class GamesList extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showModal: false,
+      modalData: props.games.games[1]
+    }
+  }
   componentDidMount() {
     this.props.listGames();
   }
+
+  //disabled actual adding of players while working on modal
+  /*onClick={e => addPlayer(game, user)}*/
+
+  setCurrentGame = game => {
+    this.setState({
+      modalData: game
+    })
+  }
+
   render() {
-    const { games, user, addPlayer, sendEmails } = this.props;
+    const { games, user, sendEmails } = this.props;
+    const { modalData, showModal } = this.state;
     return (
     <div className='GamesList'>
       <Helmet>
@@ -43,7 +63,7 @@ class GamesList extends Component {
                 <td style={{textAlign: 'center'}}>
                   {user.authenticated ?
                     game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers ?
-                    <button className='btn btn-success' onClick={e => addPlayer(game, user)}>Play</button> :
+                    <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => this.setCurrentGame(game)}>Play</button> :
                     game.players.indexOf(user.username) === -1 ? <span style={{color: 'red'}}>Full</span> : <button disabled className='btn btn-disabled'>Joined</button> :
                     game.players.length < game.maxPlayers ? <span style={{color: 'green'}}>Open</span> : <span style={{color: 'red'}}>Full</span>
                     }
@@ -62,8 +82,12 @@ class GamesList extends Component {
         </table>
       </div>
       { user.authenticated &&
-        <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
+        <div className='text-center'>
+          <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
+        </div>
       }
+      <PaymentModal show={showModal} game={modalData} />
+      <AdBanner />
     </div>
   )
   }

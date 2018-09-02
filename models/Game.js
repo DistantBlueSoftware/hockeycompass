@@ -7,7 +7,8 @@ const GameSchema = new mongoose.Schema({
   location: {type: String},
   host: {type: String},
   maxPlayers: {type: Number},
-  players: {type: [String], optional: true}
+  players: {type: [String], optional: true},
+  costPerPlayer: {type: Number}
 });
 
 module.exports = mongoose.model('Game', GameSchema);

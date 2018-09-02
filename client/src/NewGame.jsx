@@ -32,7 +32,6 @@ class NewGame extends Component {
     game.host = this.props.user.username;
     game.date = moment(game.date + ' ' + game.time);
     this.props.newGame(game, () => {
-      console.log('game!')
       this.props.history.push('/games');
     });
   }
@@ -73,6 +72,10 @@ class NewGame extends Component {
           <div className='form-group'>
             <label htmlFor='maxPlayers'>Player Cap: </label>
             <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' onChange={this.handleChange} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='costPerPlayer'>Cost Per Player: </label>
+            <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='type'>Type: </label>

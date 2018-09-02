@@ -76,6 +76,8 @@ router.post('/games/:id/notification', (req, res, next) => {
                             .filter(user => req.body.players.indexOf(user.username) === -1)
                             .map(user => user.email)
                             .toString();
+
+      const mg = new Mailgun(process.env.MAILGUN_API_KEY);
       const email = new Email({
         message: {
           from: '"Hockey Compass" <no-reply@hockeycompass.com>'
