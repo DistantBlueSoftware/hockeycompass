@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const path = require('path');
 const Nexmo = require('nexmo');
 const Email = require('email-templates');
 const mailgunTransport = require('nodemailer-mailgun-transport');
@@ -88,6 +89,13 @@ router.post('/games/:id/notification', (req, res, next) => {
 
       //const mg = new Mailgun(process.env.MAILGUN_API_KEY);
       const email = new Email({
+        juice: true,
+        juiceResources: {
+          preserveImportant: true,
+          webResources: {
+            relativeTo: path.join(__dirname, 'client/build')
+          }
+        },
         message: {
           from: '"Hockey Compass" <no-reply@hockeycompass.com>'
         },
