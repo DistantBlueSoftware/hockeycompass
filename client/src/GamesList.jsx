@@ -86,7 +86,7 @@ class GamesList extends Component {
           <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
         </div>
       }
-      <PaymentModal show={showModal} game={modalData} />
+      <PaymentModal show={showModal} game={modalData} user={user} />
       <AdBanner />
     </div>
   )

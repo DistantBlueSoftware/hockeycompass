@@ -20,7 +20,7 @@ const PaymentModal = ({game, user, addPlayer}) => (
         <p>(${game.costPerPlayer} game fee + $1 convenience fee)</p>
       </div>
       <div className='modal-footer'>
-        <button className='btn btn-success' onClick={e => addPlayer(game, user)}>Pay and Join</button>
+        <button className='btn btn-success' onClick={e => addPlayer(game, user)} data-dismiss='modal'>Pay and Join</button>
         <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
       </div>
     </div>
