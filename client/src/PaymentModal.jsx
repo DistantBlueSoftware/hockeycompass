@@ -3,7 +3,7 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from './actions'
 
-const PaymentModal = ({game, user, addPlayer}) => (
+const PaymentModal = ({game = {}, user, addPlayer}) => (
   <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
   <div className='modal-dialog' role='document'>
     <div className='modal-content'>
