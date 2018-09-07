@@ -7,6 +7,8 @@ const userSchema = new Schema({
   name: String,
   email: {type: String, unique: true, lowercase: true, required: [true, 'can\'t be blank'], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
   phone: Number,
+  zipCode: String,
+  referralType: String,
   password: String
 }, {timestamps: true});
 

@@ -16,11 +16,11 @@ const PaymentModal = ({game = {}, user, addPlayer}) => (
       <div className='modal-body'>
         <p>Location: {game.location}</p>
         <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
-        <h3>Cost: ${game.costPerPlayer + 1}</h3>
-        <p>(${game.costPerPlayer} game fee + $1 convenience fee)</p>
+        <h3>Cost: ${user.username === game.host ? 0 : game.costPerPlayer + 1}</h3>
+        {user.username !== game.host && <p>(${game.costPerPlayer} game fee + $1 convenience fee)</p>}
       </div>
       <div className='modal-footer'>
-        <button className='btn btn-success' onClick={e => addPlayer(game, user)} data-dismiss='modal'>Pay and Join</button>
+        <button className='btn btn-success' onClick={e => addPlayer(game, user)} data-dismiss='modal'>{user.username !== game.host && 'Pay and '}Join</button>
         <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
       </div>
     </div>

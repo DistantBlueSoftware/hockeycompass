@@ -1,5 +1,6 @@
 import axios from 'axios';
-import { USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, NEW_GAME, LIST_GAMES, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import moment from 'moment';
 
 export const doRegister = (user, callback) => async dispatch => {
   try {
@@ -51,6 +52,19 @@ export const addPlayer = (game, user, callback) => async dispatch => {
     }
 }
 
+export const removePlayer = (game, user, callback) => async dispatch => {
+    try {
+      const response = await axios.put(
+        `/api/games/${game._id}/drop`,
+        user
+      );
+      dispatch ({ type: REMOVE_PLAYER, payload: response.data });
+      callback();
+    } catch (e) {
+      dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and you could not be added to this game.'})
+    }
+}
+
 export const sendEmails = game => async dispatch => {
   try {
     const response = await axios.post(
@@ -83,4 +97,21 @@ export const listGames = () => async dispatch => {
     } catch (e) {
       dispatch({ type: UPDATE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'})
     }
+}
+
+export const cancelGame = (game, callback) => async dispatch => {
+    if (moment(game.date).diff(moment().subtract(24, 'hours'), 'hours') < 24) {
+      dispatch({ type: UPDATE_ERROR, payload: 'This game is scheduled to start in less than 24 hours and cannot be canceled.'})
+    } else {
+      try {
+        const response = await axios.delete(
+          `/api/games/${game._id}`,
+          game
+        );
+        dispatch ({ type: DELETE_GAME, payload: response });
+        callback();
+      } catch (e) {
+        dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and the game could not be created. Please try again.'})
+      }
+  }
 }

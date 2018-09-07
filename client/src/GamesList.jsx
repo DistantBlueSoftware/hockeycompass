@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
 import { AdBanner } from './AdBanner';
+import JoinButton from './JoinButton';
 import PaymentModal from './PaymentModal';
 
 const mapStateToProps = state => {
@@ -23,9 +24,6 @@ class GamesList extends Component {
     this.props.listGames();
   }
 
-  //disabled actual adding of players while working on modal
-  /*onClick={e => addPlayer(game, user)}*/
-
   setCurrentGame = game => {
     this.setState({
       modalData: game
@@ -33,7 +31,7 @@ class GamesList extends Component {
   }
 
   render() {
-    const { games, user, sendEmails } = this.props;
+    const { games, user, sendEmails, cancelGame } = this.props;
     const { modalData, showModal } = this.state;
     return (
     <div className='GamesList'>
@@ -46,7 +44,7 @@ class GamesList extends Component {
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
             <tr>
-              <th></th>
+              <th>Join</th>
               <th>Date</th>
               <th>Location</th>
               <th>Name</th>
@@ -55,18 +53,13 @@ class GamesList extends Component {
               <th>Openings</th>
               <th>Type</th>
             </tr>
-            {games.games.filter(game => (game.type.toLowerCase() === 'public'))
+            {games.games.filter(game => (game.type.toLowerCase() === 'public' || game.host === user.username))
               .filter(game => moment(game.date) > moment())
               .sort((a,b) => moment(a.date) - moment(b.date))
               .map((game, index) => (
               <tr key={index}>
                 <td style={{textAlign: 'center'}}>
-                  {user.authenticated ?
-                    game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers ?
-                    <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => this.setCurrentGame(game)}>Play</button> :
-                    game.players.indexOf(user.username) === -1 ? <span style={{color: 'red'}}>Full</span> : <button disabled className='btn btn-disabled'>Joined</button> :
-                    game.players.length < game.maxPlayers ? <span style={{color: 'green'}}>Open</span> : <span style={{color: 'red'}}>Full</span>
-                    }
+                  <JoinButton user={user} game={game} setCurrentGame={this.setCurrentGame} />
                 </td>
                 <td>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
                 <td>{game.location}</td>
@@ -75,7 +68,20 @@ class GamesList extends Component {
                 <td>{game.players.length}</td>
                 <td>{game.maxPlayers - game.players.length || 0}</td>
                 <td>{game.type}</td>
-                {user.authenticated && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmails(game)}>Send Emails</button></td> : <td></td>}
+                {user.authenticated && game.type.toLowerCase() === 'public' && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmails(game)}>Send Emails</button></td> : <td></td>}
+                {user.authenticated &&
+                  game.host === user.username &&
+                  <td>
+                    {moment(game.date).diff(moment().subtract(24, 'hours'), 'hours') > 24 ?
+                      <button className='btn btn-danger' onClick={e => cancelGame(game)}>
+                        Cancel
+                      </button> :
+                      <button className='btn btn-danger disabled'>
+                        Locked
+                      </button>
+                    }
+                  </td>
+                }
               </tr>
             ))}
           </tbody>

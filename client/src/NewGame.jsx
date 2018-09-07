@@ -75,7 +75,7 @@ class NewGame extends Component {
           </div>
           <div className='form-group'>
             <label htmlFor='costPerPlayer'>Cost Per Player: </label>
-            <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' onChange={this.handleChange} />
+            <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' step='.01' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='type'>Type: </label>

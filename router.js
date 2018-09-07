@@ -1,17 +1,7 @@
 const express = require('express');
 const router = express.Router();
-const path = require('path');
 const Nexmo = require('nexmo');
-const Email = require('email-templates');
-const mailgunTransport = require('nodemailer-mailgun-transport');
-
-const mailgunOptions = {
-  auth: {
-    api_key: process.env.MAILGUN_API_KEY,
-    domain: process.env.MAILGUN_DOMAIN,
-  }
-}
-const transport = mailgunTransport(mailgunOptions);
+const emailService = require('./emailService');
 
 const passport = require('passport');
 const moment = require('moment');
@@ -58,7 +48,7 @@ router.get('/games/:id', (req, res, next) => {
     .catch((err) => next(err));
 });
 
-router.delete('/games/:id', requireAuth, function (req, res, next) {
+router.delete('/games/:id', function (req, res, next) {
   Game.findOneAndRemove({ _id: req.params.id })
     .exec()
     .then((game) => res.json())
@@ -71,11 +61,45 @@ router.put('/games/:id', (req, res, next) => {
     .then((game) => {
       game.players.push(req.body.username);
       game.save()
+        .then(() => {
+          if (game.host !== req.body.username) {
+            emailService.send({
+              template: 'join-game',
+              message: {
+                to: req.body.email
+              },
+              locals: {
+                name: game.name,
+                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                location: game.location,
+                url: process.env.ROOT_URL,
+                id: req.params.id
+              }
+            })
+          .then(console.log)
+          .catch(console.error);
+          }
+
+          res.json(game);
+        })
+        .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
+});
+
+router.put('/games/:id/drop', (req, res, next) => {
+  Game.findById(req.params.id)
+    .exec()
+    .then((game) => {
+      const playerIndex = game.players.indexOf(req.body.username);
+      game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
+      game.save()
         .then(() => res.json(game))
         .catch((err) => next(err));
     })
     .catch((err) => next(err));
 });
+
 router.post('/games/:id/notification', (req, res, next) => {
   //email notifications
   //get all users emails, then filter out those that are already in the game
@@ -86,25 +110,7 @@ router.post('/games/:id/notification', (req, res, next) => {
                             .filter(user => req.body.players.indexOf(user.username) === -1)
                             .map(user => user.email)
                             .toString();
-
-      //const mg = new Mailgun(process.env.MAILGUN_API_KEY);
-      const email = new Email({
-        juice: true,
-        juiceResources: {
-          preserveImportant: true,
-          webResources: {
-            relativeTo: path.join(__dirname, 'client/build')
-          }
-        },
-        message: {
-          from: '"Hockey Compass" <no-reply@hockeycompass.com>'
-        },
-        // uncomment below to send emails in development/test env:
-        //send: true,
-        transport
-      });
-
-      email.send({
+      emailService.send({
         template: 'notify-all',
         message: {
           to: 'no-reply@hockeycompass.com',

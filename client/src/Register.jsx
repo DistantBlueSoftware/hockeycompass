@@ -40,7 +40,7 @@ class Register extends Component {
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
-            <label htmlFor='name'>Username: </label>
+            <label htmlFor='username'>Username: </label>
             <input className='form-control' type='text' name='username' id='username' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
@@ -48,13 +48,37 @@ class Register extends Component {
             <input className='form-control' type='text' name='name' id='name' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
-            <label htmlFor='name'>Phone: </label>
+            <label htmlFor='phone'>Phone: </label>
             <input className='form-control' type='tel' name='phone' id='phone' onChange={this.handleChange} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='zipCode'>Zip Code: </label>
+            <input className='form-control' type='text' name='zipCode' id='zipCode' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='password'>Password: </label>
             <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
           </div>
+          <p>How did you hear about Hockey Compass?</p>
+          <div className='form-check'>
+            <label className='form-check-label' htmlFor='friend'>
+              <input type='radio' className='form-check-input' id='friend' name='referralType' value='friend' onChange={this.handleChange}/>
+              Word of Mouth
+            </label>
+          </div>
+          <div className='form-check'>
+            <label className='form-check-label' htmlFor='search'>
+              <input type='radio' className='form-check-input' id='search' name='referralType' value='search' onChange={this.handleChange}/>
+              Google / Search
+            </label>
+          </div>
+          <div className='form-check'>
+            <label className='form-check-label' htmlFor='other'>
+              <input type='radio' className='form-check-input' id='other' name='referralType' value='other' onChange={this.handleChange}/>
+              Other
+            </label>
+          </div>
+
           <button type='submit' className='btn btn-primary'>Register</button>
         </form>
       </div>
