@@ -3,13 +3,12 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import * as actions from './actions';
 
-
 class JoinButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
       hovering: false,
-      shouldDoAction: moment(props.game.date).diff(moment().subtract(24, 'hours'), 'hours') > 24
+      shouldDoAction: moment(props.game.date).diff(moment(), 'hours') > (this.props.lockoutThreshold || 24)
     }
   }
   showDropButton = () => {
@@ -29,6 +28,7 @@ class JoinButton extends Component {
   render () {
     const {hovering, shouldDoAction} = this.state;
     const {user, game, setCurrentGame} = this.props;
+    const isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
     const buttonText = hovering ? 'Drop' : shouldDoAction ? 'Joined' : 'Locked';
     const buttonStyle = hovering ? {color: '#ffc107'} : {color: '#B2B2B2'};
     const doShowButton = shouldDoAction ? this.showDropButton : null
@@ -36,14 +36,28 @@ class JoinButton extends Component {
 
     if (user.authenticated) {
       if (game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers) {
-        button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>Play</button>
+        if (game.type.toLowerCase() === 'public') {
+          button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>Join</button>
+        } else {
+          button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button>
+        }
+
       } else if (game.players.indexOf(user.username) === -1) {
         button = <span style={{color: 'red'}}>Full</span>
       } else {
-        button = <button className='btn btn-disabled' style={{...buttonStyle, width: '74px'}} onMouseOver={doShowButton} onMouseOut={doShowButton} onClick={() => shouldDoAction ? this.dropFromGame(game, user) : null}>{buttonText}</button>
+        if (isTouch) {
+          button = <button className='btn btn-disabled' style={{color: 'red', width: '74px'}} onClick={() => shouldDoAction ? this.dropFromGame(game, user) : null}>Drop</button>
+        } else {
+          button = <button className='btn btn-disabled' style={{...buttonStyle, width: '74px'}} onMouseOver={doShowButton} onMouseOut={doShowButton} onClick={() => shouldDoAction ? this.dropFromGame(game, user) : null}>{buttonText}</button>
+        }
+
       }
     } else if (game.players.length < game.maxPlayers) {
-      button = <span style={{color: 'green'}}>Open</span>
+      if (game.type.toLowerCase() === 'public') {
+        button = <button className='btn btn-success' onClick={e => setCurrentGame(game)}>Join</button>
+      } else {
+        button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button>
+      }
     } else {
       button = <span style={{color: 'red'}}>Full</span>
     }

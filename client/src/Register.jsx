@@ -6,7 +6,9 @@ import * as actions from './actions';
 class Register extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      validationError: ''
+    }
   }
 
   handleChange = (e) => {
@@ -14,18 +16,30 @@ class Register extends Component {
       const value = target.type === 'checkbox' ? target.checked : target.value;
       const name = target.name;
       this.setState({
+        validationError: '',
         [name]: value
       });
   }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.doRegister(this.state, () => {
-      this.props.history.push('/games');
-    });
+
+    const {validationError, password, passwordConfirm} = this.state;
+
+    if (password !== passwordConfirm) {
+      this.setState({
+        validationError: 'Passwords do not match.'
+      });
+    } else {
+      this.props.doRegister(this.state, () => {
+        this.props.history.push('/games');
+      });
+    }
   }
+
   render() {
     const {errorMessage} = this.props;
+    const {validationError, referralType} = this.state;
     return (
       <div>
         <Helmet>
@@ -37,15 +51,19 @@ class Register extends Component {
           {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='email'>Email: </label>
-            <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' onChange={this.handleChange} />
+            <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='username'>Username: </label>
-            <input className='form-control' type='text' name='username' id='username' onChange={this.handleChange} />
+            <input className='form-control' type='text' name='username' id='username' required onChange={this.handleChange} />
           </div>
           <div className='form-group'>
-            <label htmlFor='name'>Name: </label>
-            <input className='form-control' type='text' name='name' id='name' onChange={this.handleChange} />
+            <label htmlFor='name'>First Name: </label>
+            <input className='form-control' type='text' name='firstName' id='firstName' onChange={this.handleChange} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='name'>Last Name: </label>
+            <input className='form-control' type='text' name='lastName' id='lastName' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='phone'>Phone: </label>
@@ -57,28 +75,28 @@ class Register extends Component {
           </div>
           <div className='form-group'>
             <label htmlFor='password'>Password: </label>
-            <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
+            <input className='form-control' type='password' name='password' id='password' required onChange={this.handleChange} />
           </div>
-          <p>How did you hear about Hockey Compass?</p>
-          <div className='form-check'>
-            <label className='form-check-label' htmlFor='friend'>
-              <input type='radio' className='form-check-input' id='friend' name='referralType' value='friend' onChange={this.handleChange}/>
-              Word of Mouth
-            </label>
+          <div className='form-group'>
+            <label htmlFor='passwordConfirm'>Confirm Password: </label>
+            <input className='form-control' type='password' name='passwordConfirm' id='passwordConfirm' required onChange={this.handleChange} />
           </div>
-          <div className='form-check'>
-            <label className='form-check-label' htmlFor='search'>
-              <input type='radio' className='form-check-input' id='search' name='referralType' value='search' onChange={this.handleChange}/>
-              Google / Search
-            </label>
+          <div className='form-group'>
+            <label htmlFor='location'>How did you hear about Hockey Compass? </label>
+            <select className='form-control' name='referralType' id='referralType' onChange={this.handleChange} >
+              <option></option>
+              <option value='friend'>Word of Mouth</option>
+              <option value='search'>Google / Search</option>
+              <option value='other'>Other</option>
+            </select>
           </div>
-          <div className='form-check'>
-            <label className='form-check-label' htmlFor='other'>
-              <input type='radio' className='form-check-input' id='other' name='referralType' value='other' onChange={this.handleChange}/>
-              Other
-            </label>
-          </div>
-
+          {referralType === 'other' &&
+            <div className='form-group'>
+              <label htmlFor='referralTypeOther'>Please Describe: </label>
+              <input className='form-control' type='text' name='referralTypeOther' id='referralTypeOther' onChange={this.handleChange} />
+            </div>
+          }
+          {validationError && <div style={{fontSize: '20px', color: 'red'}}>{validationError}</div>}
           <button type='submit' className='btn btn-primary'>Register</button>
         </form>
       </div>

@@ -23,11 +23,11 @@ const Home = ({user}) => (
       </h1>
       {!user.authenticated &&
         <React.Fragment>
-          <Link to='/login'><button className='btn btn-primary'>Login</button></Link>
-          <Link to='/register'><button className='btn btn-success'>Register</button></Link>
+          <Link to='/login'><button className='btn btn-lg btn-primary'>Login</button></Link>
+          <Link to='/register'><button className='btn btn-lg btn-success'>Register</button></Link>
         </React.Fragment>
       }
-      <Link to='/games'><button className='btn btn-warning'>Games</button></Link>
+      <Link to='/games'><button className='btn btn-lg btn-warning'>Games</button></Link>
     </div>
 
     <AdBanner />

@@ -76,8 +76,30 @@ router.put('/games/:id', (req, res, next) => {
                 id: req.params.id
               }
             })
-          .then(console.log)
-          .catch(console.error);
+            .then(console.log)
+            .catch(console.error);
+          User.findOne({username: game.host})
+            .exec()
+            .then(user => {
+              emailService.send({
+                template: 'new-player-email-to-host',
+                message: {
+                  to: user.email
+                },
+                locals: {
+                  name: game.name,
+                  date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                  location: game.location,
+                  numOfPlayers: game.players.length,
+                  openings: game.maxPlayers - game.players.length,
+                  first: req.body.first,
+                  last: req.body.last
+                }
+              })
+              .then(console.log)
+              .catch(console.error);
+            })
+
           }
 
           res.json(game);
@@ -102,54 +124,75 @@ router.put('/games/:id/drop', (req, res, next) => {
 
 router.post('/games/:id/notification', (req, res, next) => {
   //email notifications
-  //get all users emails, then filter out those that are already in the game
-  User.find()
-    .exec()
-    .then(users => {
-      const playerEmails = users
-                            .filter(user => req.body.players.indexOf(user.username) === -1)
-                            .map(user => user.email)
-                            .toString();
-      emailService.send({
-        template: 'notify-all',
-        message: {
-          to: 'no-reply@hockeycompass.com',
-          bcc: playerEmails
-        },
-        locals: {
-          name: req.body.name,
-          date: moment(req.body.date).format('MM/DD/YYYY h:mmA'),
-          location: req.body.location,
-          url: process.env.ROOT_URL,
-          id: req.params.id
-        }
+  console.log(req.body)
+  const isPrivate = req.body.type && req.body.type.toLowerCase() === 'private';
+
+  if (isPrivate) {
+    User.findOne({username: req.body.host})
+      .exec()
+      .then(user => {
+        emailService.send({
+          template: 'contact-host',
+          message: {
+            to: user.email,
+            replyTo: req.body.email
+          },
+          locals: {
+            name: req.body.name,
+            playerName: req.body.playerName,
+            message: req.body.message
+          }
+        })
       })
-      .then(console.log)
-      .catch(console.error);
+  } else {
+    //get all users emails, then filter out those that are already in the game
+    User.find()
+      .exec()
+      .then(users => {
+        const playerEmails = users
+                              .filter(user => req.body.players.indexOf(user.username) === -1)
+                              .map(user => user.email)
+                              .toString();
+        emailService.send({
+          template: 'notify-all',
+          message: {
+            to: 'no-reply@hockeycompass.com',
+            bcc: playerEmails
+          },
+          locals: {
+            name: req.body.name,
+            date: moment(req.body.date).format('MM/DD/YYYY h:mmA'),
+            location: req.body.location,
+            url: process.env.ROOT_URL,
+            id: req.params.id
+          }
+        })
+        .then(console.log)
+        .catch(console.error);
 
-      //SMS notifications through Nexmo
-      // const nexmo = new Nexmo({
-      //   apiKey: process.env.NEXMO_KEY,
-      //   apiSecret: process.env.NEXMO_SECRET
-      // });
-      // nexmo.message.sendSms(
-      //   process.env.NEXMO_VIRTUAL_NUMBER, '17737327335', `🏒 Message from Hockey Compass 🏒:
-      // A Game near you is looking for players!
-      // Date: ${req.body.date}
-      // Location: ${req.body.location}
-      // Details and join here: http://${process.env.ROOT_URL}/game/join/${req.params.id}` ,
-      //     (err, responseData) => {
-      //       if (err) {
-      //         console.log(err);
-      //       } else {
-      //         console.dir(responseData);
-      //       }
-      //     }
-      // )
-      res.json({message: 'Message Sent'});
-    })
-    .catch((err) => next(err));
-
+        //SMS notifications through Nexmo
+        // const nexmo = new Nexmo({
+        //   apiKey: process.env.NEXMO_KEY,
+        //   apiSecret: process.env.NEXMO_SECRET
+        // });
+        // nexmo.message.sendSms(
+        //   process.env.NEXMO_VIRTUAL_NUMBER, '17737327335', `🏒 Message from Hockey Compass 🏒:
+        // A Game near you is looking for players!
+        // Date: ${req.body.date}
+        // Location: ${req.body.location}
+        // Details and join here: http://${process.env.ROOT_URL}/game/join/${req.params.id}` ,
+        //     (err, responseData) => {
+        //       if (err) {
+        //         console.log(err);
+        //       } else {
+        //         console.dir(responseData);
+        //       }
+        //     }
+        // )
+        res.json({message: 'Message Sent'});
+      })
+      .catch((err) => next(err));
+    }
 
 });
 

@@ -65,11 +65,11 @@ export const removePlayer = (game, user, callback) => async dispatch => {
     }
 }
 
-export const sendEmails = game => async dispatch => {
+export const sendEmail = (game, messageDetails) => async dispatch => {
   try {
     const response = await axios.post(
       `/api/games/${game._id}/notification`,
-      game
+      {...game, ...messageDetails}
     );
     dispatch ({ type: SEND_EMAILS, payload: response.data });
   } catch (e) {

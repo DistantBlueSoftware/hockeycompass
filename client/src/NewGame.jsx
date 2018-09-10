@@ -13,6 +13,7 @@ class NewGame extends Component {
     super(props);
     this.state = {
       date: moment().format('YYYY-MM-DD'),
+      time: '19:00',
       type: 'public'
     }
   }
@@ -29,11 +30,23 @@ class NewGame extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let game = this.state;
+    let needsConfirmation = false;
+    let confirmText = '';
     game.host = this.props.user.username;
     game.date = moment(game.date + ' ' + game.time);
-    this.props.newGame(game, () => {
-      this.props.history.push('/games');
-    });
+    if (game.costPerPlayer > 30) {
+      needsConfirmation = true;
+      confirmText = 'Cost per player is higher than average ($' + game.costPerPlayer + '). Continue?';
+    }
+    if (game.maxPlayers > 30) {
+      needsConfirmation = true;
+      confirmText = 'Maximum capacity of ' + game.maxPlayers + ' players is higher than average. Continue?';
+    }
+    if (needsConfirmation && window.confirm(confirmText)) {
+      this.props.newGame(game, () => {
+        this.props.history.push('/games');
+      });
+    }
   }
 
   render() {

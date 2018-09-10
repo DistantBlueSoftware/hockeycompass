@@ -7,6 +7,7 @@ import * as actions from './actions';
 import { AdBanner } from './AdBanner';
 import JoinButton from './JoinButton';
 import PaymentModal from './PaymentModal';
+import ContactModal from './ContactModal';
 
 const mapStateToProps = state => {
   return {...state};
@@ -27,11 +28,12 @@ class GamesList extends Component {
   setCurrentGame = game => {
     this.setState({
       modalData: game
-    })
+    });
+    if (!this.props.user.authenticated && game.type === 'public') this.props.history.push(`/login/${game._id}`);
   }
 
   render() {
-    const { games, user, sendEmails, cancelGame } = this.props;
+    const { games, user, sendEmail, cancelGame } = this.props;
     const { modalData, showModal } = this.state;
     return (
     <div className='GamesList'>
@@ -53,8 +55,7 @@ class GamesList extends Component {
               <th>Openings</th>
               <th>Type</th>
             </tr>
-            {games.games.filter(game => (game.type.toLowerCase() === 'public' || game.host === user.username))
-              .filter(game => moment(game.date) > moment())
+            {games.games.filter(game => moment(game.date) > moment())
               .sort((a,b) => moment(a.date) - moment(b.date))
               .map((game, index) => (
               <tr key={index}>
@@ -68,11 +69,11 @@ class GamesList extends Component {
                 <td>{game.players.length}</td>
                 <td>{game.maxPlayers - game.players.length || 0}</td>
                 <td>{game.type}</td>
-                {user.authenticated && game.type.toLowerCase() === 'public' && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmails(game)}>Send Emails</button></td> : <td></td>}
+                {user.authenticated && game.type.toLowerCase() === 'public' && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmail(game)}>Send Emails</button></td> : <td></td>}
                 {user.authenticated &&
                   game.host === user.username &&
                   <td>
-                    {moment(game.date).diff(moment().subtract(24, 'hours'), 'hours') > 24 ?
+                    {moment(game.date).diff(moment(), 'hours') > 0 ?
                       <button className='btn btn-danger' onClick={e => cancelGame(game)}>
                         Cancel
                       </button> :
@@ -93,6 +94,7 @@ class GamesList extends Component {
         </div>
       }
       <PaymentModal show={showModal} game={modalData} user={user} />
+      <ContactModal show={showModal} game={modalData} user={user} />
       <AdBanner />
     </div>
   )

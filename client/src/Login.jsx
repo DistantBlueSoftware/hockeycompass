@@ -24,8 +24,13 @@ class Login extends Component {
       email: this.state.email,
       password: this.state.password
     }
+    const id = this.props.match.params.id || null;
     this.props.doLogin(user, () => {
-      this.props.history.push('/games');
+      if (id) {
+        this.props.history.push(`/game/join/${id}`);
+      } else {
+        this.props.history.push('/games');
+      }
     });
   }
 
