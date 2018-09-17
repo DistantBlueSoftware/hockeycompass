@@ -33,7 +33,8 @@ class ContactModal extends Component {
   }
 
   render() {
-    const {game} = this.props;
+    let {game} = this.props;
+    if (!game) game = {};
     const { name, email, message } = this.state;
     return (
       <div className='modal fade' id='contact-modal' tabIndex='-1' role='dialog'>

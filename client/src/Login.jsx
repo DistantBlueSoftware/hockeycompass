@@ -21,7 +21,7 @@ class Login extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let user = {
-      email: this.state.email,
+      usernameOrEmail: this.state.usernameOrEmail,
       password: this.state.password
     }
     const id = this.props.match.params.id || null;
@@ -46,8 +46,8 @@ class Login extends Component {
         <form onSubmit={this.handleSubmit}>
           {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
-            <label htmlFor='email'>Email: </label>
-            <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' onChange={this.handleChange} />
+            <label htmlFor='usernameOrEmail'>Username or Email: </label>
+            <input className='form-control' type='text' name='usernameOrEmail' id='usernameOrEmail' onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='password'>Password: </label>
