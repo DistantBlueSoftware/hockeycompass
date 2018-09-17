@@ -46,6 +46,10 @@ class NewGame extends Component {
       this.props.newGame(game, () => {
         this.props.history.push('/games');
       });
+    } else {
+      this.props.newGame(game, () => {
+        this.props.history.push('/games');
+      });
     }
   }
 
@@ -80,7 +84,7 @@ class NewGame extends Component {
           </div>
           <div className='form-group'>
             <label htmlFor='creator'>Game Host: </label>
-            <input className='form-control' type='text' name='host' id='host' value={user.name} readOnly />
+            <input className='form-control' type='text' name='host' id='host' value={user.username} readOnly />
           </div>
           <div className='form-group'>
             <label htmlFor='maxPlayers'>Player Cap: </label>
