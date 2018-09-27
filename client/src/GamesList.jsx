@@ -8,6 +8,7 @@ import { AdBanner } from './AdBanner';
 import JoinButton from './JoinButton';
 import PaymentModal from './PaymentModal';
 import ContactModal from './ContactModal';
+import RosterModal from './RosterModal';
 
 const mapStateToProps = state => {
   return {...state};
@@ -25,11 +26,13 @@ class GamesList extends Component {
     this.props.listGames();
   }
 
-  setCurrentGame = game => {
+  setCurrentGame = (game, needsAuth) => {
     this.setState({
       modalData: game
     });
-    if (!this.props.user.authenticated && game.type === 'public') this.props.history.push(`/login/${game._id}`);
+    if (needsAuth && !this.props.user.authenticated) {
+      this.props.history.push(`/login/${game._id}`);
+    }
   }
 
   render() {
@@ -58,7 +61,7 @@ class GamesList extends Component {
             {games.games.filter(game => moment(game.date) > moment())
               .sort((a,b) => moment(a.date) - moment(b.date))
               .map((game, index) => (
-              <tr key={index}>
+              <tr key={index} data-toggle='modal' data-target='#roster-modal' onClick={e => this.setCurrentGame(game)}>
                 <td style={{textAlign: 'center'}}>
                   <JoinButton user={user} game={game} setCurrentGame={this.setCurrentGame} />
                 </td>
@@ -95,6 +98,7 @@ class GamesList extends Component {
       }
       <PaymentModal show={showModal} game={modalData} user={user} />
       <ContactModal show={showModal} game={modalData} user={user} />
+      <RosterModal show={showModal} game={modalData} user={user} />
       <AdBanner />
     </div>
   )

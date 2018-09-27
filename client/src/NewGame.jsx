@@ -55,7 +55,6 @@ class NewGame extends Component {
 
   render() {
     const { user } = this.props;
-    console.log(this.props)
    return (
       <div>
         <form onSubmit={this.handleSubmit}>

@@ -6,13 +6,10 @@ const mapStateToProps = state => {
   return {...state};
 }
 
-class ContactModal extends Component {
+class RosterModal extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      playerName: this.props.user.name || '',
-      email: this.props.user.email || '',
-      message: 'Hello, I\'d like to join your game please.'
     }
   }
 
@@ -35,32 +32,18 @@ class ContactModal extends Component {
   render() {
     let {game} = this.props;
     if (!game) game = {};
-    const { name, email, message } = this.state;
     return (
-      <div className='modal fade' id='contact-modal' tabIndex='-1' role='dialog'>
+      <div className='modal fade' id='roster-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
         <div className='modal-content'>
           <div className='modal-header'>
-            <h5 className='modal-title'>Contact {game.host} to join {game.name}</h5>
+            <h5 className='modal-title'>Roster for {game.name}</h5>
             <button type='button' className='close' data-dismiss='modal' aria-label='Close'>
               <span aria-hidden='true'>&times;</span>
             </button>
           </div>
           <div className='modal-body'>
-            <form onSubmit={this.handleSubmit}>
-              <div className='form-group'>
-                <label htmlFor='name'>Your Name: </label>
-                <input className='form-control' type='text' name='playerName' id='playerName' value={name} onChange={this.handleChange} />
-              </div>
-              <div className='form-group'>
-                <label htmlFor='email'>Your Email: </label>
-                <input className='form-control' type='email' name='email' id='email' value={email} onChange={this.handleChange} />
-              </div>
-              <div className='form-group'>
-                <label htmlFor='message'>Message for {game.host}: </label>
-                <textarea className='form-control' name='message' id='message' value={message} onChange={this.handleChange} />
-              </div>
-            </form>
+            {game.players.map((player, index) => <p key={index}>{player}</p>)}
           </div>
           <div className='modal-footer'>
             <button className='btn btn-success' onClick={this.handleSubmit} data-dismiss='modal'>Send Email</button>
@@ -73,4 +56,4 @@ class ContactModal extends Component {
   }
 }
 
-export default connect(mapStateToProps, actions)(ContactModal);
+export default connect(mapStateToProps, actions)(RosterModal);

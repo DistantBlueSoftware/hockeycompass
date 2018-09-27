@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST);
 const Nexmo = require('nexmo');
 const emailService = require('./emailService');
 
@@ -14,6 +15,21 @@ const User = require('./models/User');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
+
+const postStripeCharge = (res, game, user) => (stripeErr, stripeRes) => {
+  if (stripeErr) {
+    console.log(stripeErr)
+    res.status(500).send({ error: stripeErr });
+  } else {
+    console.log(stripeRes)
+    res.status(200).send({ success: stripeRes });
+  }
+}
+router.post('/save-stripe-token', function (req, res, next) {
+  const { token, amount, game, user } = req.body;
+  const convertedAmount = amount * 100;
+  stripe.charges.create({source: token.id, amount: convertedAmount, currency: 'usd'}, postStripeCharge(res, game, user))
+});
 
 router.post('/login', requireSignin, Authentication.signin);
 router.post('/register', Authentication.signup);

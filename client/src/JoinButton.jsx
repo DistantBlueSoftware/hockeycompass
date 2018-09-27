@@ -54,9 +54,9 @@ class JoinButton extends Component {
       }
     } else if (game.players.length < game.maxPlayers) {
       if (game.type.toLowerCase() === 'public') {
-        button = <button className='btn btn-success' onClick={e => setCurrentGame(game)}>Join</button>
+        button = <button className='btn btn-success' onClick={e => setCurrentGame(game, true)}>Join</button>
       } else {
-        button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button>
+        button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game, true)}>Private</button>
       }
     } else {
       button = <span style={{color: 'red'}}>Full</span>

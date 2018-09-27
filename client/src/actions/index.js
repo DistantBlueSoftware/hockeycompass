@@ -1,6 +1,23 @@
 import axios from 'axios';
-import { USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { PROCESS_PAYMENT, ERROR, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
+
+export const processPayment = (token, amount, game, user, callback) => async dispatch => {
+  try {
+    const response = await axios.post(
+      `/api/save-stripe-token`, {
+      token,
+      amount,
+      game: game.name,
+      user: user.username
+    }
+    );
+    dispatch({ type: PROCESS_PAYMENT, payload: response });
+    callback(game, user);
+  } catch (e) {
+    dispatch({ type: ERROR, payload: 'Payment processing error. Please try again.'});
+  }
+}
 
 export const doRegister = (user, callback) => async dispatch => {
   try {
