@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import moment from 'moment';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
+import * as arenas from './arenas.json';
 
 const mapStateToProps = state => {
   return {...state};
@@ -14,7 +15,8 @@ class NewGame extends Component {
     this.state = {
       date: moment().format('YYYY-MM-DD'),
       time: '19:00',
-      type: 'public'
+      type: 'public',
+      errorMessage: ''
     }
   }
 
@@ -34,6 +36,12 @@ class NewGame extends Component {
     let confirmText = '';
     game.host = this.props.user.username;
     game.date = moment(game.date + ' ' + game.time);
+    if (moment(game.date).diff(moment()) < 0) {
+      this.setState({
+        errorMessage: 'This game is scheduled in the past. Please check the start time.'
+      });
+      return;
+    }
     if (game.costPerPlayer > 30) {
       needsConfirmation = true;
       confirmText = 'Cost per player is higher than average ($' + game.costPerPlayer + '). Continue?';
@@ -55,8 +63,11 @@ class NewGame extends Component {
 
   render() {
     const { user } = this.props;
+    const { errorMessage } = this.state;
+    const arenaNames = arenas.map(a => <option>{a.name}</option>);
    return (
       <div>
+        {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label htmlFor='date'>Date: </label>
@@ -70,11 +81,7 @@ class NewGame extends Component {
             <label htmlFor='location'>Location: </label>
             <select className='form-control' name='location' id='location' onChange={this.handleChange} >
               <option></option>
-              <option>Nokomis</option>
-              <option>Kennedy Ice Rink</option>
-              <option>Ice Rink J</option>
-              <option>West Arena</option>
-              <option>Highland Ice</option>
+              {arenaNames}
             </select>
           </div>
           <div className='form-group'>

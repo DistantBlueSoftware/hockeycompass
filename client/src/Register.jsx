@@ -31,7 +31,8 @@ class Register extends Component {
         validationError: 'Passwords do not match.'
       });
     } else {
-      this.props.doRegister(this.state, () => {
+      const newUser = {...this.state, profile: {emails: [], notify: true}, metrics: {loginCount: 1, joinDate: new Date()}}
+      this.props.doRegister(newUser, () => {
         this.props.history.push('/games');
       });
     }

@@ -19,6 +19,8 @@ const Navigation = ({user, doLogout}) => (
     <ul className='navbar-nav mr-auto'>
       <NavLink className='nav-link' to='/'><li className='nav-item'>Home</li></NavLink>
       <NavLink className='nav-link' to='/games'><li className='nav-item'>Games</li></NavLink>
+      {user.authenticated && <NavLink className='nav-link' to='/profile'><li className='nav-item'>Profile</li></NavLink>}
+      
     </ul>
     {user.authenticated ?
       <React.Fragment>

@@ -9,14 +9,23 @@ function tokenForUser(user) {
 }
 
 exports.signin = function(req, res, next) {
-  // User has already had their email and password auth'd
-  // We just need to give them a token
-  const { username, email, name } = req.user;
-  res.send({ username, email, name, token: tokenForUser(req.user) });
+  const { username } = req.user;
+  User.findOne({username: username})
+    .exec()
+    .then(user => {
+      user.metrics.loginCount = user.metrics.loginCount + 1;
+      user.save()
+      .then(user => {
+        const { email, firstName, lastName, metrics, phone, profile, username, zipCode, _id } = user;
+        res.json({ email, firstName, lastName, metrics, phone, profile, username, zipCode, _id, token: tokenForUser(req.user) })
+      })
+      .catch(err => next(err));
+    })
+    .catch(err => next(err));
 }
 
 exports.signup = function(req, res, next) {
-  const { email, password, username, name } = req.body;
+  const { email, password, username, firstName, lastName, zipCode, profile, metrics } = req.body;
 
   if (!email || !password) {
     return res.status(422).send({ error: 'You must provide email and password'});
@@ -32,12 +41,8 @@ exports.signup = function(req, res, next) {
     }
 
     // If a user with email does NOT exist, create and save user record
-    const user = new User({
-      email: email,
-      password: password,
-      username: username,
-      name: name
-    });
+    const user = new User(req.body);
+    
     user.save(function(err) {
       if (err) { return next(err); }
 
@@ -48,7 +53,7 @@ exports.signup = function(req, res, next) {
           to: email
         },
         locals: {
-          name: name,
+          name: `${firstName} ${lastName}`,
           username: username,
           url: process.env.ROOT_URL
         }
@@ -57,7 +62,7 @@ exports.signup = function(req, res, next) {
       .catch(console.error);
 
       // Repond to request indicating the user was created
-      res.json({ email: email, username: username, name: name, token: tokenForUser(user) });
+      res.json({ email, username, firstName, lastName, profile, zipCode, metrics, token: tokenForUser(user) });
     });
   });
 }

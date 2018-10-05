@@ -1,4 +1,4 @@
-import { USER_AUTH, LOGOUT, AUTH_ERROR } from '../constants/actionTypes';
+import { USER_AUTH, LOGOUT, SAVE_PROFILE, AUTH_ERROR } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   authenticated: '',
@@ -9,6 +9,8 @@ export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case USER_AUTH:
       return { ...state, ...action.payload, authenticated: true, errorMessage: '' };
+    case SAVE_PROFILE: 
+      return { ...state, profile: {...action.payload}, errorMessage: '' };
     case LOGOUT:
       return {};
     case AUTH_ERROR:

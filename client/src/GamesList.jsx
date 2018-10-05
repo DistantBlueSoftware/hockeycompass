@@ -18,12 +18,19 @@ class GamesList extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      loading: false,
       showModal: false,
       modalData: props.games.games[1]
     }
   }
   componentDidMount() {
     this.props.listGames();
+  }
+  
+  setLoadingState = bool => {
+    this.setState({
+      loading: bool
+    })
   }
 
   setCurrentGame = (game, needsAuth) => {
@@ -37,7 +44,7 @@ class GamesList extends Component {
 
   render() {
     const { games, user, sendEmail, cancelGame } = this.props;
-    const { modalData, showModal } = this.state;
+    const { loading, modalData, showModal } = this.state;
     return (
     <div className='GamesList'>
       <Helmet>
@@ -45,6 +52,7 @@ class GamesList extends Component {
       <title>Find a Game - Hockey Compass - Navigate to Hockey</title>
       <link rel='canonical' href='https://hockeycompass.com/games' />
       </Helmet>
+      {/*<button className='btn btn-warning'>View Past Games</button>*/}
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
@@ -61,17 +69,17 @@ class GamesList extends Component {
             {games.games.filter(game => moment(game.date) > moment())
               .sort((a,b) => moment(a.date) - moment(b.date))
               .map((game, index) => (
-              <tr key={index} data-toggle='modal' data-target='#roster-modal' onClick={e => this.setCurrentGame(game)}>
+              <tr key={index} onClick={e => this.setCurrentGame(game)}>
                 <td style={{textAlign: 'center'}}>
-                  <JoinButton user={user} game={game} setCurrentGame={this.setCurrentGame} />
+                  <JoinButton loading={loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
                 </td>
-                <td>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
-                <td>{game.location}</td>
-                <td>{game.name}</td>
-                <td>{game.host}</td>
-                <td>{game.players.length}</td>
-                <td>{game.maxPlayers - game.players.length || 0}</td>
-                <td>{game.type}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.name}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.host}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.type}</td>
                 {user.authenticated && game.type.toLowerCase() === 'public' && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmail(game)}>Send Emails</button></td> : <td></td>}
                 {user.authenticated &&
                   game.host === user.username &&
@@ -96,7 +104,7 @@ class GamesList extends Component {
           <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
         </div>
       }
-      <PaymentModal show={showModal} game={modalData} user={user} />
+      <PaymentModal show={showModal} game={modalData} user={user} setLoadingState={this.setLoadingState} />
       <ContactModal show={showModal} game={modalData} user={user} />
       <RosterModal show={showModal} game={modalData} user={user} />
       <AdBanner />

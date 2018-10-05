@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { PROCESS_PAYMENT, ERROR, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const processPayment = (token, amount, game, user, callback) => async dispatch => {
@@ -29,7 +29,8 @@ export const doRegister = (user, callback) => async dispatch => {
   localStorage.setItem('token', response.data.token);
   callback();
 } catch (e) {
-    dispatch({ type: AUTH_ERROR, payload: 'Email in use' });
+    console.log(e)
+    dispatch({ type: AUTH_ERROR, payload: 'Username or email is in use' });
   }
 }
 
@@ -130,5 +131,18 @@ export const cancelGame = (game, callback) => async dispatch => {
       } catch (e) {
         dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and the game could not be created. Please try again.'})
       }
+  }
+}
+
+export const saveProfile = (username, profile, callback) => async dispatch => {
+  try {
+    const response = await axios.put(
+      `api/user/${username}`,
+      profile
+    );
+    dispatch({ type: SAVE_PROFILE, payload: response.data });
+    callback();
+  } catch (e) {
+    dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and your profile was not saved. Please try again.' })
   }
 }

@@ -10,20 +10,39 @@ const userSchema = new Schema({
   phone: Number,
   zipCode: String,
   referralType: String,
-  password: String
+  password: String,
+  profile: {
+    emails: [String],
+    notify: {type: Boolean, default: true}
+  },
+  metrics: {
+    loginCount: Number,
+    joinDate: Date,
+    amountSpent: Number,
+    gamesJoined: Number,
+    timeOnIce: Number
+  }
 }, {timestamps: true});
 
 userSchema.pre('save', function(next) {
   const user = this;
-
-  bcrypt.genSalt(10, function(err, salt) {
-    if (err) return next(err);
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
-      if (err) return next(err);
-      user.password = hash;
-      next();
-    });
-  });
+  ModelClass.findById(this._id)
+    .exec()
+    .then(userExists => {
+      //TODO: only salts pw if user is new, will have to update logic for pw reset
+      if (!userExists) {
+        bcrypt.genSalt(10, function(err, salt) {
+          if (err) return next(err);
+          bcrypt.hash(user.password, salt, null, function(err, hash) {
+            if (err) return next(err);
+            user.password = hash;
+            next();
+          });
+        });
+      } else next();
+    })
+    .catch(err => next(err))
+  
 });
 
 userSchema.methods.comparePassword = function(candidate, callback) {

@@ -6,6 +6,7 @@ import { NotFound } from './NotFound';
 import Home from './Home';
 import Login from './Login';
 import Register from './Register';
+import Profile from './Profile';
 import NewGame from './NewGame';
 import JoinGame from './JoinGame';
 import GamesList from './GamesList';
@@ -23,6 +24,7 @@ class App extends Component {
               <Route exact path='/login/' component={Login} />
               <Route exact path='/login/:id' component={Login} />
               <Route exact path='/register' component={Register} />
+              <Route exact path='/profile' component={Profile} />
               <Route exact path='/games' component={GamesList} />
               <Route exact path='/newgame' component={NewGame} />
               <Route exact path='/game/join/:id' component={JoinGame} />

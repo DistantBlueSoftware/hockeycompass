@@ -30,8 +30,9 @@ class RosterModal extends Component {
   }
 
   render() {
-    let {game} = this.props;
+    let {user, game} = this.props;
     if (!game) game = {};
+    const rinkStyle = {width: '400px', height: '250px', margin: '0 auto', border: '3px solid #2A5489', borderRadius: '20px'};
     return (
       <div className='modal fade' id='roster-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
@@ -43,11 +44,17 @@ class RosterModal extends Component {
             </button>
           </div>
           <div className='modal-body'>
-            {game.players.map((player, index) => <p key={index}>{player}</p>)}
+            <div className='roster-rink' style={rinkStyle}>
+            {game.players && game.players.length && 
+              game.players.map((player, index) => <p style={{margin: '10px'}} key={index}>{player}</p>)
+            }
+            </div>
           </div>
           <div className='modal-footer'>
-            <button className='btn btn-success' onClick={this.handleSubmit} data-dismiss='modal'>Send Email</button>
-            <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
+            {user.authenticated && user.username === game.host && 
+              <button className='btn btn-primary' data-dismiss='modal' >Edit Game</button>
+            }
+            <button className='btn btn-danger' data-dismiss='modal' >Close</button>
           </div>
         </div>
       </div>

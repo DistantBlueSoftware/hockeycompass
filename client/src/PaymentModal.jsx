@@ -4,12 +4,10 @@ import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from './actions'
 
-
-
-const PaymentModal = ({game = {}, user, addPlayer, processPayment}) => {
+const PaymentModal = ({game = {}, user, addPlayer, processPayment, setLoadingState}) => {
 const costWithFee = game.costPerPlayer + 1;
   const onToken = token => {
-      processPayment(token, costWithFee, game, user, addPlayer);
+    processPayment(token, costWithFee, game, user, addPlayer, () => setLoadingState(false));
     }
   return (
     <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
@@ -28,7 +26,7 @@ const costWithFee = game.costPerPlayer + 1;
         </div>
         <div className='modal-footer'>
           <StripeCheckout token={onToken} stripeKey="pk_test_feHScO25l9pXUPP5opXgkoKY">
-            <button className='btn btn-success' data-dismiss='modal'>{user.username !== game.host && 'Pay and '}Join</button>
+            <button className='btn btn-success' data-dismiss='modal' onClick={() => setLoadingState(true)}>{user.username !== game.host && 'Pay and '}Join</button>
           </StripeCheckout>
           <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
         </div>

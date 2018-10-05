@@ -27,17 +27,22 @@ class JoinButton extends Component {
 
   render () {
     const {hovering, shouldDoAction} = this.state;
-    const {user, game, setCurrentGame} = this.props;
+    const {loading, user, game, setCurrentGame} = this.props;
+    const isLoading = loading ? <i className='fas fa-circle-notch fa-spin'></i> : '';
+    const isDisabled = loading ? 'disabled' : '';
     const isTouch = (('ontouchstart' in window) || (navigator.msMaxTouchPoints > 0));
     const buttonText = hovering ? 'Drop' : shouldDoAction ? 'Joined' : 'Locked';
     const buttonStyle = hovering ? {color: '#ffc107'} : {color: '#B2B2B2'};
     const doShowButton = shouldDoAction ? this.showDropButton : null
     let button;
 
-    if (user.authenticated) {
+    if (moment(game.date) < moment()) {
+      button = <button className='btn btn-disabled' style={{...buttonStyle, width: '74px'}}>Past</button>
+    }
+    else if (user.authenticated) {
       if (game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers) {
         if (game.type.toLowerCase() === 'public') {
-          button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>Join</button>
+          button = <button className='btn btn-success' disabled={isDisabled} data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Join'}</button>
         } else {
           button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button>
         }

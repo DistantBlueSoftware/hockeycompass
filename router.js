@@ -12,6 +12,7 @@ const passportService = require('./services/passport');
 
 const Game = require('./models/Game');
 const User = require('./models/User');
+const Venue = require('./models/Venue');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
@@ -140,7 +141,6 @@ router.put('/games/:id/drop', (req, res, next) => {
 
 router.post('/games/:id/notification', (req, res, next) => {
   //email notifications
-  console.log(req.body)
   const isPrivate = req.body.type && req.body.type.toLowerCase() === 'private';
 
   if (isPrivate) {
@@ -210,6 +210,35 @@ router.post('/games/:id/notification', (req, res, next) => {
       .catch((err) => next(err));
     }
 
+});
+
+router.put('/user/:username', (req, res, next) => {
+  User.findOne({username: req.params.username})
+    .exec()
+    .then(user => {
+      
+      user.profile = {...req.body};
+      user.save()
+        .then(user => res.json(user.profile))
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.get('/venues', (req, res, next) => {
+  Venue.find({})
+    .then(venues => res.json(venues))
+    .catch((err) => next(err));
+});
+
+router.post('/venues', (req, res, next) => {
+  const venue = new Venue({
+    ...req.body
+  });
+
+  venue.save()
+    .then(() => res.json(venue))
+    .catch((err) => next(err));
 });
 
 
