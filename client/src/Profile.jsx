@@ -32,7 +32,7 @@ class Profile extends Component {
     let currentList = this.props.user.profile && this.props.user.profile.emails || [];
     let invalidEmails = [];
     const emails = utils.removeWhitespace(this.state.emails).split(',');
-    emails.forEach(email => {
+    emails.filter(email => email.length > 0).forEach(email => {
       if (!utils.validateEmail(email)) {
         invalidEmails.push(email)
       }
