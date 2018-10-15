@@ -62,9 +62,9 @@ class NewGame extends Component {
   }
 
   render() {
-    const { user } = this.props;
+    const { user, venues } = this.props;
     const { errorMessage } = this.state;
-    const arenaNames = arenas.map(a => <option>{a.name}</option>);
+    const arenaNames = venues.all && venues.all.map(v => <option>{v.name}</option>);
    return (
       <div>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
