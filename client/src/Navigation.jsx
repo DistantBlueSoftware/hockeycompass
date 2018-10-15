@@ -20,7 +20,6 @@ const Navigation = ({user, doLogout}) => (
       <NavLink className='nav-link' to='/'><li className='nav-item'>Home</li></NavLink>
       <NavLink className='nav-link' to='/games'><li className='nav-item'>Games</li></NavLink>
       <NavLink className='nav-link' to='/venues'><li className='nav-item'>Venues</li></NavLink>
-      <NavLink className='nav-link' to='/admin/upload'><li className='nav-item'>Upload</li></NavLink>
       {user.authenticated && <NavLink className='nav-link' to='/profile'><li className='nav-item'>Profile</li></NavLink>}
       
     </ul>
