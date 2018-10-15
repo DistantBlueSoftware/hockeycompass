@@ -14,8 +14,8 @@ class Upload extends Component {
   
   handleFileUpload = (e) => {
     e.preventDefault();
+    if (window.prompt('Secret code please') !== 'distantandblue') return;
     this.setState({ loading: true });
-    confirm('hi');
     const files = e.target.files;
     const reader = new FileReader();
     reader.onload = e => {
