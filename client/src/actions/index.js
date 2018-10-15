@@ -1,6 +1,27 @@
 import axios from 'axios';
-import { PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
+
+export const listVenues = () => async dispatch => {
+    try {
+      const response = await axios.get(`/api/venues`);
+      dispatch ({ type: LIST_VENUES, payload: response.data });
+    } catch (e) {
+      dispatch({ type: UPDATE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'})
+    }
+}
+
+export const saveVenue = venue => async dispatch => {
+  try {
+    const response = await axios.post(
+      `/api/venue`, 
+      venue
+    );
+    dispatch({ type: SAVE_VENUE, payload: response.data });
+  } catch (e) {
+    dispatch({ type: ERROR, payload: 'Could not save venue. Sorry!'});
+  }
+}
 
 export const processPayment = (token, amount, game, user, callback) => async dispatch => {
   try {

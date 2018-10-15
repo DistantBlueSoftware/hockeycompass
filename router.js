@@ -231,7 +231,7 @@ router.get('/venues', (req, res, next) => {
     .catch((err) => next(err));
 });
 
-router.post('/venues', (req, res, next) => {
+router.post('/venue', (req, res, next) => {
   const venue = new Venue({
     ...req.body
   });

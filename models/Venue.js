@@ -5,6 +5,9 @@ const VenueSchema = new mongoose.Schema({
   lastUpdated: Date,
   address: String,
   phone: String,
+  city: String,
+  state: String,
+  zip: String,
   url: String
 });
 

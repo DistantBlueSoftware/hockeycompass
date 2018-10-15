@@ -12,3 +12,5 @@ export const LIST_GAMES = 'LIST_GAMES';
 export const DELETE_GAME = 'DELETE_GAME';
 export const SEND_EMAILS = 'SEND_EMAILS';
 export const PROCESS_PAYMENT = 'PROCESS_PAYMENT';
+export const SAVE_VENUE = 'SAVE_VENUE';
+export const LIST_VENUES = 'LIST_VENUES';
