@@ -25,5 +25,11 @@
   "devDependencies": {
     "autoprefixer": "^9.1.2"
   },
-  "proxy": "http://localhost:3001"
+  "proxy": "http://localhost:3001",
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
