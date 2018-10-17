@@ -9,7 +9,7 @@ export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case LIST_VENUES:
     case SAVE_VENUE:
-      return {...state, all: [...action.payload]};
+      return {...state, all: [...state.all, ...action.payload]};
     default:
       return state;
   }

@@ -27,7 +27,8 @@ class VenueModal extends Component {
   }
 
   render() {
-    const {venue, user} = this.props;
+    let {venue, user} = this.props;
+    if (!venue) venue = {};
     return (
       <div className='modal fade' id='venue-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
