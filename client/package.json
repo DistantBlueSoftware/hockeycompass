@@ -23,8 +23,7 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "autoprefixer": "^9.1.2",
-    "webpack": "^4.17.0"
+    "autoprefixer": "^9.1.2"
   },
   "proxy": "http://localhost:3001"
 }
