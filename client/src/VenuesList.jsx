@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
 import * as actions from './actions';
 import { AdBanner } from './AdBanner';
+import VenueModal from './VenueModal';
 
 const mapStateToProps = state => {
   return {...state};
@@ -26,13 +27,12 @@ class VenuesList extends Component {
       loading: bool
     })
   }
-
-  setCurrentGame = (game, needsAuth) => {
+setCurrentVenue = (venue, needsAuth) => {
     this.setState({
-      modalData: game
+      modalData: venue
     });
     if (needsAuth && !this.props.user.authenticated) {
-      this.props.history.push(`/login/${game._id}`);
+      this.props.history.push(`/login`);
     }
   }
 
@@ -61,13 +61,13 @@ class VenuesList extends Component {
             </tr>
             {venues.all
               .map((venue, index) => (
-              <tr key={index}>
-                <td>{venue.name}</td>
-                <td>{venue.address}</td>
-                <td>{venue.city}</td>
-                <td>{venue.state}</td>
-                <td>{venue.zip}</td>
-                <td>{venue.phone}</td>
+              <tr key={index} onClick={e => this.setCurrentVenue(venue)}>
+                <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>
+                <td data-toggle='modal' data-target='#venue-modal'>{venue.address}</td>
+                <td data-toggle='modal' data-target='#venue-modal'>{venue.city}</td>
+                <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
+                <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
+                <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
                 <td><a href={venue.url} target='_blank'>Website</a></td>
               </tr>
             ))}
@@ -75,6 +75,7 @@ class VenuesList extends Component {
         </table>
       </div>
       <AdBanner />
+      <VenueModal show={showModal} venue={modalData} user={user} />
     </div>
   )
   }
