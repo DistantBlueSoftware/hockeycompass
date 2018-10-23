@@ -1,13 +1,11 @@
-//server.js
 'use strict'
-require('dotenv').config()
-//first we import our dependencies...
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = require('./router');
 const cors = require('cors');
-//and create our instances
+const cron = require('./services/cron');
 
 const app = express();
 
@@ -51,6 +49,9 @@ app.use(function(req, res, next) {
 
 //Use our router configuration when we call /api
 app.use('/api', router);
+
+//start cron jobs
+cron.start();
 
 //starts the server and listens for requests
 app.listen(port, function() {

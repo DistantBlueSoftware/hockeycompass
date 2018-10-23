@@ -53,7 +53,7 @@ class VenueModal extends Component {
             </div>
           </div>
           <div className='modal-footer'>
-            {user.authenticated && 
+            {user.authenticated && user.isAdmin &&
               <button className='btn btn-primary' data-dismiss='modal' >Edit Venue</button>
             }
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>

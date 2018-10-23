@@ -43,7 +43,7 @@ class GamesList extends Component {
   }
 
   render() {
-    const { games, user, sendEmail, cancelGame } = this.props;
+    const { games, user, cancelGame } = this.props;
     const { loading, modalData, showModal } = this.state;
     return (
     <div className='GamesList'>
@@ -80,7 +80,6 @@ class GamesList extends Component {
                 <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.type}</td>
-                {user.authenticated && game.type.toLowerCase() === 'public' && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmail(game)}>Send Emails</button></td> : <td></td>}
                 {user.authenticated &&
                   game.host === user.username &&
                   <td>

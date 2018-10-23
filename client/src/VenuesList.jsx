@@ -68,7 +68,7 @@ setCurrentVenue = (venue, needsAuth) => {
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
-                <td><a href={venue.url} target='_blank'>Website</a></td>
+                <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Website</a></td>
               </tr>
             ))}
           </tbody>

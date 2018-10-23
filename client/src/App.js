@@ -7,7 +7,7 @@ import Home from './Home';
 import Login from './Login';
 import Register from './Register';
 import Profile from './Profile';
-import NewGame from './NewGame';
+import GameDetail from './GameDetail';
 import JoinGame from './JoinGame';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
@@ -29,7 +29,7 @@ class App extends Component {
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/games' component={GamesList} />
               <Route exact path='/venues' component={VenuesList} />
-              <Route exact path='/newgame' component={NewGame} />
+              <Route exact path='/newgame' component={GameDetail} />
               <Route exact path='/game/join/:id' component={JoinGame} />
               <Route exact path='/admin/upload' component={Upload} />
               <Route path='*' component={NotFound} />

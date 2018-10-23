@@ -52,7 +52,7 @@ class RosterModal extends Component {
           </div>
           <div className='modal-footer'>
             {user.authenticated && user.username === game.host && 
-              <button className='btn btn-primary' data-dismiss='modal' >Edit Game</button>
+              <button className='btn btn-primary' data-dismiss='modal' onClick={e => console.log('hi')}>Edit Game</button>
             }
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>
           </div>

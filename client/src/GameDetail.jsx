@@ -9,7 +9,7 @@ const mapStateToProps = state => {
   return {...state};
 }
 
-class NewGame extends Component {
+class GameDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -64,7 +64,7 @@ class NewGame extends Component {
   render() {
     const { user, venues } = this.props;
     const { errorMessage } = this.state;
-    const arenaNames = venues.all && venues.all.map(v => <option>{v.name}</option>);
+    const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
       <div>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
@@ -113,4 +113,4 @@ class NewGame extends Component {
     )
   }
 }
-export default connect(mapStateToProps, actions)(requireAuth(NewGame));
+export default connect(mapStateToProps, actions)(requireAuth(GameDetail));
