@@ -216,8 +216,9 @@ router.put('/user/:username', (req, res, next) => {
   User.findOne({username: req.params.username})
     .exec()
     .then(user => {
-      
-      user.profile = {...req.body};
+      for (const prop in req.body) {
+        user.profile[prop] = req.body[prop];
+      }
       user.save()
         .then(user => res.json(user.profile))
         .catch(err => next(err));

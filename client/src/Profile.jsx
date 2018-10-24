@@ -16,6 +16,15 @@ class Profile extends Component {
       notify: profile && profile.notify
     }
   }
+  
+  removeEmail = email => {
+    const currentList = this.props.user.profile.emails.filter(address => address !== email);
+    this.props.saveProfile(this.props.user.username, {emails: currentList}, () => {
+      this.setState({
+        errorMessage: ''
+      })
+    });
+  }
 
   handleChange = (e) => {
     const target = e.target;
@@ -33,7 +42,7 @@ class Profile extends Component {
     let invalidEmails = [];
     const emails = utils.removeWhitespace(this.state.emails).split(',');
     emails.filter(email => email.length > 0).forEach(email => {
-      if (!utils.validateEmail(email)) {
+      if (!utils.validateEmail(email) || email === '') {
         invalidEmails.push(email)
       }
     });
@@ -59,7 +68,7 @@ class Profile extends Component {
   render() {
     const { user } = this.props;
     const { emails, notify, errorMessage } = this.state;
-    const EmailList = user.profile && user.profile.emails.length && user.profile.emails.map(email => <EmailPill email={email}></EmailPill>)
+    const EmailList = user.profile && user.profile.emails.length && user.profile.emails.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
     const emailContainerStyle = {
       display: 'flex',
       flexFlow: 'row wrap'
@@ -68,39 +77,50 @@ class Profile extends Component {
       <div>
         <h1>{user.username} - profile</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
-        {user.profile && user.profile.emails && user.profile.emails.length > 0 && <div style={emailContainerStyle}>{EmailList}</div>}
-        <form onSubmit={this.handleSubmit}>
-          <div className='form-check'>
-            <input type='checkbox' className='form-check-input' name='notify' id='notify' checked={notify} onChange={this.handleChange} />
-            <label className='form-check-label' htmlFor='notify'>Send me game notifications</label>
-          </div>
-          <div className='form-group'>
-            <label className='form-label' htmlFor='emails'>Paste emails here (separated by commas):</label>
-            <textarea className='form-control' name='emails' value={emails} onChange={this.handleChange}></textarea>
-          </div>
-          <button className='btn btn-success' type='submit'>Save Changes</button>
-        </form>
+        <div style={{padding: '20px'}}>
+          <h3>Email List:</h3>
+          {user.profile && user.profile.emails && user.profile.emails.length > 0 && <div style={emailContainerStyle}>{EmailList}</div>}
+        </div>
+        <div style={{padding: '20px'}}>
+          <h3>Preferences:</h3>
+          <form onSubmit={this.handleSubmit}>
+            <div className='form-check'>
+              <input type='checkbox' className='form-check-input' name='notify' id='notify' checked={notify} onChange={this.handleChange} />
+              <label className='form-check-label' htmlFor='notify'>Send me game notifications</label>
+            </div>
+            <div className='form-group'>
+              <label className='form-label' htmlFor='emails'>Paste emails here (separated by commas):</label>
+              <textarea className='form-control' name='emails' value={emails} onChange={this.handleChange}></textarea>
+            </div>
+            <button className='btn btn-success' type='submit'>Save Changes</button>
+          </form>
+        </div>
       </div>
     )
   }
 } 
 
-const EmailPill = (props) => {
+const EmailPill = ({email, removeEmail}) => {
   const containerStyle={
     display: 'flex',
     flexFlow: 'row wrap',
     alignItems: 'center',
     cursor: 'pointer',
     margin: '.2em',
-    // padding: '.5em',
+    padding: '4px 8px',
+    color: 'black',
+    background: 'transparent',
+    borderRadius: '5px',
+    border: '1px solid #154B8B'
   }
   const xStyle = {
-    marginLeft: '.25em',
+    marginLeft: '.5em',
+    color: '#d53939'
   }
   return (
-    <div className='badge badge-primary' style={containerStyle}>
-          <span>{props.email}</span>
-          <div style={xStyle}>&times;</div>
+    <div style={containerStyle}>
+          <span>{email}</span>
+          <i style={xStyle} className='fas fa-times' onClick={() => removeEmail(email)}></i>
     </div>
   )
 }
