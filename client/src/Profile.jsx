@@ -59,12 +59,16 @@ class Profile extends Component {
   render() {
     const { user } = this.props;
     const { emails, notify, errorMessage } = this.state;
-    const EmailList = user.profile && user.profile.emails.length && user.profile.emails.map(email => <li>{email}</li>)
+    const EmailList = user.profile && user.profile.emails.length && user.profile.emails.map(email => <EmailPill email={email}></EmailPill>)
+    const emailContainerStyle = {
+      display: 'flex',
+      flexFlow: 'row wrap'
+    }
     return (
       <div>
         <h1>{user.username} - profile</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
-        {user.profile && user.profile.emails && user.profile.emails.length > 0 && <ul>{EmailList}</ul>}
+        {user.profile && user.profile.emails && user.profile.emails.length > 0 && <div style={emailContainerStyle}>{EmailList}</div>}
         <form onSubmit={this.handleSubmit}>
           <div className='form-check'>
             <input type='checkbox' className='form-check-input' name='notify' id='notify' checked={notify} onChange={this.handleChange} />
@@ -80,5 +84,25 @@ class Profile extends Component {
     )
   }
 } 
+
+const EmailPill = (props) => {
+  const containerStyle={
+    display: 'flex',
+    flexFlow: 'row wrap',
+    alignItems: 'center',
+    cursor: 'pointer',
+    margin: '.2em',
+    // padding: '.5em',
+  }
+  const xStyle = {
+    marginLeft: '.25em',
+  }
+  return (
+    <div className='badge badge-primary' style={containerStyle}>
+          <span>{props.email}</span>
+          <div style={xStyle}>&times;</div>
+    </div>
+  )
+}
 
 export default connect(mapStateToProps, actions)(Profile);
