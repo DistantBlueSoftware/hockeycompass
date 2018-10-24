@@ -60,10 +60,9 @@ router.post('/games', function (req, res, next) {
           gameID: game._id,
           sendDate: moment(game.date).subtract(1, 'days')
         });
-      }
       notification.save()
         .catch(err => next(err));
-      
+      }
       //return game info to client  
       res.json(game);
     })
