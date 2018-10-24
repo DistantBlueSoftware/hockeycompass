@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, DELETE_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -143,11 +143,11 @@ export const cancelGame = (game, callback) => async dispatch => {
       dispatch({ type: UPDATE_ERROR, payload: 'This game is scheduled to start in less than 24 hours and cannot be canceled.'})
     } else {
       try {
-        const response = await axios.delete(
-          `/api/games/${game._id}`,
+        const response = await axios.put(
+          `/api/games/${game._id}/cancel`,
           game
         );
-        dispatch ({ type: DELETE_GAME, payload: response });
+        dispatch ({ type: CANCEL_GAME, payload: response.data });
         callback();
       } catch (e) {
         dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and the game could not be created. Please try again.'})

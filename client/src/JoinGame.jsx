@@ -18,7 +18,6 @@ const JoinGame = ({...props}) => {
           <p>Location: {game.location}</p>
           <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
           <h3>Cost: ${game.costPerPlayer + 1}</h3>
-          <p>(${game.costPerPlayer} game fee + $1 convenience fee)</p>
           <button className='btn btn-success' onClick={e => addPlayer(game, user, () => props.history.push('/games'))}>Pay and Join</button>
           <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
         </div>

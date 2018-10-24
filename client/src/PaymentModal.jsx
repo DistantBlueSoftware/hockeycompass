@@ -22,12 +22,17 @@ const costWithFee = game.costPerPlayer + 1;
         <div className='modal-body'>
           <p>Location: {game.location}</p>
           <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
-          <h3>Cost: ${user.username === game.host ? 0 : costWithFee}</h3>
+          {user.username !== game.host && costWithFee > 0 &&  
+            <h3>Cost: {costWithFee}</h3>
+          }
         </div>
         <div className='modal-footer'>
-          <StripeCheckout token={onToken} stripeKey="pk_test_feHScO25l9pXUPP5opXgkoKY">
-            <button className='btn btn-success' data-dismiss='modal' onClick={() => setLoadingState(game._id)}>{user.username !== game.host && 'Pay and '}Join</button>
-          </StripeCheckout>
+          {user.username !== game.host ? 
+            <StripeCheckout token={onToken} stripeKey="pk_test_feHScO25l9pXUPP5opXgkoKY">
+              <button className='btn btn-success' data-dismiss='modal' onClick={() => setLoadingState(game._id)}>Pay and Join</button>
+            </StripeCheckout> :
+            <button className='btn btn-success' data-dismiss='modal' onClick={() => addPlayer(game, user)}>Join Your Game</button>
+          }
           <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
         </div>
       </div>

@@ -13,16 +13,15 @@ const passportService = require('./services/passport');
 const Game = require('./models/Game');
 const User = require('./models/User');
 const Venue = require('./models/Venue');
+const EmailQueue = require('./models/EmailQueue');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
 
 const postStripeCharge = (res, game, user) => (stripeErr, stripeRes) => {
   if (stripeErr) {
-    console.log(stripeErr)
     res.status(500).send({ error: stripeErr });
   } else {
-    console.log(stripeRes)
     res.status(200).send({ success: stripeRes });
   }
 }
@@ -54,7 +53,18 @@ router.post('/games', function (req, res, next) {
   });
 
   game.save()
-    .then(() => res.json(game))
+    .then(game => {
+      //add game to email queue
+      const notification = new EmailQueue({
+        gameID: game._id,
+        sendDate: moment(game.date).subtract(1, 'days')
+      });
+      notification.save()
+        .catch(err => next(err));
+      
+      //return game info to client  
+      res.json(game);
+    })
     .catch((err) => next(err));
 });
 
@@ -66,9 +76,9 @@ router.get('/games/:id', (req, res, next) => {
 });
 
 router.delete('/games/:id', function (req, res, next) {
-  Game.findOneAndRemove({ _id: req.params.id })
+  Game.findOneAndDelete({ _id: req.params.id })
     .exec()
-    .then((game) => res.json())
+    .then((game) => res.json(game))
     .catch((err) => next(err));
 });
 
@@ -129,14 +139,29 @@ router.put('/games/:id', (req, res, next) => {
 router.put('/games/:id/drop', (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
-    .then((game) => {
+    .then(game => {
       const playerIndex = game.players.indexOf(req.body.username);
       game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
       game.save()
-        .then(() => res.json(game))
+        .then(game => res.json(game))
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
+router.put('/games/:id/cancel', (req, res, next) => {
+  Game.findById(req.params.id)
+    .exec()
+    .then(game => {
+      game.active = false;
+      game.save()
+        .then(game => {
+          //TODO: send cancelled email to players roster
+          res.json(game);
+        })
         .catch((err) => next(err));
     })
-    .catch((err) => next(err));
+    .catch(err => next(err));
 });
 
 router.post('/games/:id/notification', (req, res, next) => {
@@ -166,6 +191,7 @@ router.post('/games/:id/notification', (req, res, next) => {
       .exec()
       .then(users => {
         const playerEmails = users
+                              .filter(user => user.notify)
                               .filter(user => req.body.players.indexOf(user.username) === -1)
                               .map(user => user.email)
                               .toString();

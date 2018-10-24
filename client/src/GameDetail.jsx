@@ -62,6 +62,7 @@ class GameDetail extends Component {
   }
 
   render() {
+    console.log(this.state)
     const { user, venues } = this.props;
     const { errorMessage } = this.state;
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
@@ -103,10 +104,16 @@ class GameDetail extends Component {
           <div className='form-group'>
             <label htmlFor='type'>Type: </label>
             <select className='form-control' name='type' id='type' onChange={this.handleChange} >
-              <option>Public</option>
-              <option>Private</option>
+              <option value='public'>Public</option>
+              <option value='private'>Private</option>
             </select>
           </div>
+          {this.state.type === 'private' &&
+            <div className='form-group'>
+              <label htmlFor='emailList'>Email List: </label>
+              <textarea className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emails}></textarea>
+            </div>
+          }
           <button type='submit' className='btn btn-primary'>Create Game</button>
         </form>
       </div>

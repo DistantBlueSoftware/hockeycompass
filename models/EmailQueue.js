@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 
 const EmailQueueSchema = new mongoose.Schema({
-  gameID: {type: String, required: true},
+  gameID: {type: 'ObjectId', required: true},
   sendDate: {type: Date, required: true}
 });
 

@@ -66,7 +66,7 @@ class GamesList extends Component {
               <th>Openings</th>
               <th>Type</th>
             </tr>
-            {games.games.filter(game => moment(game.date) > moment())
+            {games.games.filter(game => game.active && moment(game.date) > moment())
               .sort((a,b) => moment(a.date) - moment(b.date))
               .map((game, index) => (
               <tr key={index} onClick={e => this.setCurrentGame(game)}>
