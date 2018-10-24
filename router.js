@@ -54,11 +54,13 @@ router.post('/games', function (req, res, next) {
 
   game.save()
     .then(game => {
-      //add game to email queue
-      const notification = new EmailQueue({
-        gameID: game._id,
-        sendDate: moment(game.date).subtract(1, 'days')
-      });
+      if (game.type === 'public') {
+        //add game to email queue
+        const notification = new EmailQueue({
+          gameID: game._id,
+          sendDate: moment(game.date).subtract(1, 'days')
+        });
+      }
       notification.save()
         .catch(err => next(err));
       
