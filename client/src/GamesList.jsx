@@ -71,7 +71,8 @@ class GamesList extends Component {
               .map((game, index) => (
               <tr key={index} onClick={e => this.setCurrentGame(game)}>
                 <td style={{textAlign: 'center'}}>
-                  <JoinButton loading={loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
+                {/* loading is set to the game id in PaymentModal when payment is in process */}
+                  <JoinButton loading={game._id === loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
                 </td>
                 <td data-toggle='modal' data-target='#roster-modal'>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
