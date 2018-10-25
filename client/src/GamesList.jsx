@@ -53,7 +53,7 @@ class GamesList extends Component {
       <link rel='canonical' href='https://hockeycompass.com/games' />
       </Helmet>
       {/*<button className='btn btn-warning'>View Past Games</button>*/}
-      <h1>Upcoming Games</h1>
+      <h1>Upcoming Games <span style={{fontSize: '16px'}}>(click a row to view roster)</span> </h1>
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
