@@ -1,6 +1,6 @@
 .login-register {
   max-width: 600px;
-  margin: 10px auto;
+  margin: 20px auto;
 }
 
 .tabs {
@@ -17,6 +17,9 @@
 	flex: 1;
 	text-align: center;
   border-radius: 5px 5px 0 0;
+  border-width: 1px 1px 0 1px;
+  border-style: solid;
+  border-color: #154b8b;
   transition: all 0.3s;
 }
 

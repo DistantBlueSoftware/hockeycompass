@@ -57,7 +57,6 @@ class Register extends Component {
         <link rel='canonical' href='https://hockeycompass.com/register' />
         </Helmet>
         <form onSubmit={this.handleSubmit}>
-          {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='email'>Email: </label>
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
@@ -107,6 +106,7 @@ class Register extends Component {
           }
           {validationError && <div style={{fontSize: '20px', color: 'red'}}>{validationError}</div>}
           <button type='submit' className='btn btn-primary'>Register</button>
+          {errorMessage && <span style={{marginLeft: '20px', fontSize: '20px', color: 'red'}}>{errorMessage}</span>}
         </form>
       </div>
     )

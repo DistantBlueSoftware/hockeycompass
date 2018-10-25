@@ -44,7 +44,6 @@ class Login extends Component {
         <link rel='canonical' href='https://hockeycompass.com/login' />
         </Helmet>
         <form onSubmit={this.handleSubmit}>
-          {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='usernameOrEmail'>Username or Email: </label>
             <input className='form-control' type='text' name='usernameOrEmail' id='usernameOrEmail' onChange={this.handleChange} />
@@ -54,6 +53,7 @@ class Login extends Component {
             <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
           </div>
           <button type='submit' className='btn btn-primary'>Login</button>
+          {errorMessage && <span style={{marginLeft: '20px', fontSize: '20px', color: 'red'}}>{errorMessage}</span>}
         </form>
       </div>
     )
