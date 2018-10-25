@@ -62,12 +62,12 @@ class GameDetail extends Component {
   }
 
   render() {
-    console.log(this.state)
-    const { user, venues } = this.props;
+    const { user, venues, isNew = true, game = {} } = this.props;
     const { errorMessage } = this.state;
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
-      <div>
+      <div className='container-fluid'>
+        <h1>{isNew ? 'New Game' : game.name}</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>

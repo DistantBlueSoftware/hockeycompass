@@ -8,6 +8,7 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
     case LIST_VENUES:
+      return {...state, all:[...action.payload]};
     case SAVE_VENUE:
       return {...state, all: [...state.all, ...action.payload]};
     default:

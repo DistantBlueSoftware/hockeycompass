@@ -46,13 +46,14 @@ class GamesList extends Component {
     const { games, user, cancelGame } = this.props;
     const { loading, modalData, showModal } = this.state;
     return (
-    <div className='GamesList'>
+    <div className='GamesList container-fluid'>
       <Helmet>
       <meta charSet='utf-8' />
       <title>Find a Game - Hockey Compass - Navigate to Hockey</title>
       <link rel='canonical' href='https://hockeycompass.com/games' />
       </Helmet>
       {/*<button className='btn btn-warning'>View Past Games</button>*/}
+      <h1>Upcoming Games</h1>
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
@@ -81,7 +82,7 @@ class GamesList extends Component {
                 <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.type}</td>
-                {user.authenticated &&
+                {/*user.authenticated &&
                   game.host === user.username &&
                   <td>
                     {moment(game.date).diff(moment(), 'hours') > 0 ?
@@ -93,7 +94,7 @@ class GamesList extends Component {
                       </button>
                     }
                   </td>
-                }
+                */}
               </tr>
             ))}
           </tbody>
