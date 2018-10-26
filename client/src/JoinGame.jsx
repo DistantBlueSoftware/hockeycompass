@@ -1,5 +1,4 @@
 import React from 'react';
-import StripeCheckout from 'react-stripe-checkout';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from './actions';
@@ -23,9 +22,7 @@ const JoinGame = ({...props}) => {
           <p>Location: {game.location}</p>
           <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
           <h3>Cost: ${game.costPerPlayer + 1}</h3>
-          <StripeCheckout token={onToken} stripeKey="pk_test_feHScO25l9pXUPP5opXgkoKY">
-            <button className='btn btn-success'>Pay and Join</button>
-          </StripeCheckout>
+          <button className='btn btn-success'>Pay and Join</button>
           <button className='btn btn-danger' onClick={e => this.props.router.push('/games')} >Cancel</button>
         </div>
       )

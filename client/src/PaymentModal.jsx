@@ -27,7 +27,7 @@ const costWithFee = game.costPerPlayer + 1;
             <React.Fragment>
               <h3>Cost: ${costWithFee}</h3>
               <Elements>
-                <StripePaymentForm game={game} user={user} costWithFee={costWithFee} />
+                <StripePaymentForm game={game} user={user} costWithFee={costWithFee} setLoadingState={setLoadingState} />
               </Elements>
             </React.Fragment>
           }

@@ -28,7 +28,6 @@ const postStripeCharge = (res, game, user) => (stripeErr, stripeRes) => {
 router.post('/save-stripe-token', function (req, res, next) {
   const { token, amount, game, user } = req.body;
   const convertedAmount = amount * 100;
-  console.log(req.body)
   stripe.charges.create({
     source: token.id, 
     amount: convertedAmount, 
