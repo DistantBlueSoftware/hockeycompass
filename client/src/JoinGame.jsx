@@ -1,4 +1,5 @@
 import React from 'react';
+import StripeCheckout from 'react-stripe-checkout';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from './actions';
@@ -8,18 +9,24 @@ const mapStateToProps = state => {
 }
 
 const JoinGame = ({...props}) => {
-  const {match, games, user, addPlayer} = props;
+  const {match, games, user, addPlayer, processPayment} = props;
   const game = games.games.find(game => game._id === match.params.id);
   if (game.players.length < game.maxPlayers) {
     if (game.players.indexOf(user.username) === -1) {
+      const costWithFee = game.costPerPlayer + 1;
+      const onToken = token => {
+        processPayment(token, costWithFee, game, user, addPlayer, () => this.props.router.push('/games'));
+        }
       return (
         <div>
           <h5>Join {game.name}</h5>
           <p>Location: {game.location}</p>
           <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
           <h3>Cost: ${game.costPerPlayer + 1}</h3>
-          <button className='btn btn-success' onClick={e => addPlayer(game, user, () => props.history.push('/games'))}>Pay and Join</button>
-          <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
+          <StripeCheckout token={onToken} stripeKey="pk_test_feHScO25l9pXUPP5opXgkoKY">
+            <button className='btn btn-success'>Pay and Join</button>
+          </StripeCheckout>
+          <button className='btn btn-danger' onClick={e => this.props.router.push('/games')} >Cancel</button>
         </div>
       )
     } else {

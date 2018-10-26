@@ -23,7 +23,7 @@ class LoginRegister extends Component {
     return (
       <Tabs 
         className='login-register' 
-        defaultIndex={this.state.active} 
+        defaultIndex={active} 
         selectedTabClassName='active' 
         selectedTabPanelClassName='active-tab-content'
         >

@@ -28,7 +28,28 @@ const postStripeCharge = (res, game, user) => (stripeErr, stripeRes) => {
 router.post('/save-stripe-token', function (req, res, next) {
   const { token, amount, game, user } = req.body;
   const convertedAmount = amount * 100;
-  stripe.charges.create({source: token.id, amount: convertedAmount, currency: 'usd'}, postStripeCharge(res, game, user))
+  console.log(req.body)
+  stripe.charges.create({
+    source: token.id, 
+    amount: convertedAmount, 
+    currency: 'usd',
+  }, postStripeCharge(res, game, user))
+});
+
+router.post('/create-payment', (req, res, next) => {
+  stripe.charges.create({
+    amount: 1000,
+    currency: 'usd',
+    source: 'tok_visa',
+    destination: {
+      account: req.userStripeToken || 'acct_1DPKXrCKzu6eM4DO',
+    },
+    application_fee: 100,
+  })
+  .then(function(charge) {
+    console.log(charge);
+    res.send(200);
+  });
 });
 
 router.post('/login', requireSignin, Authentication.signin);

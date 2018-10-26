@@ -43,7 +43,7 @@ class GamesList extends Component {
   }
 
   render() {
-    const { games, user, cancelGame } = this.props;
+    const { games, user } = this.props;
     const { loading, modalData, showModal } = this.state;
     return (
     <div className='GamesList container-fluid'>

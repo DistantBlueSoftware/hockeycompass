@@ -49,7 +49,7 @@ class VenueModal extends Component {
               {venue.phone}
               <br />
               <h5>Website: </h5>
-              <a href={venue.url} target='_blank'>{venue.url}</a>
+              <a href={venue.url} target='_blank' rel='noopener noreferrer'>{venue.url}</a>
             </div>
           </div>
           <div className='modal-footer'>

@@ -24,7 +24,7 @@ class Login extends Component {
       usernameOrEmail: this.state.usernameOrEmail,
       password: this.state.password
     }
-    const id = this.props.match.params.id || null;
+    const id = this.props.match && this.props.match.params ? this.props.match.params.id : null;
     this.props.doLogin(user, () => {
       if (id) {
         this.props.history.push(`/game/join/${id}`);

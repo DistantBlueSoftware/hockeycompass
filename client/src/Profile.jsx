@@ -38,7 +38,7 @@ class Profile extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     const { notify } = this.state;
-    let currentList = this.props.user.profile && this.props.user.profile.emails || [];
+    let currentList = this.props.user.profile ? this.props.user.profile.emails : [];
     let invalidEmails = [];
     const emails = utils.removeWhitespace(this.state.emails).split(',');
     emails.filter(email => email.length > 0).forEach(email => {
@@ -74,7 +74,7 @@ class Profile extends Component {
       flexFlow: 'row wrap'
     }
     return (
-      <div>
+      <div className='container-fluid'>
         <h1>{user.username} - profile</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <div style={{padding: '20px'}}>

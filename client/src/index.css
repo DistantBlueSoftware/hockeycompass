@@ -4,10 +4,23 @@ body {
   font-family: sans-serif;
 }
 
+.container-fluid {
+  animation: fadeIn .6s ease-in-out;
+}
+
 .btn-primary {
   background: #154b8b;
 }
 
 .btn-danger {
   background: #C4252D;
+}
+
+table.table-hover td:hover{
+  cursor: pointer;
+}
+
+@keyframes fadeIn {
+from {opacity: 0;}
+to {opacity: 1;}
 }

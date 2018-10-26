@@ -25,13 +25,13 @@ class App extends Component {
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/login/' component={LoginRegister} />
-              <Route exact path='/login/:id' component={Login} />
+              <Route exact path='/login/:id' component={LoginRegister} />
               <Route exact path='/register' render={() => <LoginRegister currentTab={1} />} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/games' component={GamesList} />
               <Route exact path='/venues' component={VenuesList} />
               <Route exact path='/newgame' component={GameDetail} />
-              <Route exact path='/game/join/:id' component={JoinGame} />
+              <Route exact path='/game/join/:id' render={() => <GamesList openModal={'payment-modal'} />} />
               <Route exact path='/admin/upload' component={Upload} />
               <Route path='*' component={NotFound} />
             </Switch>

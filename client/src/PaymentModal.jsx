@@ -1,8 +1,9 @@
 import React from 'react';
-import StripeCheckout from 'react-stripe-checkout';
+import {Elements} from 'react-stripe-elements';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import * as actions from './actions'
+import StripePaymentForm from './StripePaymentForm'
+import * as actions from './actions';
 
 const PaymentModal = ({game = {}, user, addPlayer, processPayment, setLoadingState}) => {
 const costWithFee = game.costPerPlayer + 1;
@@ -23,16 +24,15 @@ const costWithFee = game.costPerPlayer + 1;
           <p>Location: {game.location}</p>
           <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
           {user.username !== game.host && costWithFee > 0 &&  
-            <h3>Cost: {costWithFee}</h3>
+            <React.Fragment>
+              <h3>Cost: ${costWithFee}</h3>
+              <Elements>
+                <StripePaymentForm game={game} user={user} costWithFee={costWithFee} />
+              </Elements>
+            </React.Fragment>
           }
         </div>
         <div className='modal-footer'>
-          {user.username !== game.host ? 
-            <StripeCheckout token={onToken} stripeKey="pk_test_feHScO25l9pXUPP5opXgkoKY">
-              <button className='btn btn-success' data-dismiss='modal' onClick={() => setLoadingState(game._id)}>Pay and Join</button>
-            </StripeCheckout> :
-            <button className='btn btn-success' data-dismiss='modal' onClick={() => addPlayer(game, user)}>Join Your Game</button>
-          }
           <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
         </div>
       </div>
