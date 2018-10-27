@@ -8,7 +8,7 @@ const mapStateToProps = state => {
   return { ...state };
 }
 
-const inputField = (props) => {
+const InputField = (props) => {
   const handleChange = (event) => {
     props.handleChange(event);
   }
@@ -43,17 +43,38 @@ class EditVenue extends Component {
     let needsConfirmation = false;
     let confirmText = '';
     venue.lastUpdated = moment().format('YYYY-MM-DD');
-    
+
   }
 
   render() {
     const { user, venues } = this.props;
     const { errorMessage } = this.state;
+    // last updated is added automatically in the handleSubmit function
+    // These will be the field names for the edit venue form
+    const venueProperties = ['name',
+      'address',
+      'phone',
+      'city',
+      'state',
+      'zip',
+      'url'
+    ]
+    // Creating a separate field for each venue field.  InputField defined above
+    const fields = venueProperties.map((property, i) => {
+      <InputField key={i.toString()}
+        name={property}
+        type="String"
+        name={property}
+        defaultValue={''}
+        handleChange={this.handleChange}
+      />
+    })
+
     return (
       <div>
         {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
         <form onSubmit={this.handleSubmit}>
-
+          {fields}
           <button type='submit' className='btn btn-primary'>Submit</button>
         </form>
       </div>

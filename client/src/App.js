@@ -12,6 +12,7 @@ import JoinGame from './JoinGame';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';
+import EditVenue from './EditVenue';
 
 class App extends Component {
   render() {
@@ -32,6 +33,7 @@ class App extends Component {
               <Route exact path='/newgame' component={NewGame} />
               <Route exact path='/game/join/:id' component={JoinGame} />
               <Route exact path='/admin/upload' component={Upload} />
+              <Route exact path='/edit-venue' component={EditVenue} />
               <Route path='*' component={NotFound} />
             </Switch>
           </React.Fragment>

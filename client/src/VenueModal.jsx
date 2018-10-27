@@ -26,6 +26,12 @@ class VenueModal extends Component {
     e.preventDefault();
   }
 
+  selectVenue = (e) => {
+    // select the venue in redux so it can be used in EditVenue.js
+    this.props.selectVenue(this.props.venue);
+    this.props.redirectToEditVenue();
+  }
+
   render() {
     let {venue, user} = this.props;
     if (!venue) venue = {};
@@ -54,7 +60,8 @@ class VenueModal extends Component {
           </div>
           <div className='modal-footer'>
             {user.authenticated && 
-              <button className='btn btn-primary' data-dismiss='modal' >Edit Venue</button>
+            // What is best practice here.  Should I use <Redirect> instead of <Link> since I'm also calling a function?
+              <button className='btn btn-primary' data-dismiss='modal' onClick={this.selectVenue}>Edit Venue</button>
             }
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>
           </div>
