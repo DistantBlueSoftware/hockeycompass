@@ -40,10 +40,11 @@ class EditVenue extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let venue = this.state;
+    delete venue['errorMessage'];
     let needsConfirmation = false;
     let confirmText = '';
-    venue.lastUpdated = moment().format('YYYY-MM-DD');
-
+    venue._id = this.props.selectedVenue._id;
+    this.props.editVenue(venue);
   }
 
   render() {
@@ -60,15 +61,16 @@ class EditVenue extends Component {
       'url'
     ]
     // Creating a separate field for each venue field.  InputField defined above
-    const fields = venueProperties.map((property, i) => {
+    const fields = venueProperties.map((property, i) => 
       <InputField key={i.toString()}
+        title={property.charAt(0).toUpperCase() + property.slice(1)}
         name={property}
         type="String"
         name={property}
         defaultValue={''}
         handleChange={this.handleChange}
       />
-    })
+    )
 
     return (
       <div>

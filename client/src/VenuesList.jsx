@@ -5,6 +5,7 @@ import * as actions from './actions';
 import { AdBanner } from './AdBanner';
 import VenueModal from './VenueModal';
 import { Redirect } from 'react-router-dom'
+import './VenuesList.css'
 
 const mapStateToProps = state => {
   return { ...state };

@@ -15,3 +15,5 @@ export const PROCESS_PAYMENT = 'PROCESS_PAYMENT';
 export const SAVE_VENUE = 'SAVE_VENUE';
 export const LIST_VENUES = 'LIST_VENUES';
 export const SELECT_VENUE = 'SELECT_VENUE';
+export const EDIT_VENUE = 'EDIT_VENUE';
+export const EDIT_VENUE_ERROR = 'EDIT_VENUE_ERROR';
