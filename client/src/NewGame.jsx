@@ -16,6 +16,8 @@ class NewGame extends Component {
       date: moment().format('YYYY-MM-DD'),
       time: '19:00',
       type: 'public',
+      // if directed from VenueModal, the venue is set as props.selectedVenue
+      location: this.props.selectedVenue.name ? this.props.selectedVenue.name : '',
       errorMessage: ''
     }
   }
@@ -32,6 +34,9 @@ class NewGame extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let game = this.state;
+
+    console.log('game');
+    console.log(game)
     let needsConfirmation = false;
     let confirmText = '';
     game.host = this.props.user.username;

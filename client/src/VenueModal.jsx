@@ -73,7 +73,7 @@ class VenueModal extends Component {
               />
               <Button 
                 className='btn btn-primary'
-                data-dismiss='modal'
+                dataDismiss='modal'
                 handleClick={this.selectVenueAndRedirect}
                 text={'Schedule a Game'}
                 data={'/newgame'}

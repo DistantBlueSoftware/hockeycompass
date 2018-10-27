@@ -34,6 +34,7 @@ class Form extends Component {
       venue._id = this.props.selectedVenue._id;
       this.props.editVenue(venue);
       this.props.redirect('/venues');
+
     }
   }
 
