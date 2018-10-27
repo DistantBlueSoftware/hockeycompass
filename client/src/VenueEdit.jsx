@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import moment from 'moment';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
+import { Redirect } from 'react-router-dom'
 
 const mapStateToProps = state => {
   return { ...state };
@@ -20,12 +20,10 @@ const InputField = (props) => {
   )
 }
 
-class EditVenue extends Component {
+class Form extends Component {
   constructor(props) {
-    super(props);
-    this.state = {
-      errorMessage: ''
-    }
+    super(props)
+    this.state = {}
   }
 
   handleChange = (e) => {
@@ -40,11 +38,11 @@ class EditVenue extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
     let venue = this.state;
-    delete venue['errorMessage'];
     const confirm = window.confirm('Are you ready to submit your changes?')
     if (confirm === true) {
       venue._id = this.props.selectedVenue._id;
       this.props.editVenue(venue);
+      this.props.redirect('/venues');
     }
   }
 
@@ -74,14 +72,42 @@ class EditVenue extends Component {
     )
 
     return (
-      <div>
-        {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
-        <form onSubmit={this.handleSubmit}>
-          {fields}
-          <button type='submit' className='btn btn-primary'>Submit</button>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit}>
+        {fields}
+        <button type='submit' className='btn btn-primary'>Submit</button>
+      </form>
     )
+  }
+}
+
+class EditVenue extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      errorMessage: '',
+      redirectTo: null,
+    }
+  }
+
+  redirect = (redirectTo) => {
+    this.setState({
+      redirectTo: redirectTo
+    })
+  }
+
+  render() {
+    const { errorMessage } = this.state;
+    if (this.state.redirectTo) {
+      return <Redirect to={this.state.redirectTo} />
+    } else {
+      return (
+        <div>
+          {errorMessage && <div style={{ color: 'red' }}>{errorMessage}</div>}
+          <Form redirect={this.redirect}
+            {...this.props}/>
+        </div>
+      )
+    }
   }
 }
 export default connect(mapStateToProps, actions)(requireAuth(EditVenue));

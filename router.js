@@ -245,7 +245,6 @@ router.post('/venue', (req, res, next) => {
 router.put('/venue', (req, res, next) => {
   const venueId = req.body._id;
   const updatedVenue = req.body;
-  delete updatedVenue['lastUpdated'];
   Venue.findOneAndUpdate(
     { _id: venueId },
     {
