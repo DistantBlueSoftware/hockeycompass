@@ -3,22 +3,13 @@ import { connect } from 'react-redux';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
 import { Redirect } from 'react-router-dom'
+// Components
+import InputField from './components/InputField'
 
 const mapStateToProps = state => {
   return { ...state };
 }
 
-const InputField = (props) => {
-  const handleChange = (event) => {
-    props.handleChange(event);
-  }
-  return (
-    <div className='form-group'>
-      <label htmlFor={props.name}>{props.title} </label>
-      <input className='form-control' type={props.type} name={props.name} defaultValue={props.defaultValue} onChange={handleChange} />
-    </div>
-  )
-}
 
 class Form extends Component {
   constructor(props) {

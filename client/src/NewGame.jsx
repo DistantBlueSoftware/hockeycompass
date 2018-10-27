@@ -79,7 +79,7 @@ class NewGame extends Component {
           </div>
           <div className='form-group'>
             <label htmlFor='location'>Location: </label>
-            <select className='form-control' name='location' id='location' onChange={this.handleChange} >
+            <select className='form-control' name='location' id='location' defaultValue={this.props.selectedVenue.name} onChange={this.handleChange} >
               <option></option>
               {arenaNames}
             </select>
