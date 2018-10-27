@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
+// Components
+import Button from './components/button';
 
 const mapStateToProps = state => {
   return {...state};
@@ -26,10 +28,11 @@ class VenueModal extends Component {
     e.preventDefault();
   }
 
-  selectVenue = (e) => {
-    // select the venue in redux so it can be used in EditVenue.js
+  selectVenueAndRedirect = (path) => {
+    // select venue in redux, so it's available in newgame
     this.props.selectVenue(this.props.venue);
-    this.props.redirectToEditVenue();
+    // redirect in VenuesList
+    this.props.redirectTo(path);
   }
 
   render() {
@@ -60,8 +63,22 @@ class VenueModal extends Component {
           </div>
           <div className='modal-footer'>
             {user.authenticated && 
-            // What is best practice here.  Should I use <Redirect> instead of <Link> since I'm also calling a function?
-              <button className='btn btn-primary' data-dismiss='modal' onClick={this.selectVenue}>Edit Venue</button>
+            <Fragment>
+              <Button 
+                className='btn btn-primary'
+                dataDismiss='modal'
+                handleClick={this.selectVenueAndRedirect}
+                text={'Edit Venue'}
+                data={'/edit-venue'}
+              />
+              <Button 
+                className='btn btn-primary'
+                data-dismiss='modal'
+                handleClick={this.selectVenueAndRedirect}
+                text={'Schedule a Game'}
+                data={'/newgame'}
+              />
+            </Fragment>
             }
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>
           </div>

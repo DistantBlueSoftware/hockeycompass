@@ -39,9 +39,9 @@ class VenuesList extends Component {
     }
   }
 
-  redirectToEditVenue = () => {
+  redirectTo = (path) => {
     this.setState({
-      redirectTo: '/edit-venue'
+      redirectTo: path
     })
   }
 
@@ -87,7 +87,7 @@ class VenuesList extends Component {
             </table>
           </div>
           <AdBanner />
-          <VenueModal show={showModal} venue={modalData} user={user} redirectToEditVenue={this.redirectToEditVenue} />
+          <VenueModal show={showModal} venue={modalData} user={user} redirectTo={this.redirectTo} />
         </div>
       )
     }
