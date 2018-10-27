@@ -41,10 +41,11 @@ class EditVenue extends Component {
     e.preventDefault();
     let venue = this.state;
     delete venue['errorMessage'];
-    let needsConfirmation = false;
-    let confirmText = '';
-    venue._id = this.props.selectedVenue._id;
-    this.props.editVenue(venue);
+    const confirm = window.confirm('Are you ready to submit your changes?')
+    if (confirm === true) {
+      venue._id = this.props.selectedVenue._id;
+      this.props.editVenue(venue);
+    }
   }
 
   render() {
@@ -61,13 +62,13 @@ class EditVenue extends Component {
       'url'
     ]
     // Creating a separate field for each venue field.  InputField defined above
-    const fields = venueProperties.map((property, i) => 
+    const fields = venueProperties.map((property, i) =>
       <InputField key={i.toString()}
         title={property.charAt(0).toUpperCase() + property.slice(1)}
         name={property}
         type="String"
         name={property}
-        defaultValue={''}
+        defaultValue={this.props.selectedVenue[property]}
         handleChange={this.handleChange}
       />
     )
