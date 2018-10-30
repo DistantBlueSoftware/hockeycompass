@@ -49,7 +49,7 @@ const PayoutSchedule = new CronJob('0 */8 * * *', function() {
               gameIDs.push(game._id);
               User.findOne({username: game.host})
                 .exec()
-                .then(user => user && payouts.push({gameID: game._id, payee: user.email, amount: 0}))
+                .then(user => payouts.push({gameID: game._id, payee: user.email, amount: 0}))
                 .catch(err => console.log(err))
             }
           })
@@ -58,16 +58,28 @@ const PayoutSchedule = new CronJob('0 */8 * * *', function() {
       //then organize activePayments by gameID and pay the host of each game that amount
       gameIDs.forEach(gameID => {
         const currentPayout = payouts.find(p => p.gameID === gameID);
+        
         if (currentPayout) {
+          console.log(currentPayout)
           for (const payment of activePayments) {
             if (payment.gameID === gameID) {
               currentPayout.amount += payment.amount;
             }
           }
           console.log(currentPayout.amount)
+          
         }
       })
       // console.log(payouts)
+      request.post({
+        url: `http://${process.env.ROOT_URL}/api/payouts`,
+        json: true,
+        body: payouts
+      }, (err, res, body) => {
+        if (err) console.log(err);
+        console.log('Email sent');
+        //TODO: mark payments paid
+      })
     })
 }, null, true, 'America/Chicago');
 

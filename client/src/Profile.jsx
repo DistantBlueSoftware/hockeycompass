@@ -67,8 +67,11 @@ class Profile extends Component {
 
   render() {
     const { user } = this.props;
+    console.log(user)
     const { emails, notify, errorMessage } = this.state;
     const EmailList = user.profile && user.profile.emails.length && user.profile.emails.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
+    const payoutsList = user.profile && user.profile.payments && user.profile.payments.length > 0 && user.profile.payments.map(payment => <div>{payment.from} - ${payment.amount}</div>)
+    const payoutsTotal = user.profile && user.profile.payments && user.profile.payments.length > 0 && user.profile.payments.reduce((acc, payment) => acc + payment.amount, 0)
     const emailContainerStyle = {
       display: 'flex',
       flexFlow: 'row wrap'
@@ -77,10 +80,18 @@ class Profile extends Component {
       <div className='container-fluid'>
         <h1>{user.username} - profile</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
-        <div style={{padding: '20px'}}>
-          <h3>Email List:</h3>
-          {user.profile && user.profile.emails && user.profile.emails.length > 0 && <div style={emailContainerStyle}>{EmailList}</div>}
-        </div>
+        {user.profile && user.profile.emails && user.profile.emails.length > 0 &&
+          <div style={{padding: '20px'}}>
+            <h3>Email List:</h3>
+            <div style={emailContainerStyle}>{EmailList}</div>
+          </div>
+        }
+        {user.profile && user.profile.payments && user.profile.payments.length > 0 &&
+          <div style={{padding: '20px'}}>
+            <h3>Pending Payouts: ${payoutsTotal}</h3>
+            <div>{payoutsList}</div>
+          </div>
+        }
         <div style={{padding: '20px'}}>
           <h3>Preferences:</h3>
           <form onSubmit={this.handleSubmit}>

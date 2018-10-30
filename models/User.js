@@ -13,7 +13,12 @@ const userSchema = new Schema({
   password: String,
   profile: {
     emails: [String],
-    notify: {type: Boolean, default: true}
+    notify: {type: Boolean, default: true},
+    payments: [{
+      game: String,
+      from: String,
+      amount: Number
+    }]
   },
   metrics: {
     loginCount: Number,

@@ -150,6 +150,14 @@ router.put('/games/:id', (req, res, next) => {
               })
               .then(console.log)
               .catch(console.error);
+              
+              user.profile.payments.push({
+                game: game.name, 
+                from: req.body.username, 
+                amount: game.costPerPlayer
+              });
+              user.save()
+                .catch(err => next(err));
             })
             .catch(err => next(err));
             //create a record for future payout to host 
@@ -157,12 +165,13 @@ router.put('/games/:id', (req, res, next) => {
               gameID: game._id,
               payer: req.body.username,
               payoutDate: game.date,
-              amount: game.costPerPlayer + 1,
+              amount: game.costPerPlayer,
             });
             paymentDetail.save()
               .catch(err => next(err));
           }
         })
+        .catch(err => next(err));
     })
     .catch((err) => next(err));
 });
@@ -268,6 +277,10 @@ router.post('/games/:id/notification', (req, res, next) => {
     }
 
 });
+
+router.post('/payouts', (req, res, next) => {
+  console.log(req.body)
+})
 
 router.put('/user/:username', (req, res, next) => {
   User.findOne({username: req.params.username})
