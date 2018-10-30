@@ -45,7 +45,7 @@ class GamesList extends Component {
   }
 
   render() {
-    const { games, user } = this.props;
+    const { games, user, history } = this.props;
     const { loading, modalData, showModal } = this.state;
     return (
     <div className='GamesList container-fluid'>
@@ -62,8 +62,8 @@ class GamesList extends Component {
             <tr>
               <th>Join</th>
               <th>Date</th>
-              <th>Location</th>
               <th>Name</th>
+              <th>Location</th>
               <th>Host</th>
               <th>Players</th>
               <th>Openings</th>
@@ -78,8 +78,8 @@ class GamesList extends Component {
                   <JoinButton loading={game._id === loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
                 </td>
                 <td data-toggle='modal' data-target='#roster-modal'>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
-                <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.name}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.host}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
@@ -109,7 +109,7 @@ class GamesList extends Component {
       }
       <PaymentModal show={showModal} game={modalData} user={user} setLoadingState={this.setLoadingState} />
       <ContactModal show={showModal} game={modalData} user={user} />
-      <RosterModal show={showModal} game={modalData} user={user} />
+      <RosterModal show={showModal} game={modalData} user={user} history={history} />
       <AdBanner />
     </div>
   )

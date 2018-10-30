@@ -1,7 +1,8 @@
-import { ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   games: [],
+  current: {},
   errorMessage: ''
 };
 
@@ -18,6 +19,8 @@ export default function(state = INITIAL_STATE, action) {
         return game;
       })
       return {...state, games: updatedGames, lastUpdate: new Date()};
+    case SHOW_GAME: 
+      return {...state, current: {...action.payload}}
     case CANCEL_GAME:
       const index = state.games.findIndex(game => game._id === action.payload._id)
       return {...state, games: [...state.games.slice(0, index), ...state.games.slice(index + 1)]}

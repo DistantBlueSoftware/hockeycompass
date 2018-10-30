@@ -88,7 +88,7 @@ class Profile extends Component {
         }
         {user.profile && user.profile.payments && user.profile.payments.length > 0 &&
           <div style={{padding: '20px'}}>
-            <h3>Pending Payouts: ${payoutsTotal}</h3>
+            <h3>Pending Payouts: <span style={{color: '#218838'}}>${payoutsTotal}</span></h3>
             <div>{payoutsList}</div>
           </div>
         }

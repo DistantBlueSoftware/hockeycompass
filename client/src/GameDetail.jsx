@@ -63,13 +63,15 @@ class GameDetail extends Component {
   }
   
   componentDidMount() {
-    const { venues } = this.props;
+    const { venues, match, game } = this.props;
     if (venues && venues.all.length === 0) this.props.listVenues();
+    if (!game && match && match.params.id) this.props.getGameDetails(match.params.id);
   }
 
   render() {
-    const { user, venues, isNew = true, game = {} } = this.props;
+    const { user, venues, game = {}, match } = this.props;
     const { errorMessage } = this.state;
+    const isNew = match && !match.params.id;
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
       <div className='game-detail'>

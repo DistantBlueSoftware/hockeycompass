@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -133,6 +133,15 @@ export const listGames = () => async dispatch => {
     try {
       const response = await axios.get(`/api/games`);
       dispatch ({ type: LIST_GAMES, payload: response });
+    } catch (e) {
+      dispatch({ type: UPDATE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'})
+    }
+}
+
+export const getGameDetails = () => async dispatch => {
+    try {
+      const response = await axios.get(`/api/games/:id`);
+      dispatch ({ type: SHOW_GAME, payload: response.data });
     } catch (e) {
       dispatch({ type: UPDATE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'})
     }
