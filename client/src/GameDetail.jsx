@@ -61,6 +61,11 @@ class GameDetail extends Component {
       });
     }
   }
+  
+  componentDidMount() {
+    const { venues } = this.props;
+    if (venues && venues.all.length === 0) this.props.listVenues();
+  }
 
   render() {
     const { user, venues, isNew = true, game = {} } = this.props;

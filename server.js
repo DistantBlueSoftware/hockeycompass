@@ -5,7 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const router = require('./router');
 const cors = require('cors');
-const cron = require('./services/cron');
+const {EmailCheck, PayoutSchedule} = require('./services/cron');
 
 const app = express();
 
@@ -51,7 +51,8 @@ app.use(function(req, res, next) {
 app.use('/api', router);
 
 //start cron jobs
-cron.start();
+EmailCheck.start();
+PayoutSchedule.start();
 
 //starts the server and listens for requests
 app.listen(port, function() {

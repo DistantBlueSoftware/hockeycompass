@@ -14,6 +14,7 @@ const Game = require('./models/Game');
 const User = require('./models/User');
 const Venue = require('./models/Venue');
 const EmailQueue = require('./models/EmailQueue');
+const Payment = require('./models/Payment');
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
@@ -61,7 +62,7 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, type, location, host, maxPlayers } = req.body;
+  const { name, date, type, location, host, maxPlayers, costPerPlayer } = req.body;
   const game = new Game({
     name,
     date,
@@ -69,6 +70,7 @@ router.post('/games', function (req, res, next) {
     location,
     host,
     maxPlayers,
+    costPerPlayer,
     players: [host]
   });
 
@@ -106,10 +108,11 @@ router.delete('/games/:id', function (req, res, next) {
 router.put('/games/:id', (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
-    .then((game) => {
+    .then(game => {
       game.players.push(req.body.username);
       game.save()
-        .then(() => {
+        .then(game => {
+          //if player is not game host, send join game email
           if (game.host !== req.body.username) {
             emailService.send({
               template: 'join-game',
@@ -126,6 +129,7 @@ router.put('/games/:id', (req, res, next) => {
             })
             .then(console.log)
             .catch(console.error);
+          //send email to host informing them that a player has joined
           User.findOne({username: game.host})
             .exec()
             .then(user => {
@@ -147,12 +151,18 @@ router.put('/games/:id', (req, res, next) => {
               .then(console.log)
               .catch(console.error);
             })
-
+            .catch(err => next(err));
+            //create a record for future payout to host 
+            const paymentDetail = new Payment({
+              gameID: game._id,
+              payer: req.body.username,
+              payoutDate: game.date,
+              amount: game.costPerPlayer + 1,
+            });
+            paymentDetail.save()
+              .catch(err => next(err));
           }
-
-          res.json(game);
         })
-        .catch((err) => next(err));
     })
     .catch((err) => next(err));
 });

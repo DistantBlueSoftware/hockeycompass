@@ -122,7 +122,7 @@ export const newGame = (game, callback) => async dispatch => {
         `/api/games`,
         game
       );
-      dispatch ({ type: NEW_GAME, payload: response });
+      dispatch ({ type: NEW_GAME, payload: response.data });
       callback();
     } catch (e) {
       dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and the game could not be created. Please try again.'})

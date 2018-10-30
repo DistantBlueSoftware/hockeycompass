@@ -7,9 +7,10 @@ const INITIAL_STATE = {
 
 export default function(state = INITIAL_STATE, action) {
   switch(action.type) {
+    case NEW_GAME:
+      return {...state, games: [...state.games, action.payload]}
     case ADD_PLAYER:
     case REMOVE_PLAYER:
-    case NEW_GAME:
       const updatedGames = state.games.map(game => {
         if (game._id === action.payload._id) {
           return {...action.payload};

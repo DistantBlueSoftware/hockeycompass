@@ -24,7 +24,9 @@ class GamesList extends Component {
     }
   }
   componentDidMount() {
-    this.props.listGames();
+    const { games, venues } = this.props;
+    if (games && games.games.length === 0) this.props.listGames();
+    if (venues && venues.all.length === 0) this.props.listVenues();
   }
   
   setLoadingState = bool => {
