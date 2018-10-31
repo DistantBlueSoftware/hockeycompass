@@ -1,15 +1,11 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navigation from './Navigation';
-import { Header } from './Header';
 import { NotFound } from './NotFound';
 import Home from './Home';
-import Login from './Login';
-import Register from './Register';
 import LoginRegister from './LoginRegister';
 import Profile from './Profile';
 import GameDetail from './GameDetail';
-import JoinGame from './JoinGame';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';

@@ -7,7 +7,7 @@ import * as actions from './actions';
 class StripePaymentForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
-    const {processPayment, costWithFee, game, user, addPlayer, setLoadingState} = this.props;
+    const {costWithFee, game, user, addPlayer, setLoadingState} = this.props;
     setLoadingState(game._id);
     // Within the context of `Elements`, this call to createToken knows which Element to
     // tokenize, since there's only one in this group.

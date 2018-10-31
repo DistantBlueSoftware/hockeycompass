@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -81,7 +81,7 @@ export const doLogout = () => {
 export const addPlayer = (game, user, callback) => async dispatch => {
     try {
       const response = await axios.put(
-        `/api/games/${game._id}`,
+        `/api/games/${game._id}/add`,
         user
       );
       dispatch ({ type: ADD_PLAYER, payload: response.data });
@@ -129,6 +129,19 @@ export const newGame = (game, callback) => async dispatch => {
     }
 }
 
+export const updateGame = (game, callback) => async dispatch => {
+    try {
+      const response = await axios.put(
+        `/api/games/${game._id}`,
+        game
+      );
+      dispatch ({ type: UPDATE_GAME, payload: response.data });
+      callback();
+    } catch (e) {
+      dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and the game could not be created. Please try again.'})
+    }
+}
+
 export const listGames = () => async dispatch => {
     try {
       const response = await axios.get(`/api/games`);
@@ -138,9 +151,9 @@ export const listGames = () => async dispatch => {
     }
 }
 
-export const getGameDetails = () => async dispatch => {
+export const getGameDetails = id => async dispatch => {
     try {
-      const response = await axios.get(`/api/games/:id`);
+      const response = await axios.get(`/api/games/${id}`);
       dispatch ({ type: SHOW_GAME, payload: response.data });
     } catch (e) {
       dispatch({ type: UPDATE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'})

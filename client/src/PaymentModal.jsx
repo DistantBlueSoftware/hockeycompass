@@ -7,9 +7,6 @@ import * as actions from './actions';
 
 const PaymentModal = ({game = {}, user, addPlayer, processPayment, setLoadingState}) => {
 const costWithFee = game.costPerPlayer + 1;
-  const onToken = token => {
-    processPayment(token, costWithFee, game, user, addPlayer, () => setLoadingState(false));
-    }
   return (
     <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
     <div className='modal-dialog' role='document'>

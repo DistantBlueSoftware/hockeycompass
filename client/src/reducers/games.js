@@ -1,4 +1,4 @@
-import { ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, UPDATE_GAME, SHOW_GAME, LIST_GAMES, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   games: [],
@@ -12,6 +12,7 @@ export default function(state = INITIAL_STATE, action) {
       return {...state, games: [...state.games, action.payload]}
     case ADD_PLAYER:
     case REMOVE_PLAYER:
+    case UPDATE_GAME:
       const updatedGames = state.games.map(game => {
         if (game._id === action.payload._id) {
           return {...action.payload};

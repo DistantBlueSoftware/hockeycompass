@@ -9,6 +9,7 @@ export const ADD_PLAYER = 'ADD_PLAYER';
 export const REMOVE_PLAYER = 'REMOVE_PLAYER';
 export const NEW_GAME = 'NEW_GAME';
 export const SHOW_GAME = 'SHOW_GAME';
+export const UPDATE_GAME = 'UPDATE_GAME';
 export const LIST_GAMES = 'LIST_GAMES';
 export const CANCEL_GAME = 'CANCEL_GAME';
 export const SEND_EMAILS = 'SEND_EMAILS';

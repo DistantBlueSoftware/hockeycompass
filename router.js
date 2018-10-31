@@ -98,6 +98,20 @@ router.get('/games/:id', (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.put('/games/:id', (req, res, next) => {
+  Game.findById(req.params.id)
+    .exec()
+    .then(game => {
+      for (const key of Object.keys(req.body)) {
+        game[key] = req.body[key];
+      }
+      game.save()
+        .then(game => res.json(game))
+        .catch(err => next(err));
+    })
+    .catch(err => next(err));
+});
+
 router.delete('/games/:id', function (req, res, next) {
   Game.findOneAndDelete({ _id: req.params.id })
     .exec()
@@ -105,7 +119,7 @@ router.delete('/games/:id', function (req, res, next) {
     .catch((err) => next(err));
 });
 
-router.put('/games/:id', (req, res, next) => {
+router.put('/games/:id/add', (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
     .then(game => {
