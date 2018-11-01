@@ -12,8 +12,9 @@ const mapStateToProps = state => {
 class GameDetail extends Component {
   constructor(props) {
     super(props);
+    const { games } = this.props;
     this.state = {
-      date: moment().format('YYYY-MM-DD'),
+      date: moment().add('days', 1).format('YYYY-MM-DD'),
       time: '19:00',
       type: 'public',
       errorMessage: ''
@@ -33,6 +34,12 @@ class GameDetail extends Component {
     e.preventDefault();
     let game = this.state;
     game.date = moment(game.date + ' ' + game.time);
+    if (!moment(game.date).isValid()) {
+      this.setState({
+        errorMessage: 'Error: You must specify a date'
+      })
+      return;
+    }
     this.props.updateGame(game, () => {
       this.props.history.push('/games');
     })
@@ -74,8 +81,12 @@ class GameDetail extends Component {
     const { venues, match, game } = this.props;
     if (venues && venues.all.length === 0) this.props.listVenues();
     if (!game && match && match.params.id) {
-      this.props.getGameDetails(match.params.id);
-      this.setState({...this.props.games.current})
+      this.props.getGameDetails(match.params.id, () => {
+        const currentGame = {...this.props.games.current};
+        currentGame.date = moment(this.props.games.current.date).format('YYYY-MM-DD');
+        currentGame.time = moment(this.props.games.current.date).format('HH:mm');
+        this.setState({...currentGame})
+      });
     }
   }
 
@@ -94,11 +105,11 @@ class GameDetail extends Component {
           <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='date'>Date: </label>
-              <input className='form-control' type='date' name='date' id='date' value={moment(game.date).format('YYYY-MM-DD')} onChange={this.handleChange} />
+              <input className='form-control' type='date' name='date' id='date' value={game.date} onChange={this.handleChange} />
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='time'>Time: </label>
-              <input className='form-control' type='time' name='time' id='time' value={game.time} defaultValue={moment(game.date).format('HH:mm')} onChange={this.handleChange} />
+              <input className='form-control' type='time' name='time' id='time' value={game.time} onChange={this.handleChange} />
             </div>
           </div>
           <div className='row'>

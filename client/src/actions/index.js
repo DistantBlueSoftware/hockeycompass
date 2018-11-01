@@ -151,10 +151,11 @@ export const listGames = () => async dispatch => {
     }
 }
 
-export const getGameDetails = id => async dispatch => {
+export const getGameDetails = (id, callback) => async dispatch => {
     try {
       const response = await axios.get(`/api/games/${id}`);
       dispatch ({ type: SHOW_GAME, payload: response.data });
+      callback();
     } catch (e) {
       dispatch({ type: UPDATE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'})
     }

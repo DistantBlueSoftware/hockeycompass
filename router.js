@@ -99,6 +99,7 @@ router.get('/games/:id', (req, res, next) => {
 });
 
 router.put('/games/:id', (req, res, next) => {
+  console.log(req.body.date)
   Game.findById(req.params.id)
     .exec()
     .then(game => {
