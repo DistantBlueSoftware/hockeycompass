@@ -99,7 +99,6 @@ router.get('/games/:id', (req, res, next) => {
 });
 
 router.put('/games/:id', (req, res, next) => {
-  console.log(req.body.date)
   Game.findById(req.params.id)
     .exec()
     .then(game => {
@@ -246,7 +245,7 @@ router.post('/games/:id/notification', (req, res, next) => {
       .exec()
       .then(users => {
         const playerEmails = users
-                              .filter(user => user.notify)
+                              .filter(user => user.profile.notify)
                               .filter(user => req.body.players.indexOf(user.username) === -1)
                               .map(user => user.email)
                               .toString();

@@ -26,11 +26,12 @@ class StripePaymentForm extends Component {
     // }});
   };
   render() {
+    const { user } = this.props;
     return (
       <form className='payment-form' onSubmit={this.handleSubmit}>
         <label>
           Card details
-          <CardElement style={{base: {fontSize: '18px'}}} />
+          <CardElement style={{base: {fontSize: '18px'}}} value={{postalCode: user.zipCode}}/>
         </label>
         <button className='btn btn-success' data-dismiss='modal' onClick={e => this.handleSubmit(e)}>Pay and Join</button>
       </form>

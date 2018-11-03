@@ -40,6 +40,10 @@ class GameDetail extends Component {
       })
       return;
     }
+    if (game.maxPlayers < game.players.length) {
+      this.setState({errorMessage: `There are already ${game.players.length} players in the game!`})
+      return;
+    }
     this.props.updateGame(game, () => {
       this.props.history.push('/games');
     })
@@ -96,6 +100,7 @@ class GameDetail extends Component {
     const { errorMessage } = this.state;
     const isNew = match && !match.params.id;
     const buttonText = isNew ? 'Create Game' : 'Update Game';
+    const costMessage = game.costPerPlayer ? <div>cost per player will be <span style={{fontSize: '16px', color: 'green'}}>${+game.costPerPlayer+1}</span> <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; $1 HC fee</div> : '';
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
       <div className='game-detail'>
@@ -134,11 +139,12 @@ class GameDetail extends Component {
           <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='maxPlayers'>Player Cap: </label>
-              <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' value={game.maxPlayers} onChange={this.handleChange} />
+              <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' min={1} value={game.maxPlayers} onChange={this.handleChange} />
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='costPerPlayer'>Cost Per Player: </label>
-              <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' step='.01' value={game.costPerPlayer} onChange={this.handleChange} />
+              <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} step='.01' value={game.costPerPlayer} onChange={this.handleChange} />
+              {costMessage}
             </div>
           </div>
           <div className='row'>

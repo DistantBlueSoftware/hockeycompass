@@ -33,8 +33,9 @@ const EmailCheck = new CronJob('* * * * *', function() {
     .catch(err => console.log(err))
 }, null, true, 'America/Chicago');
 
-const PayoutSchedule = new CronJob('0 */8 * * *', function() {
-  console.log('every eight hours');
+//payouts run every night at midnight
+const PayoutSchedule = new CronJob('0 0 * * *', function() {
+  console.log('checking payments logs');
   Payment.find({})
     .then(async payments => {
       //first create a list of all games that have scheduled payouts
