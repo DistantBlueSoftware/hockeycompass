@@ -1,0 +1,10 @@
+head
+  //link(rel='stylesheet', href='/css/notify.css', data-inline)
+//img(src='logo.png')
+h1 You've been invited by #{host} to join their game!
+p Game Name: #{name}
+p Date: #{date}
+p Location: #{location}
+p Details and join here:
+  a(href=`http://${url}/game/join/${id}`)
+    button Join

@@ -62,7 +62,7 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, type, location, host, maxPlayers, costPerPlayer } = req.body;
+  const { name, date, type, location, host, maxPlayers, costPerPlayer, emailList } = req.body;
   const game = new Game({
     name,
     date,
@@ -84,6 +84,25 @@ router.post('/games', function (req, res, next) {
         });
       notification.save()
         .catch(err => next(err));
+      } else {
+        //send new game email to email list
+        emailService.send({
+          template: 'notify-private',
+          message: {
+            to: 'no-reply@hockeycompass.com',
+            bcc: emailList
+          },
+          locals: {
+            name: req.body.name,
+            host: host,
+            date: moment(req.body.date).format('MM/DD/YYYY h:mmA'),
+            location: req.body.location,
+            url: process.env.ROOT_URL,
+            id: req.params.id
+          }
+        })
+        .then(console.log)
+        .catch(console.error);
       }
       //return game info to client  
       res.json(game);

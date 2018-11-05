@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import utils from '@distantbluesoftware/dbsutil';
 import moment from 'moment';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
@@ -17,6 +18,7 @@ class GameDetail extends Component {
       date: moment().add('days', 1).format('YYYY-MM-DD'),
       time: '19:00',
       type: 'public',
+      emailList: this.props.user.profile.emails,
       errorMessage: ''
     }
   }
@@ -70,6 +72,31 @@ class GameDetail extends Component {
       needsConfirmation = true;
       confirmText = 'Maximum capacity of ' + game.maxPlayers + ' players is higher than average. Continue?';
     }
+    if (game.type === 'private') {
+      let currentList = [];
+      let emails, invalidEmails = [];
+      if (typeof this.state.emailList === 'string') emails = utils.removeWhitespace(this.state.emailList).split(',');
+      else emails = this.state.emailList;
+      emails.filter(email => email.length > 0).forEach(email => {
+        if (!utils.validateEmail(email) || email === '') {
+          invalidEmails.push(email)
+        }
+      });
+      if (invalidEmails.length) {
+        this.setState({
+          errorMessage: `The following emails are invalid: ${invalidEmails.join('\n ')} \nPlease correct and retry.`
+        });
+        return;
+      } else {
+        emails.forEach(email => {
+          if (currentList.indexOf(email) === -1) {
+            currentList.push(email);
+          }
+        })
+        game.emailList = currentList;
+      } 
+    }
+    
     if (needsConfirmation && window.confirm(confirmText)) {
       this.props.newGame(game, () => {
         this.props.history.push('/games');
@@ -95,6 +122,7 @@ class GameDetail extends Component {
   }
 
   render() {
+    console.log(this.state)
     const { user, venues, match } = this.props;
     const game = this.state;
     const { errorMessage } = this.state;
