@@ -138,24 +138,24 @@ class GameDetail extends Component {
           <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='date'>Date: </label>
-              <input className='form-control' type='date' name='date' id='date' value={game.date} onChange={this.handleChange} />
+              <input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='time'>Time: </label>
-              <input className='form-control' type='time' name='time' id='time' value={game.time} onChange={this.handleChange} />
+              <input className='form-control' type='time' name='time' id='time' required value={game.time} onChange={this.handleChange} />
             </div>
           </div>
           <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>
-              <select className='form-control' name='location' id='location' value={game.location} onChange={this.handleChange} >
+              <select className='form-control' name='location' id='location' required value={game.location} onChange={this.handleChange} >
                 <option></option>
                 {arenaNames}
               </select>
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='name'>Game Name: </label>
-              <input className='form-control' type='text' name='name' id='name' value={game.name} onChange={this.handleChange} />
+              <input className='form-control' type='text' name='name' id='name' required value={game.name} onChange={this.handleChange} />
             </div>
           </div>
           <div className='row'>

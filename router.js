@@ -6,6 +6,7 @@ const emailService = require('./emailService');
 
 const passport = require('passport');
 const moment = require('moment');
+const tz = require('moment-timezone');
 
 const Authentication = require('./controllers/authentication');
 const passportService = require('./services/passport');
@@ -95,7 +96,7 @@ router.post('/games', function (req, res, next) {
           locals: {
             name: req.body.name,
             host: host,
-            date: moment(req.body.date).format('MM/DD/YYYY h:mmA'),
+            date: moment(req.body.date).tz('America/Chicago').format('MM/DD/YYYY h:mmA'),
             location: req.body.location,
             url: process.env.ROOT_URL,
             id: req.params.id
