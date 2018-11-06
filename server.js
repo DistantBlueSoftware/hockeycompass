@@ -27,14 +27,16 @@ mongoose.connect(uristring, { useNewUrlParser: true }, (err, res) => {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+
 if (process.env.REACT_APP_ENV !=='localhost') {
   const path = require('path');
-app.use(express.static(path.join(__dirname, 'client/build')));
+  app.use(express.static(path.join(__dirname, 'client/build')));
 
-app.get('/', (req, res) => {
-  res.sendFile(path.join(__dirname, '/client/build/index.html'));
-});
+  app.get('/', (req, res) => {
+    res.sendFile(path.join(__dirname, '/client/build/index.html'));
+  });
 }
+
 //To prevent errors from Cross Origin Resource Sharing, we will set our headers to allow CORS with middleware like so:
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');

@@ -7,13 +7,13 @@ import * as actions from './actions';
 class StripePaymentForm extends Component {
   handleSubmit = e => {
     e.preventDefault();
-    const {costWithFee, game, user, addPlayer, setLoadingState} = this.props;
+    const {stripe, costWithFee, game, user, addPlayer, processPayment, setLoadingState} = this.props;
     setLoadingState(game._id);
     // Within the context of `Elements`, this call to createToken knows which Element to
     // tokenize, since there's only one in this group.
-    this.props.stripe.createToken({name: user.username, email: user.email}).then(({token}) => {
-      this.props.processPayment(token, costWithFee, game, user, addPlayer, () => setLoadingState(false));
-    });
+    stripe.createToken({name: user.username, email: user.email})
+      .then(({token}) => processPayment(token, costWithFee, game, user, addPlayer))
+      .then(() => setLoadingState(false));
     // However, this line of code will do the same thing:
     //
     // this.props.stripe.createToken({type: 'card', name: 'Jenny Rosen'});

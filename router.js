@@ -30,6 +30,10 @@ const postStripeCharge = (res, game, user) => (stripeErr, stripeRes) => {
 router.post('/save-stripe-token', function (req, res, next) {
   const { token, amount, game, user } = req.body;
   const convertedAmount = amount * 100;
+  if (!token) {
+    res.status(500).send({error: 'Error: payment info not valid or not provided.'});
+    return;
+  }
   stripe.charges.create({
     source: token.id, 
     amount: convertedAmount, 

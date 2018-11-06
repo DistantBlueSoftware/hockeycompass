@@ -36,7 +36,9 @@ export const processPayment = (token, amount, game, user, callback) => async dis
     dispatch({ type: PROCESS_PAYMENT, payload: response });
     callback(game, user);
   } catch (e) {
-    dispatch({ type: ERROR, payload: 'Payment processing error. Please try again.'});
+    const error = e.response && e.response.data ? e.response.data.error : 'Sorry, an error occurred and your payment could not be processed.';
+    alert(error);
+    dispatch({ type: ERROR, payload: e.response.data.error});
   }
 }
 
