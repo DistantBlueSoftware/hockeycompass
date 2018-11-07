@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import ReactTooltip from 'react-tooltip';
 import * as actions from './actions';
+import './RosterModal.css';
 
 const mapStateToProps = state => {
   return {...state};
@@ -28,11 +30,14 @@ class RosterModal extends Component {
       console.log('Message Sent');
     });
   }
+  
+  componentDidMount() {
+    ReactTooltip.rebuild();
+  }
 
   render() {
     let {user, game, history} = this.props;
     if (!game) game = {};
-    const rinkStyle = {width: '400px', height: '250px', margin: '0 auto', border: '3px solid #2A5489', borderRadius: '20px'};
     return (
       <div className='modal fade' id='roster-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
@@ -44,10 +49,20 @@ class RosterModal extends Component {
             </button>
           </div>
           <div className='modal-body'>
-            <div className='roster-rink' style={rinkStyle}>
+            <div className='roster-rink'>
+              <div className='goal'></div>
             {game.players && game.players.length && 
-              game.players.map((player, index) => <p style={{margin: '10px'}} key={index}>{player}</p>)
+              game.players.map(
+                (player, index) => 
+                <div 
+                  className='player' 
+                  data-tip={player}
+                  key={index}>
+                  {player.slice(0,2)}
+                </div>
+              )
             }
+              <div className='goal'></div>
             </div>
           </div>
           <div className='modal-footer'>

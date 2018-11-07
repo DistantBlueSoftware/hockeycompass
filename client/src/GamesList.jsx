@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import ReactTooltip from 'react-tooltip';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
@@ -111,6 +112,7 @@ class GamesList extends Component {
       <ContactModal show={showModal} game={modalData} user={user} />
       <RosterModal show={showModal} game={modalData} user={user} history={history} />
       <AdBanner />
+      <ReactTooltip />
     </div>
   )
   }
