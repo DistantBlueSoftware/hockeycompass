@@ -123,14 +123,46 @@ router.get('/games/:id', (req, res, next) => {
 });
 
 router.put('/games/:id', (req, res, next) => {
+  let hasMeaningfulChanges = false;
   Game.findById(req.params.id)
     .exec()
     .then(game => {
       for (const key of Object.keys(req.body)) {
-        game[key] = req.body[key];
+        if(game[key]!== req.body[key]) {
+          game[key] = req.body[key];
+          if (key === 'date' || key === 'location') hasMeaningfulChanges = true;
+        }
       }
       game.save()
-        .then(game => res.json(game))
+        .then(async game => {
+          if (hasMeaningfulChanges) {
+            //get emails for joined users
+            let emailList = [];
+            for (const player of game.players) {
+              await User.findOne({username: player})
+                .exec()
+                .then(user => emailList.push(user.email))
+            }
+          
+            emailService.send({
+              template: 'game-updated',
+              message: {
+                to: emailList
+              },
+              locals: {
+                name: game.name,
+                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                location: game.location,
+                url: process.env.ROOT_URL,
+                id: req.params.id
+              }
+            })
+            .then(console.log)
+            .catch(console.error);
+          }
+          
+          res.json(game)
+        })
         .catch(err => next(err));
     })
     .catch(err => next(err));

@@ -38,7 +38,7 @@ setCurrentVenue = (venue, needsAuth) => {
 
   render() {
     const { venues, user } = this.props;
-    const { loading, modalData, showModal } = this.state;
+    const { modalData, showModal } = this.state;
     return (
     <div className='VenuesList container-fluid'>
       <Helmet>

@@ -24,7 +24,7 @@ class Register extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
 
-    const {validationError, password, passwordConfirm} = this.state;
+    const {password, passwordConfirm} = this.state;
 
     if (password !== passwordConfirm) {
       this.setState({

@@ -13,7 +13,6 @@ const mapStateToProps = state => {
 class GameDetail extends Component {
   constructor(props) {
     super(props);
-    const { games } = this.props;
     this.state = {
       date: moment().add('days', 1).format('YYYY-MM-DD'),
       time: '19:00',
