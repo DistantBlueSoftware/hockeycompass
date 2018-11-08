@@ -129,8 +129,9 @@ router.put('/games/:id', (req, res, next) => {
     .then(game => {
       for (const key of Object.keys(req.body)) {
         if(game[key]!== req.body[key]) {
+          if (key === 'location') hasMeaningfulChanges = true;
+          if (key === 'date' && !moment(game[key]).isSame(req.body[key])) hasMeaningfulChanges = true;
           game[key] = req.body[key];
-          if (key === 'date' || key === 'location') hasMeaningfulChanges = true;
         }
       }
       game.save()
@@ -147,7 +148,7 @@ router.put('/games/:id', (req, res, next) => {
             emailService.send({
               template: 'game-updated',
               message: {
-                to: emailList
+                bcc: emailList
               },
               locals: {
                 name: game.name,
