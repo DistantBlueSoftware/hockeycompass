@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import utils from '@distantbluesoftware/dbsutil';
+import _ from 'underscore';
 import * as actions from './actions';
 
 const mapStateToProps = state => {
@@ -67,11 +68,14 @@ class Profile extends Component {
 
   render() {
     const { user } = this.props;
-    console.log(user)
     const { emails, notify, errorMessage } = this.state;
     const EmailList = user.profile && user.profile.emails.length && user.profile.emails.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
-    const payoutsList = user.profile && user.profile.payments && user.profile.payments.length > 0 && user.profile.payments.map(payment => <div>{payment.from} - ${payment.amount}</div>)
-    const payoutsTotal = user.profile && user.profile.payments && user.profile.payments.length > 0 && user.profile.payments.reduce((acc, payment) => acc + payment.amount, 0)
+    let payoutsList, payoutsTotal, payoutGames;
+    if (user.profile && user.profile.payments && user.profile.payments.length > 0) {      
+      payoutGames = _.uniq(user.profile.payments, 'game').map(p => p.game);
+      payoutsList = user.profile.payments.map(payment => <div>{payment.from} - ${payment.amount}</div>)
+      payoutsTotal = user.profile.payments.reduce((acc, payment) => acc + payment.amount, 0)
+    }
     const emailContainerStyle = {
       display: 'flex',
       flexFlow: 'row wrap'
@@ -89,7 +93,14 @@ class Profile extends Component {
         {user.profile && user.profile.payments && user.profile.payments.length > 0 &&
           <div style={{padding: '20px'}}>
             <h3>Pending Payouts: <span style={{color: '#218838'}}>${payoutsTotal}</span></h3>
-            <div>{payoutsList}</div>
+            <p>You'll receive ${payoutsTotal} from your players the next time we send payouts, usually less than 48 hours.</p>
+            {payoutGames && payoutGames.map(g => {
+              return (
+              <div>
+                <h3>{g}</h3>
+                {user.profile.payments.filter(p => p.game === g).map(p => <div>{p.from} - ${p.amount}</div>)}
+              </div>)
+              })}
           </div>
         }
         <div style={{padding: '20px'}}>

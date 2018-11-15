@@ -23,7 +23,6 @@ class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-
     const {password, passwordConfirm} = this.state;
 
     if (password !== passwordConfirm) {
@@ -114,7 +113,7 @@ class Register extends Component {
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.user.errorMessage };
+  return { ...state };
 }
 
 export default connect(mapStateToProps, actions)(Register);

@@ -383,5 +383,10 @@ router.post('/venue', (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.get('/activePayments', (req, res, next) => {
+  Payment.find({paid: false})
+    .then(payments => res.json(payments))
+    .catch((err) => next(err));
+});
 
 module.exports = router;

@@ -61,7 +61,7 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.user.errorMessage };
+  return { ...state };
 }
 
 export default connect(mapStateToProps, actions)(Login);
