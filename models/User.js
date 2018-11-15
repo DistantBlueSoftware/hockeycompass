@@ -20,6 +20,7 @@ const userSchema = new Schema({
       amount: Number
     }]
   },
+  role: {type: Number, default: 0},
   metrics: {
     loginCount: Number,
     joinDate: Date,

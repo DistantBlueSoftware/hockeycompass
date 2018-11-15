@@ -5,6 +5,7 @@ import { NotFound } from './NotFound';
 import Home from './Home';
 import LoginRegister from './LoginRegister';
 import Profile from './Profile';
+import AdminDashboard from './AdminDashboard';
 import GameDetail from './GameDetail';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
@@ -29,6 +30,7 @@ class App extends Component {
               <Route exact path='/newgame' component={GameDetail} />
               <Route exact path='/game/join/:id' render={() => <GamesList openModal={'payment-modal'} />} />
               <Route exact path='/game/:id/edit' component={GameDetail} />} />
+              <Route exact path='/admin' component={AdminDashboard} />
               <Route exact path='/admin/upload' component={Upload} />
               <Route path='*' component={NotFound} />
             </Switch>
