@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import {AdminPayouts} from './AdminPayouts';
 
 class AdminDashboard extends Component {
   constructor(props) {
@@ -13,6 +14,7 @@ class AdminDashboard extends Component {
     return (
       <div>
         <h1>Admin Portal</h1>
+        <AdminPayouts />
       </div>
     )
   }

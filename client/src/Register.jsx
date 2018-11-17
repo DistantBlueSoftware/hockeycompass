@@ -59,6 +59,7 @@ class Register extends Component {
           <div className='form-group'>
             <label htmlFor='email'>Email: </label>
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
+            <p style={{color: '#B52C32'}}>Note: this is the address we will use for your game payouts via PayPal.</p>
           </div>
           <div className='form-group'>
             <label htmlFor='username'>Username: </label>
