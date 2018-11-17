@@ -23,7 +23,13 @@ class Profile extends Component {
     const payoutsEmailField = document.getElementById('payoutsEmail');
     const payoutButton = document.getElementById('payoutsEmailButton');
     if (payoutButton.innerText === 'Update') {
-      this.props.saveProfile(this.props.user.username, {payoutsEmail: payoutsEmailField.value})
+      this.props.saveProfile(
+        this.props.user.username, 
+        {payoutsEmail: payoutsEmailField.value}, 
+        () => {
+          payoutsEmailField.style.display = 'none';
+          payoutButton.innerText = 'Update your Payouts Email here';
+        })
     } else {
       payoutsEmailField.style.display = 'block';
       payoutButton.innerText = 'Update';

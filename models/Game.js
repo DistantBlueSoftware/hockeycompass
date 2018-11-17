@@ -4,6 +4,7 @@ const GameSchema = new mongoose.Schema({
   name: {type: String},
   date: {type: Date},
   type: {type: String},
+  invited: [String],
   location: {type: String},
   host: {type: String},
   maxPlayers: {type: Number},
