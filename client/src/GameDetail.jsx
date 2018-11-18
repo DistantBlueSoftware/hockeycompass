@@ -17,7 +17,7 @@ class GameDetail extends Component {
       date: moment().add('days', 1).format('YYYY-MM-DD'),
       time: '19:00',
       type: 'public',
-      emailList: this.props.user.profile.emails,
+      emailList: this.props.user.profile.emailList,
       errorMessage: ''
     }
   }
@@ -185,7 +185,7 @@ class GameDetail extends Component {
             {this.state.type === 'private' &&
               <div className='form-group col-md-12'>
                 <label htmlFor='emailList'>Email List: </label>
-                <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emails}></textarea>
+                <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emailList}></textarea>
               </div>
             }
           </div>
