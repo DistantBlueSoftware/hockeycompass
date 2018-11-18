@@ -18,7 +18,6 @@ class App extends Component {
         <Router>
           <React.Fragment>
             <Navigation />
-            {/*<Header />*/}
             <Switch>
               <Route exact path='/' component={Home} />
               <Route exact path='/login/' component={LoginRegister} />

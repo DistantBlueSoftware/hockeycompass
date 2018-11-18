@@ -75,7 +75,7 @@ router.post('/games', function (req, res, next) {
     location,
     host,
     maxPlayers,
-    invited: [...emailList] || [],
+    invited: emailList.length ? [...emailList] : [],
     costPerPlayer,
     players: [host]
   });
