@@ -49,11 +49,11 @@ class VenueModal extends Component {
               {venue.phone}
               <br />
               <h5>Website: </h5>
-              <a href={venue.url} target='_blank'>{venue.url}</a>
+              <a href={venue.url} target='_blank' rel='noopener noreferrer'>{venue.url}</a>
             </div>
           </div>
           <div className='modal-footer'>
-            {user.authenticated && 
+            {user.authenticated && user.isAdmin &&
               <button className='btn btn-primary' data-dismiss='modal' >Edit Venue</button>
             }
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>

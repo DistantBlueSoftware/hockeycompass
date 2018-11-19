@@ -16,8 +16,8 @@ exports.signin = function(req, res, next) {
       user.metrics.loginCount = user.metrics.loginCount + 1;
       user.save()
       .then(user => {
-        const { email, firstName, lastName, metrics, phone, profile, username, zipCode, _id } = user;
-        res.json({ email, firstName, lastName, metrics, phone, profile, username, zipCode, _id, token: tokenForUser(req.user) })
+        const { email, firstName, lastName, metrics, phone, profile, username, zipCode, _id, role } = user;
+        res.json({ email, firstName, lastName, metrics, phone, profile, username, zipCode, _id, role, token: tokenForUser(req.user) })
       })
       .catch(err => next(err));
     })

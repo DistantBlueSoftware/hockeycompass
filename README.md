@@ -5,10 +5,20 @@
 ```
 git clone https://github.com/perezvon/hockeycompass.git [your-dir]
 cd [your-dir]
-yarn && yarn dev (or npm install && npm run dev)
+yarn && cd client && yarn && cd .. && yarn dev /* or the same but with npm install */
 ```
 
 ## Facts
+
+You'll need a few environment variables for test; create a `.env` file in the root dir and enter something akin to the following: 
+
+```
+MAILGUN_API_KEY=any_key_will_do_for_test
+MAILGUN_DOMAIN=mg.test.com
+ROOT_URL=localhost:3000
+STRIPE_SECRET_KEY_TEST=test_stripe_key
+```
+Note: test Stripe payments will fail unless you have the actual test key for the account, or your own test key.
 
 All client-side code is in the `client` subfolder.
 

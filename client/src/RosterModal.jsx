@@ -30,7 +30,7 @@ class RosterModal extends Component {
   }
 
   render() {
-    let {user, game} = this.props;
+    let {user, game, history} = this.props;
     if (!game) game = {};
     const rinkStyle = {width: '400px', height: '250px', margin: '0 auto', border: '3px solid #2A5489', borderRadius: '20px'};
     return (
@@ -52,9 +52,9 @@ class RosterModal extends Component {
           </div>
           <div className='modal-footer'>
             {user.authenticated && user.username === game.host && 
-              <button className='btn btn-primary' data-dismiss='modal' >Edit Game</button>
+              <button className='btn btn-primary' data-dismiss='modal' onClick={e => history.push(`/game/${game._id}/edit`)}>Edit Game</button>
             }
-            <button className='btn btn-danger' data-dismiss='modal' >Close</button>
+            <button className='btn btn-danger' data-dismiss='modal'>Close</button>
           </div>
         </div>
       </div>

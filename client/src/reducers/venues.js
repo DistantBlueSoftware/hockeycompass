@@ -8,10 +8,14 @@ const INITIAL_STATE = {
 export default function (state = INITIAL_STATE, action) {
   switch (action.type) {
     case LIST_VENUES:
+<<<<<<< HEAD
       return {
         ...state,
         all: [...action.payload]
       }
+=======
+      return {...state, all:[...action.payload]};
+>>>>>>> f8b4e0a067832ab8f4541c75e44ac51d17d8247d
     case SAVE_VENUE:
       return { ...state, all: [...state.all, ...action.payload] };
     default:

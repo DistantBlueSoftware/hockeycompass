@@ -1,0 +1,11 @@
+head
+  //link(rel='stylesheet', href='/css/notify.css', data-inline)
+//img(src='logo.png')
+h1 Game Details Changed for #{name} 
+p The host has changed some details about this game we thought you should know about.
+p Game Name: #{name}
+p Date: #{date}
+p Location: #{location}
+p View game details here:
+  a(href=`http://${url}/game/join/${id}`)
+    button View Game

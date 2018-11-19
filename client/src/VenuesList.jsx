@@ -38,15 +38,15 @@ setCurrentVenue = (venue, needsAuth) => {
 
   render() {
     const { venues, user } = this.props;
-    const { loading, modalData, showModal } = this.state;
+    const { modalData, showModal } = this.state;
     return (
-    <div className='VenuesList'>
+    <div className='VenuesList container-fluid'>
       <Helmet>
       <meta charSet='utf-8' />
       <title>Hockey Arenas - Hockey Compass - Navigate to Hockey</title>
       <link rel='canonical' href='https://hockeycompass.com/venues' />
       </Helmet>
-      {/*<button className='btn btn-warning'>View Past Games</button>*/}
+      <h1>Minnesota Ice Arenas</h1>
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
@@ -68,7 +68,7 @@ setCurrentVenue = (venue, needsAuth) => {
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
-                <td><a href={venue.url} target='_blank'>Website</a></td>
+                <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Website</a></td>
               </tr>
             ))}
           </tbody>

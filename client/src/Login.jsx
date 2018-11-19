@@ -24,7 +24,7 @@ class Login extends Component {
       usernameOrEmail: this.state.usernameOrEmail,
       password: this.state.password
     }
-    const id = this.props.match.params.id || null;
+    const id = this.props.match && this.props.match.params ? this.props.match.params.id : null;
     this.props.doLogin(user, () => {
       if (id) {
         this.props.history.push(`/game/join/${id}`);
@@ -37,14 +37,13 @@ class Login extends Component {
   render() {
     const {errorMessage} = this.props;
     return (
-      <div className='Login'>
+      <div className='Login container-fluid'>
         <Helmet>
         <meta charSet='utf-8' />
         <title>Login - Hockey Compass - Navigate to Hockey</title>
         <link rel='canonical' href='https://hockeycompass.com/login' />
         </Helmet>
         <form onSubmit={this.handleSubmit}>
-          {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='usernameOrEmail'>Username or Email: </label>
             <input className='form-control' type='text' name='usernameOrEmail' id='usernameOrEmail' onChange={this.handleChange} />
@@ -54,6 +53,7 @@ class Login extends Component {
             <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
           </div>
           <button type='submit' className='btn btn-primary'>Login</button>
+          {errorMessage && <span style={{marginLeft: '20px', fontSize: '20px', color: 'red'}}>{errorMessage}</span>}
         </form>
       </div>
     )
@@ -61,7 +61,7 @@ class Login extends Component {
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.user.errorMessage };
+  return { ...state };
 }
 
 export default connect(mapStateToProps, actions)(Login);
