@@ -23,8 +23,7 @@ class Register extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-
-    const {validationError, password, passwordConfirm} = this.state;
+    const {password, passwordConfirm} = this.state;
 
     if (password !== passwordConfirm) {
       this.setState({
@@ -37,22 +36,30 @@ class Register extends Component {
       });
     }
   }
+  
+  componentDidMount() {
+    //phone number formatter
+    document.getElementById('phone').addEventListener('input', function (e) {
+      var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+      e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    });
+  }
 
   render() {
     const {errorMessage} = this.props;
     const {validationError, referralType} = this.state;
     return (
-      <div>
+      <div className='container-fluid'>
         <Helmet>
         <meta charSet='utf-8' />
         <title>Register - Hockey Compass - Navigate to Hockey</title>
         <link rel='canonical' href='https://hockeycompass.com/register' />
         </Helmet>
         <form onSubmit={this.handleSubmit}>
-          {errorMessage && <div style={{fontSize: '20px', color: 'red'}}>{errorMessage}</div>}
           <div className='form-group'>
             <label htmlFor='email'>Email: </label>
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
+            <p style={{color: '#B52C32'}}>Note: this is the address we will use for your game payouts via PayPal.</p>
           </div>
           <div className='form-group'>
             <label htmlFor='username'>Username: </label>
@@ -72,7 +79,7 @@ class Register extends Component {
           </div>
           <div className='form-group'>
             <label htmlFor='zipCode'>Zip Code: </label>
-            <input className='form-control' type='text' name='zipCode' id='zipCode' onChange={this.handleChange} />
+            <input className='form-control' type='text' name='zipCode' id='zipCode' maxLength={5} onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='password'>Password: </label>
@@ -99,6 +106,7 @@ class Register extends Component {
           }
           {validationError && <div style={{fontSize: '20px', color: 'red'}}>{validationError}</div>}
           <button type='submit' className='btn btn-primary'>Register</button>
+          {errorMessage && <span style={{marginLeft: '20px', fontSize: '20px', color: 'red'}}>{errorMessage}</span>}
         </form>
       </div>
     )
@@ -106,7 +114,7 @@ class Register extends Component {
 }
 
 function mapStateToProps(state) {
-  return { errorMessage: state.user.errorMessage };
+  return { ...state };
 }
 
 export default connect(mapStateToProps, actions)(Register);

@@ -1,0 +1,34 @@
+.login-register {
+  max-width: 600px;
+  margin: 20px auto;
+}
+
+.tabs {
+  display: flex;
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	border-radius: 5px 5px 0 0;
+}
+.tab-link {
+	display: inline-block;
+	padding: 10px 0;
+	cursor: pointer;
+	flex: 1;
+	text-align: center;
+  border-radius: 5px 5px 0 0;
+  border-width: 1px 1px 0 1px;
+  border-style: solid;
+  border-color: #154b8b;
+  transition: all 0.3s;
+}
+
+.tab-link.active {
+  background: #154b8b;
+  color: #fff;
+}
+
+.active-tab-content{
+	padding: 15px;
+  border: 1px solid #154b8b;
+}

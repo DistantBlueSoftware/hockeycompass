@@ -11,7 +11,7 @@ const mapStateToProps = state => {
 }
 
 const Home = ({user}) => (
-  <div className='Home'>
+  <div className='Home container-fluid'>
     <Helmet>
     <meta charSet='utf-8' />
     <title>Hockey Compass - Navigate to Hockey</title>

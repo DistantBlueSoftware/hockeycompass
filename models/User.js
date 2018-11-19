@@ -12,9 +12,16 @@ const userSchema = new Schema({
   referralType: String,
   password: String,
   profile: {
-    emails: [String],
-    notify: {type: Boolean, default: true}
+    payoutsEmail: {type: String, unique: true, lowercase: true, match: [/\S+@\S+\.\S+/, 'is invalid']},
+    emailList: [String],
+    notify: {type: Boolean, default: true},
+    payments: [{
+      game: String,
+      from: String,
+      amount: Number
+    }]
   },
+  role: {type: Number, default: 0},
   metrics: {
     loginCount: Number,
     joinDate: Date,

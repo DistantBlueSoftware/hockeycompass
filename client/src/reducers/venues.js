@@ -5,8 +5,8 @@ const INITIAL_STATE = {
   errorMessage: ''
 };
 
-export default function(state = INITIAL_STATE, action) {
-  switch(action.type) {
+export default function (state = INITIAL_STATE, action) {
+  switch (action.type) {
     case LIST_VENUES:
     return {
       ...state,
@@ -18,8 +18,7 @@ export default function(state = INITIAL_STATE, action) {
       return {
         ...state,
         all: [...state.all].map((venue) => {
-          console.log(typeof venue._id);
-          console.log(typeof action.payload._id)
+
           if (venue._id === action.payload._id) {
             return action.payload;
           }

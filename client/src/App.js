@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navigation from './Navigation';
-import { Header } from './Header';
 import { NotFound } from './NotFound';
 import Home from './Home';
-import Login from './Login';
-import Register from './Register';
+import LoginRegister from './LoginRegister';
 import Profile from './Profile';
-import NewGame from './NewGame';
-import JoinGame from './JoinGame';
+import AdminDashboard from './AdminDashboard';
+import GameDetail from './GameDetail';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';
@@ -21,17 +19,18 @@ class App extends Component {
         <Router>
           <React.Fragment>
             <Navigation />
-            {/*<Header />*/}
             <Switch>
               <Route exact path='/' component={Home} />
-              <Route exact path='/login/' component={Login} />
-              <Route exact path='/login/:id' component={Login} />
-              <Route exact path='/register' component={Register} />
+              <Route exact path='/login/' component={LoginRegister} />
+              <Route exact path='/login/:id' component={LoginRegister} />
+              <Route exact path='/register' render={() => <LoginRegister currentTab={1} />} />
               <Route exact path='/profile' component={Profile} />
               <Route exact path='/games' component={GamesList} />
               <Route exact path='/venues' component={VenuesList} />
-              <Route exact path='/newgame' component={NewGame} />
-              <Route exact path='/game/join/:id' component={JoinGame} />
+              <Route exact path='/newgame' component={GameDetail} />
+              <Route exact path='/game/join/:id' render={() => <GamesList openModal={'payment-modal'} />} />
+              <Route exact path='/game/:id/edit' component={GameDetail} />} />
+              <Route exact path='/admin' component={AdminDashboard} />
               <Route exact path='/admin/upload' component={Upload} />
               <Route exact path='/edit-venue' component={VenueEdit} />
               <Route path='*' component={NotFound} />

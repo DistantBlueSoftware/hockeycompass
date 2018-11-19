@@ -24,7 +24,9 @@ class GamesList extends Component {
     }
   }
   componentDidMount() {
-    this.props.listGames();
+    const { games, venues } = this.props;
+    if (games && games.games.length === 0) this.props.listGames();
+    if (venues && venues.all.length === 0) this.props.listVenues();
   }
   
   setLoadingState = bool => {
@@ -43,45 +45,46 @@ class GamesList extends Component {
   }
 
   render() {
-    const { games, user, sendEmail, cancelGame } = this.props;
+    const { games, user, history } = this.props;
     const { loading, modalData, showModal } = this.state;
     return (
-    <div className='GamesList'>
+    <div className='GamesList container-fluid'>
       <Helmet>
       <meta charSet='utf-8' />
       <title>Find a Game - Hockey Compass - Navigate to Hockey</title>
       <link rel='canonical' href='https://hockeycompass.com/games' />
       </Helmet>
       {/*<button className='btn btn-warning'>View Past Games</button>*/}
+      <h1>Upcoming Games <span style={{fontSize: '16px'}}>(click a row to view roster)</span> </h1>
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
             <tr>
               <th>Join</th>
               <th>Date</th>
-              <th>Location</th>
               <th>Name</th>
+              <th>Location</th>
               <th>Host</th>
               <th>Players</th>
               <th>Openings</th>
               <th>Type</th>
             </tr>
-            {games.games.filter(game => moment(game.date) > moment())
+            {games.games.filter(game => game.active && moment(game.date) > moment())
               .sort((a,b) => moment(a.date) - moment(b.date))
               .map((game, index) => (
               <tr key={index} onClick={e => this.setCurrentGame(game)}>
                 <td style={{textAlign: 'center'}}>
-                  <JoinButton loading={loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
+                {/* loading is set to the game id in PaymentModal when payment is in process */}
+                  <JoinButton loading={game._id === loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
                 </td>
                 <td data-toggle='modal' data-target='#roster-modal'>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
-                <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.name}</td>
+                <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.host}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
                 <td data-toggle='modal' data-target='#roster-modal'>{game.type}</td>
-                {user.authenticated && game.type.toLowerCase() === 'public' && game.host === user.username ? <td><button className='btn btn-primary' onClick={e => sendEmail(game)}>Send Emails</button></td> : <td></td>}
-                {user.authenticated &&
+                {/*user.authenticated &&
                   game.host === user.username &&
                   <td>
                     {moment(game.date).diff(moment(), 'hours') > 0 ?
@@ -93,7 +96,7 @@ class GamesList extends Component {
                       </button>
                     }
                   </td>
-                }
+                */}
               </tr>
             ))}
           </tbody>
@@ -106,7 +109,7 @@ class GamesList extends Component {
       }
       <PaymentModal show={showModal} game={modalData} user={user} setLoadingState={this.setLoadingState} />
       <ContactModal show={showModal} game={modalData} user={user} />
-      <RosterModal show={showModal} game={modalData} user={user} />
+      <RosterModal show={showModal} game={modalData} user={user} history={history} />
       <AdBanner />
     </div>
   )
