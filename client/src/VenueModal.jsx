@@ -1,6 +1,8 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
+// Components
+import Button from './components/button';
 
 const mapStateToProps = state => {
   return {...state};
@@ -24,6 +26,13 @@ class VenueModal extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
+  }
+
+  selectVenueAndRedirect = (path) => {
+    // select venue in redux, so it's available in newgame
+    this.props.selectVenue(this.props.venue);
+    // redirect in VenuesList
+    this.props.redirectTo(path);
   }
 
   render() {
@@ -53,8 +62,23 @@ class VenueModal extends Component {
             </div>
           </div>
           <div className='modal-footer'>
-            {user.authenticated && user.isAdmin &&
-              <button className='btn btn-primary' data-dismiss='modal' >Edit Venue</button>
+            {user.authenticated && 
+            <Fragment>
+              <Button 
+                className='btn btn-primary'
+                dataDismiss='modal'
+                handleClick={this.selectVenueAndRedirect}
+                text={'Edit Venue'}
+                data={'/edit-venue'}
+              />
+              <Button 
+                className='btn btn-primary'
+                dataDismiss='modal'
+                handleClick={this.selectVenueAndRedirect}
+                text={'Schedule a Game'}
+                data={'/newgame'}
+              />
+            </Fragment>
             }
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>
           </div>

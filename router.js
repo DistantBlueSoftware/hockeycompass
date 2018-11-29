@@ -390,4 +390,36 @@ router.get('/activePayments', (req, res, next) => {
     .catch((err) => next(err));
 });
 
+router.put('/venue', (req, res, next) => {
+  const venueId = req.body._id;
+  const updatedVenue = req.body;
+  Venue.findOneAndUpdate(
+    { _id: venueId },
+    {
+      $set: { ...updatedVenue },
+      $currentDate: { lastUpdated: true },
+      
+    },
+    {new: true}
+  ).exec()
+  .then((venue) => {    
+    res.json(venue);
+  }).catch((err) => {
+    next(err);
+  })
+});
+
+router.put('/games/:id/drop', (req, res, next) => {
+  Game.findById(req.params.id)
+    .exec()
+    .then((game) => {
+      const playerIndex = game.players.indexOf(req.body.username);
+      game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
+      game.save()
+        .then(() => res.json(game))
+        .catch((err) => next(err));
+    })
+    .catch((err) => next(err));
+});
+
 module.exports = router;

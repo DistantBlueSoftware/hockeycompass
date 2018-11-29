@@ -23,6 +23,18 @@ export const saveVenue = venue => async dispatch => {
   }
 }
 
+export const editVenue = venue => async dispatch => {
+  try {
+    const response = await axios.put(
+      `/api/venue`, 
+      venue
+    );
+    dispatch({ type: EDIT_VENUE, payload: response.data });
+  } catch (e) {
+    dispatch({ type: EDIT_VENUE_ERROR, payload: 'Sorry, we couldn\t complete this request right now. Please try again.'});
+  }
+}
+
 export const processPayment = (token, amount, game, user, callback) => async dispatch => {
   try {
     const response = await axios.post(
@@ -191,4 +203,8 @@ export const saveProfile = (username, profile, callback) => async dispatch => {
   } catch (e) {
     dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and your profile was not saved. Please try again.' })
   }
+}
+
+export const selectVenue = (venue) => async dispatch => {
+  dispatch({type: SELECT_VENUE, payload: venue})
 }
