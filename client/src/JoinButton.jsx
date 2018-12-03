@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
 
@@ -44,7 +45,9 @@ class JoinButton extends Component {
         if (game.type.toLowerCase() === 'public') {
           button = <button className='btn btn-success' disabled={isDisabled} data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Join'}</button>
         } else {
-          if (game.invited && game.invited.length > 0 && game.invited.find(email => email === user.email)) {
+          if (game.host === user.username) 
+            button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Rejoin'}</button> 
+          else if (game.invited && game.invited.length > 0 && game.invited.find(email => email === user.email)) {
             button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Invited'}</button> 
           } else {
             button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button> 
@@ -65,7 +68,7 @@ class JoinButton extends Component {
       if (game.type.toLowerCase() === 'public') {
         button = <button className='btn btn-success' onClick={e => setCurrentGame(game, true)}>Join</button>
       } else {
-        button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game, true)}>Private</button>
+        button = <Link to='/login'><button className='btn btn-warning' onClick={e => setCurrentGame(game, true)}>Private</button></Link>
       }
     } else {
       button = <span style={{color: 'red'}}>Full</span>

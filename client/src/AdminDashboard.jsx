@@ -12,7 +12,7 @@ class AdminDashboard extends Component {
   
   render() {
     return (
-      <div>
+      <div className='container-fluid'>
         <h1>Admin Portal</h1>
         <AdminPayouts />
       </div>

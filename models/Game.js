@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const GameSchema = new mongoose.Schema({
   name: {type: String},
   date: {type: Date},
+  dateCreated: {type: Date, default: new Date()},
   type: {type: String},
   invited: [String],
   location: {type: String},
