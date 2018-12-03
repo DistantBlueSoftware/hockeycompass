@@ -11,6 +11,7 @@ const PaymentModal = ({game = {}, user, addPlayer, setLoadingState}) => {
     setLoadingState(true);
     addPlayer(game, user, () => setLoadingState(false));
   }
+  const showJoinButton = game.host === user.username;
   const costWithFee = game.costPerPlayer + 1;
     return (
       <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
@@ -36,7 +37,7 @@ const PaymentModal = ({game = {}, user, addPlayer, setLoadingState}) => {
             }
           </div>
           <div className='modal-footer'>
-            <button className='btn btn-success' data-dismiss='modal' onClick={() => handleAddPlayer()} >Join</button>
+            {showJoinButton && <button className='btn btn-success' data-dismiss='modal' onClick={() => handleAddPlayer()} >Join</button>}
             <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
           </div>
         </div>
