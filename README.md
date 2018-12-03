@@ -3,7 +3,7 @@
 ## Installation
 
 ```
-git clone https://github.com/perezvon/hockeycompass.git [your-dir]
+git clone https://github.com/DistantBlueSoftware/hockeycompass.git [your-dir]
 cd [your-dir]
 yarn && cd client && yarn && cd .. && yarn dev /* or the same but with npm install */
 ```
