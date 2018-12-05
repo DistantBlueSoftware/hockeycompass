@@ -1,13 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
  
-export const PaypalCheckout = ({costWithFee}) => {
+export const PaypalCheckout = ({costWithFee, handleAddPlayer}) => {
   const client = {
-      sandbox:    process.env.REACT_APP_PAYPAL_SANDBOX_ID || 'ARbjvXFuHi3sp9goJjLstHr6x8zHPTZoITMvivpDgD2fTg4pW09EGpbwFHiSmuaCQ8o7HZR-wLn6lFzx-wLn6lFzx',
+      sandbox: process.env.REACT_APP_PAYPAL_SANDBOX_ID || 'ARbjvXFuHi3sp9goJjLstHr6x8zHPTZoITMvivpDgD2fTg4pW09EGpbwFHiSmuaCQ8o7HZR-wLn6lFzx',
       production: process.env.REACT_APP_PAYPAL_PROD_ID || 'YOUR-PRODUCTION-APP-ID',
   };
-  
-  console.log(client)
   
   const payment = (data, actions) => {
     return actions.payment.create({
@@ -24,7 +22,13 @@ export const PaypalCheckout = ({costWithFee}) => {
   
   const onAuthorize = (data, actions) => {
     return actions.payment.execute().then(res => {
-      console.log('The payment was completed!');
+      if (res.state === 'approved') {
+        handleAddPlayer();
+        window.$("#payment-modal").modal('hide');
+      } else {
+        alert('payment failed, please try again')
+      }
+      
     });
   };
   
@@ -38,6 +42,6 @@ export const PaypalCheckout = ({costWithFee}) => {
   
   let PaypalButton = window.paypal.Button.driver('react', { React, ReactDOM });
   return (
-      <PaypalButton style={style} client={client} payment={payment}  commit={true} onAuthorize={onAuthorize} />
+      <PaypalButton env={'sandbox'} style={style} client={client} payment={payment} commit={true} onAuthorize={onAuthorize} />
   );
 }

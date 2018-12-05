@@ -29,6 +29,7 @@ class GamesList extends Component {
     if (match && match.params.id) 
       this.props.getGameDetails(match.params.id, () => {
       this.setCurrentGame(this.props.games.current, true);
+      //TODO: logic check that the game can be joined (is not locked)
       window.$("#payment-modal").modal();
     })
     if (games && games.games.length === 0) this.props.listGames();
@@ -53,7 +54,6 @@ class GamesList extends Component {
   render() {
     const { games, user, history } = this.props;
     const { loading, modalData, showModal } = this.state;
-    console.log(modalData)
     return (
     <div className='GamesList container-fluid'>
       <Helmet>

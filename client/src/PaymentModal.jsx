@@ -9,7 +9,10 @@ import * as actions from './actions';
 const PaymentModal = ({game = {}, user, addPlayer, setLoadingState}) => {
   const handleAddPlayer = () => {
     setLoadingState(true);
-    addPlayer(game, user, () => setLoadingState(false));
+    addPlayer(game, user, () => {
+      setLoadingState(false)      
+      
+    });
   }
   const showJoinButton = game.host === user.username;
   const costWithFee = game.costPerPlayer + 1;
@@ -43,7 +46,7 @@ const PaymentModal = ({game = {}, user, addPlayer, setLoadingState}) => {
                 onClick={() => handleAddPlayer()
                 } >Join
               </button> :
-              <PaypalCheckout costWithFee={costWithFee} />
+              <PaypalCheckout costWithFee={costWithFee} handleAddPlayer={handleAddPlayer}/>
             }
             
             <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
