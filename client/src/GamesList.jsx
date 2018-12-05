@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import { withRouter } from "react-router";
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
@@ -24,12 +25,10 @@ class GamesList extends Component {
     }
   }
   componentDidMount() {
-    console.log(this.props)
     const { games, venues, match } = this.props;
-    console.log(match)
     if (match && match.params.id) 
       this.props.getGameDetails(match.params.id, () => {
-      this.setCurrentGame(games.current);
+      this.setCurrentGame(this.props.games.current, true);
       window.$("#payment-modal").modal();
     })
     if (games && games.games.length === 0) this.props.listGames();
@@ -54,6 +53,7 @@ class GamesList extends Component {
   render() {
     const { games, user, history } = this.props;
     const { loading, modalData, showModal } = this.state;
+    console.log(modalData)
     return (
     <div className='GamesList container-fluid'>
       <Helmet>
@@ -123,4 +123,4 @@ class GamesList extends Component {
   }
 
 }
-export default connect(mapStateToProps, actions)(GamesList);
+export default connect(mapStateToProps, actions)(withRouter(GamesList));
