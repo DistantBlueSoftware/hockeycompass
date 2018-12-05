@@ -24,7 +24,14 @@ class GamesList extends Component {
     }
   }
   componentDidMount() {
-    const { games, venues } = this.props;
+    console.log(this.props)
+    const { games, venues, match } = this.props;
+    console.log(match)
+    if (match && match.params.id) 
+      this.props.getGameDetails(match.params.id, () => {
+      this.setCurrentGame(games.current);
+      window.$("#payment-modal").modal();
+    })
     if (games && games.games.length === 0) this.props.listGames();
     if (venues && venues.all.length === 0) this.props.listVenues();
   }

@@ -104,7 +104,7 @@ router.post('/games', function (req, res, next) {
             date: moment(req.body.date).tz('America/Chicago').format('MM/DD/YYYY h:mmA'),
             location: req.body.location,
             url: process.env.ROOT_URL,
-            id: req.params.id
+            id: game._id
           }
         })
         .then(console.log)

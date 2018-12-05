@@ -2,7 +2,7 @@ import React from 'react';
 import {Elements} from 'react-stripe-elements';
 import moment from 'moment';
 import { connect } from 'react-redux';
-import { PaypalExpressCheckout } from './PaypalExpressCheckout';
+import { PaypalCheckout } from './PaypalCheckout';
 import StripePaymentForm from './StripePaymentForm'
 import * as actions from './actions';
 
@@ -29,15 +29,23 @@ const PaymentModal = ({game = {}, user, addPlayer, setLoadingState}) => {
             {user.username !== game.host && costWithFee > 0 &&  
               <React.Fragment>
                 <h3>Cost: ${costWithFee}</h3>
-                <PaypalExpressCheckout costWithFee={costWithFee} />
-                <Elements>
+                {/*<Elements>
                   <StripePaymentForm game={game} user={user} costWithFee={costWithFee} setLoadingState={setLoadingState} />
-                </Elements>
+                </Elements>*/}
               </React.Fragment>
             }
           </div>
-          <div className='modal-footer'>
-            {showJoinButton && <button className='btn btn-success' data-dismiss='modal' onClick={() => handleAddPlayer()} >Join</button>}
+          <div className='modal-footer' style={{alignItems: 'flex-start'}}>
+            {showJoinButton ? 
+              <button 
+                className='btn btn-success' 
+                data-dismiss='modal' 
+                onClick={() => handleAddPlayer()
+                } >Join
+              </button> :
+              <PaypalCheckout costWithFee={costWithFee} />
+            }
+            
             <button className='btn btn-danger' data-dismiss='modal' >Cancel</button>
           </div>
         </div>

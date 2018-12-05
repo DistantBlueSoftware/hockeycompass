@@ -45,7 +45,7 @@ class RosterModal extends Component {
           </div>
           <div className='modal-body'>
             <div className='roster-rink' style={rinkStyle}>
-            {game.players && game.players.length && 
+            {game.players && game.players.length > 0 && 
               game.players.map((player, index) => <p style={{margin: '10px'}} key={index}>{player}</p>)
             }
             </div>
