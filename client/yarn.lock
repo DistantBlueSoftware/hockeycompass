@@ -6859,6 +6859,11 @@ react-side-effect@^1.1.0:
     exenv "^1.2.1"
     shallowequal "^1.0.1"
 
+react-skeleton-loader@^1.0.3:
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/react-skeleton-loader/-/react-skeleton-loader-1.0.3.tgz#8b5ed1d49d476c80e758bc3f676af50717d1bc90"
+  integrity sha512-kvYD3eyeCpOQVO4HQT7fRkEVaDPlh+FqOoP46db2QTLWxnH4ZMlpNRTssayPtktgJBjVZXciH+XVs4swzmaNTQ==
+
 react-stripe-elements@^2.0.1:
   version "2.0.1"
   resolved "https://registry.yarnpkg.com/react-stripe-elements/-/react-stripe-elements-2.0.1.tgz#197db4762c57bf73a07d852564ebdbac52954094"
