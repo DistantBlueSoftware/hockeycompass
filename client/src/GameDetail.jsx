@@ -4,6 +4,7 @@ import utils from '@distantbluesoftware/dbsutil';
 import moment from 'moment';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
+import {emailRegexTest} from './lib';
 import './GameDetail.css';
 
 const mapStateToProps = state => {
@@ -74,7 +75,7 @@ class GameDetail extends Component {
     if (game.type === 'private') {
       let currentList = [];
       let emails, invalidEmails = [];
-      if (typeof this.state.emailList === 'string') emails = utils.removeWhitespace(this.state.emailList).split(',');
+      if (typeof this.state.emailList === 'string') emails = this.state.emailList.match(emailRegexTest);
       else emails = this.state.emailList;
       emails.filter(email => email.length > 0).forEach(email => {
         if (!utils.validateEmail(email) || email === '') {
@@ -93,9 +94,18 @@ class GameDetail extends Component {
           }
         })
         game.emailList = currentList;
+        
+        //save email list to user profile
+        this.props.saveProfile(this.props.user.username, {emailList: emails}, () => {
+          this.setState({
+            errorMessage: '',
+            emailList: this.props.user.profile.emailList
+          })
+        });
       } 
     }
     
+    //create the game
     if (needsConfirmation && window.confirm(confirmText)) {
       this.props.newGame(game, () => {
         this.props.history.push('/games');
@@ -184,7 +194,7 @@ class GameDetail extends Component {
             </div>
             {this.state.type === 'private' &&
               <div className='form-group col-md-12'>
-                <label htmlFor='emailList'>Email List: </label>
+                <label htmlFor='emailList'>Paste an email list here. Don't worry if there are duplicates or extra stuff in there; we'll find the emails for you.</label>
                 <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emailList}></textarea>
               </div>
             }

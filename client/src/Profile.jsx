@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import utils from '@distantbluesoftware/dbsutil';
 import _ from 'underscore';
 import * as actions from './actions';
+import {emailRegexTest} from './lib';
 
 const mapStateToProps = state => {
   return { ...state };
@@ -59,7 +60,7 @@ class Profile extends Component {
     const { notify } = this.state;
     let currentList = this.props.user.profile ? this.props.user.profile.emailList : [];
     let invalidEmails = [];
-    const emailList = utils.removeWhitespace(this.state.emailList).split(',');
+    const emailList = this.state.emailList.match(emailRegexTest);
     emailList.filter(email => email.length > 0).forEach(email => {
       if (!utils.validateEmail(email) || email === '') {
         invalidEmails.push(email)
@@ -77,7 +78,8 @@ class Profile extends Component {
       })
       this.props.saveProfile(this.props.user.username, {emailList: currentList, notify}, () => {
         this.setState({
-          errorMessage: ''
+          errorMessage: '',
+          emailList: ''
         })
       });
     }
@@ -133,8 +135,9 @@ class Profile extends Component {
               <input type='checkbox' className='form-check-input' name='notify' id='notify' checked={notify} onChange={this.handleChange} />
               <label className='form-check-label' htmlFor='notify'>Send me game notifications</label>
             </div>
+            <h3>Email List:</h3>
             <div className='form-group'>
-              <label className='form-label' htmlFor='emailList'>Paste emails here (separated by commas):</label>
+              <label className='form-label' htmlFor='emailList'>Paste an email list here. Don't worry if there are duplicates or extra stuff in there; we'll find the emails for you.</label>
               <textarea className='form-control' name='emailList' value={emailList} onChange={this.handleChange}></textarea>
             </div>
             <button className='btn btn-success' type='submit'>Save Changes</button>
