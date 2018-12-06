@@ -242,6 +242,7 @@ router.put('/games/:id/add', (req, res, next) => {
             paymentDetail.save()
               .catch(err => next(err));
           }
+          res.json(game)
         })
         .catch(err => next(err));
     })

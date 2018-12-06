@@ -41,10 +41,12 @@ class JoinButton extends Component {
       button = <button className='btn btn-disabled' style={{...buttonStyle, width: '74px'}}>Past</button>
     }
     else if (user.authenticated) {
+      //player has not joined, game is not full
       if (game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers) {
         if (game.type.toLowerCase() === 'public') {
           button = <button className='btn btn-success' disabled={isDisabled} data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Join'}</button>
         } else {
+          //game is private
           if (game.host === user.username) 
             button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Rejoin'}</button> 
           else if (game.invited && game.invited.length > 0 && game.invited.find(email => email === user.email)) {
@@ -53,10 +55,11 @@ class JoinButton extends Component {
             button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button> 
           }
         }
-
       } else if (game.players.indexOf(user.username) === -1) {
+        //game is full
         button = <span style={{color: 'red'}}>Full</span>
       } else {
+        //player has joined
         if (isTouch) {
           button = <button className='btn btn-disabled' style={{color: 'red', width: '74px'}} onClick={() => shouldDoAction ? this.dropFromGame(game, user) : null}>Drop</button>
         } else {
@@ -64,6 +67,7 @@ class JoinButton extends Component {
         }
 
       }
+      //user is not logged in
     } else if (game.players.length < game.maxPlayers) {
       if (game.type.toLowerCase() === 'public') {
         button = <button className='btn btn-success' onClick={e => setCurrentGame(game, true)}>Join</button>

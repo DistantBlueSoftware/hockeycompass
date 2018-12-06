@@ -6,14 +6,8 @@ import { PaypalCheckout } from './PaypalCheckout';
 import StripePaymentForm from './StripePaymentForm'
 import * as actions from './actions';
 
-const PaymentModal = ({game = {}, user, addPlayer, setLoadingState}) => {
-  const handleAddPlayer = () => {
-    setLoadingState(true);
-    addPlayer(game, user, () => {
-      setLoadingState(false)      
-      
-    });
-  }
+const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
+  
   const showJoinButton = game.host === user.username;
   const costWithFee = game.costPerPlayer + 1;
     return (

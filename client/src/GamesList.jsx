@@ -41,6 +41,13 @@ class GamesList extends Component {
       loading: bool
     })
   }
+  
+  handleAddPlayer = () => {
+    this.setLoadingState(true);
+    this.props.addPlayer(this.state.modalData, this.props.user, () => {
+      this.setLoadingState(false);
+    });
+  }
 
   setCurrentGame = (game, needsAuth) => {
     this.setState({
@@ -114,7 +121,7 @@ class GamesList extends Component {
           <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
         </div>
       }
-      <PaymentModal show={showModal} game={modalData} user={user} setLoadingState={this.setLoadingState} />
+      <PaymentModal show={showModal} game={modalData} user={user} handleAddPlayer={this.handleAddPlayer} setLoadingState={this.setLoadingState} />
       <ContactModal show={showModal} game={modalData} user={user} />
       <RosterModal show={showModal} game={modalData} user={user} history={history} />
       <AdBanner />
