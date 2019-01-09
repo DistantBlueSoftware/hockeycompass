@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import {AdminPayouts} from './AdminPayouts';
+import AdminPayouts from './AdminPayouts';
 import * as actions from './actions';
 
 const mapStateToProps = state => {

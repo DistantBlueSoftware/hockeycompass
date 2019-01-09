@@ -3,6 +3,10 @@
   padding: 10px;
 }
 
+.react-datepicker-wrapper, .react-datepicker__input-container {
+  display: inherit !important;
+}
+
 @media only screen and (min-width: 801px) {
   .game-detail {
     width: 60%;

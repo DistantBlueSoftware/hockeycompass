@@ -5,6 +5,9 @@ import moment from 'moment';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
 import {emailRegexTest} from './lib';
+import DatePicker from "react-datepicker";
+ 
+import "react-datepicker/dist/react-datepicker.css";
 import './GameDetail.css';
 
 const mapStateToProps = state => {
@@ -15,8 +18,7 @@ class GameDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: moment().add('days', 1).format('YYYY-MM-DD'),
-      time: '19:00',
+      date: new Date(),
       type: 'public',
       emailList: this.props.user.profile.emailList,
       errorMessage: ''
@@ -24,24 +26,31 @@ class GameDetail extends Component {
   }
 
   handleChange = (e) => {
-    const target = e.target;
+    if (e instanceof Date) {
+      this.setState({
+        date: e
+      })
+    } else {
+      const target = e.target;
       const value = target.type === 'checkbox' ? target.checked : target.value;
       const name = target.name;
       this.setState({
         [name]: value
       });
+    }
+    
   }
   
   handleGameUpdate = e => {
     e.preventDefault();
     let game = this.state;
-    game.date = moment(game.date + ' ' + game.time);
-    if (!moment(game.date).isValid()) {
-      this.setState({
-        errorMessage: 'Error: You must specify a date'
-      })
-      return;
-    }
+    // game.date = moment(game.date + ' ' + game.time);
+    // if (!moment(game.date).isValid()) {
+    //   this.setState({
+    //     errorMessage: 'Error: You must specify a date'
+    //   })
+    //   return;
+    // }
     if (game.maxPlayers < game.players.length) {
       this.setState({errorMessage: `There are already ${game.players.length} players in the game!`})
       return;
@@ -57,13 +66,13 @@ class GameDetail extends Component {
     let needsConfirmation = false;
     let confirmText = '';
     game.host = this.props.user.username;
-    game.date = moment(game.date + ' ' + game.time);
-    if (moment(game.date).diff(moment()) < 0) {
-      this.setState({
-        errorMessage: 'This game is scheduled in the past. Please check the start time.'
-      });
-      return;
-    }
+    // game.date = moment(game.date + ' ' + game.time);
+    // if (moment(game.date).diff(moment()) < 0) {
+    //   this.setState({
+    //     errorMessage: 'This game is scheduled in the past. Please check the start time.'
+    //   });
+    //   return;
+    // }
     if (game.costPerPlayer > 30) {
       needsConfirmation = true;
       confirmText = 'Cost per player is higher than average ($' + game.costPerPlayer + '). Continue?';
@@ -122,10 +131,7 @@ class GameDetail extends Component {
     if (venues && venues.all.length === 0) this.props.listVenues();
     if (!game && match && match.params.id) {
       this.props.getGameDetails(match.params.id, () => {
-        const currentGame = {...this.props.games.current};
-        currentGame.date = moment(this.props.games.current.date).format('YYYY-MM-DD');
-        currentGame.time = moment(this.props.games.current.date).format('HH:mm');
-        this.setState({...currentGame})
+        this.setState({...this.props.games.current})
       });
     }
   }
@@ -147,12 +153,20 @@ class GameDetail extends Component {
           <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='date'>Date: </label>
-              <input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />
+                <DatePicker className='form-control date-picker' selected={game.date}
+                  onChange={this.handleChange}
+                  showTimeSelect
+                  timeFormat="h:mm aa"
+                  timeIntervals={15}
+                  dateFormat="MM/DD/YYYY h:mm aa"
+                  timeCaption="time"
+                />
+              {/*<input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />*/}
             </div>
-            <div className='form-group col-md-6'>
+            {/*<div className='form-group col-md-6'>
               <label htmlFor='time'>Time: </label>
               <input className='form-control' type='time' name='time' id='time' required value={game.time} onChange={this.handleChange} />
-            </div>
+            </div>*/}
           </div>
           <div className='row'>
             <div className='form-group col-md-6'>
