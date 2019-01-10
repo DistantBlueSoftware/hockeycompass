@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const request = require('request');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST);
 const Nexmo = require('nexmo');
 const emailService = require('./emailService');
@@ -7,6 +8,7 @@ const emailService = require('./emailService');
 const passport = require('passport');
 const moment = require('moment');
 const tz = require('moment-timezone');
+const _ = require('underscore');
 
 const Authentication = require('./controllers/authentication');
 const passportService = require('./services/passport');
@@ -16,6 +18,14 @@ const User = require('./models/User');
 const Venue = require('./models/Venue');
 const EmailQueue = require('./models/EmailQueue');
 const Payment = require('./models/Payment');
+
+async function asyncForEach(array, callback) {
+  for (let index = 0; index < array.length; index++) {
+    await callback(array[index], index, array);
+  }
+}
+let BATCH_ID = 1547093985518;
+let NEWTOKEN = null;
 
 const requireAuth = passport.authenticate('jwt', { session: false });
 const requireSignin = passport.authenticate('local', { session: false });
@@ -235,6 +245,7 @@ router.put('/games/:id/add', (req, res, next) => {
             //create a record for future payout to host 
             const paymentDetail = new Payment({
               gameID: game._id,
+              gameHost: game.host,
               payer: req.body.username,
               payoutDate: game.date,
               amount: game.costPerPlayer,
@@ -351,9 +362,122 @@ router.post('/games/:id/notification', (req, res, next) => {
 
 });
 
+router.get('/payoutsTotal', (req, res, next) => {
+  Payment.find({paid: false})
+    .exec()
+    .then(payouts => res.json(payouts.map(p => p.amount).reduce((a,b) => a + b)))
+    .catch(e => next(e));
+});
+
+router.get('/sendPayouts', (req, res, next) => {
+  Payment.find({paid: false})
+    .exec()
+    .then(async payments => {
+      let items = [];
+      const usernames = _.uniq(payments, 'gameHost').map(p => p.gameHost);
+      await asyncForEach(usernames, async u => {
+        await User.findOne({username: u})
+          .exec()
+          .then(user => {
+            if (user) {
+              const grandTotal = user.profile.payments.map(p => p.amount).reduce((a, b) => a + b);
+              items.push({
+                "recipient_type": "EMAIL",
+                "amount": {
+                  "value": grandTotal.toFixed(2),
+                  "currency": "USD"
+                },
+                "receiver": user.profile.payoutsEmail || user.email,
+                "note": "Thanks for using Hockey Compass!"
+              });
+            }
+          })
+      });
+      const options = {
+        "strictSSL": false,
+        "url": "https://api.sandbox.paypal.com/v1/payments/payouts",
+        "method": "POST",
+        "headers": {
+          "Accept": "application/json",
+          "Authorization": `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
+          "Content-Type": "application/json"
+        },
+        "body": {
+          "sender_batch_header": {
+            "email_subject": "[Hockey Compass] 🏒 You've Been Paid! 🏒",
+            "sender_batch_id": `batch-${BATCH_ID}`
+          },
+          "items": items
+        },
+        "json": true
+      };
+
+      request(options, (error, response, body) => {
+        /* Print the error if one occurred */
+        console.log('error:', error);
+      
+        /* Print the response status code if a response was received */
+        console.log('statusCode:', response && response.statusCode);
+      
+        /* Print the response body */
+        console.log('body:', body);
+        res.json(items)
+        // payments.forEach(p => {
+        //   p.paid = true;
+        //   p.save();
+        // })
+        BATCH_ID++;
+      });
+      
+    })
+    .catch(err => next(err))
+});
+
 router.post('/payouts', (req, res, next) => {
+  let pbg = [];
   console.log(req.body)
+  // req.body.forEach(game => {
+  //   Payment.find({gameID: game._id})
+  //     .exec()
+  //     .then(payments => {
+  //       res.json(payments)
+  //     })
+  // })
 })
+
+router.get('/paypal-token', (req, res, next) => {
+  const accessOptions = {
+    "strictSSL": false,
+    "url": "https://api.sandbox.paypal.com/v1/oauth2/token",
+    "method": "POST",
+    "auth": {
+      "user": "AViNcnTmPaYZ3VltsmWEN3UmogFcZnjKsnqaitDo2cHrEEl1Rlns4GSz36CSUl69q9eADJwEItR0Rq7M",
+      "pass": "EGaXgsg81ztam1dWliT7pUgKILzfgXJlEvnnlfwmM9PCwnbLL9ZplNYKSGW-oeI1BnEClmhVazadRkDV",
+      "sendImmediately": true
+    },
+    "headers": {
+      "Accept": "application/json",
+      "Accept-Language": "en_US",
+      "Content-Type": "application/x-www-form-urlencoded"
+    },
+    "form": {
+      "grant_type": "client_credentials"
+    }
+  };
+
+  request(accessOptions, (error, response, body) => {
+    /* Print the error if one occurred */
+    console.log('error:', error);
+
+    /* Print the response status code if a response was received */
+    console.log('statusCode:', response && response.statusCode);
+
+    /* Print the response body */
+    console.log('body:', body);
+    
+    NEWTOKEN = body.access_token;
+  });
+});
 
 router.put('/user/:username', (req, res, next) => {
   User.findOne({username: req.params.username})

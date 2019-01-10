@@ -16,3 +16,7 @@ export const SEND_EMAILS = 'SEND_EMAILS';
 export const PROCESS_PAYMENT = 'PROCESS_PAYMENT';
 export const SAVE_VENUE = 'SAVE_VENUE';
 export const LIST_VENUES = 'LIST_VENUES';
+export const SEND_PAYOUTS = 'SEND_PAYOUTS';
+export const GET_PAYOUTS = 'GET_PAYOUTS';
+export const PAYMENTS_ERROR = 'PAYMENTS_ERROR';
+export const GET_PAYMENTS_TOTAL = 'GET_PAYMENTS_TOTAL';

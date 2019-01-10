@@ -19,7 +19,11 @@ class AdminPayouts extends Component {
     this.setState({
       ajax: true
     });
-    setTimeout(() => this.setState({ajax: false, paymentsSent: true}), 1500)
+    this.props.sendAllOutstandingPayouts(() => this.setState({ajax: false, paymentsSent: true}));
+  }
+  
+  componentDidMount() {
+    this.props.getPaymentsTotal()
   }
 
   render() {
@@ -29,9 +33,11 @@ class AdminPayouts extends Component {
     const { games, sendPayouts } = this.props;
     return (
       <React.Fragment>
-        <div>Admin Payouts</div>
+        <h3>Admin Payouts</h3>
+        <p>Current Total Payout Amount: ${this.props.payouts.total} <br />
+        <em style={{fontSize: '12px'}}>You'll need this amount in your PayPal balance to make the payout.</em></p>
         <button className='btn btn-large btn-success' disabled={buttonDisabled} onClick={() => this.sendPayouts()}>{loadingOrReady}</button>
-        {games.games.map(game => <h2>{game.name}</h2>)}
+        {/*games.games.map(game => <h2>{game.name}</h2>)*/}
       </React.Fragment>
     )
   }

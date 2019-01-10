@@ -18,8 +18,6 @@ class AdminDashboard extends Component {
   componentDidMount() {
     const {games} = this.props;
     if (games && games.games.length === 0) this.props.listGames();
-    // TODO: create this action 
-    // this.props.getOutstandingPayments();
   }
   
   render() {

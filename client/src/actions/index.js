@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { LIST_VENUES, SAVE_VENUE, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -190,5 +190,37 @@ export const saveProfile = (username, profile, callback) => async dispatch => {
     callback();
   } catch (e) {
     dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred and your profile was not saved. Please try again.' })
+  }
+}
+
+export const sendAllOutstandingPayouts = callback => async dispatch => {
+  try {
+    const response = await axios.get(`api/payouts`);
+    dispatch({ type: SEND_PAYOUTS, payload: response.data });
+    callback();
+  } catch (e) {
+    dispatch({ type: ERROR, payload: 'Sorry, there was an error. Beerp boop'})
+  }
+}
+
+export const getPaymentsTotal = () => async dispatch => {
+  try {
+    const response = await axios.get(`api/payoutsTotal`);
+    dispatch({ type: GET_PAYMENTS_TOTAL, payload: response.data });
+  } catch (e) {
+    dispatch({ type: PAYMENTS_ERROR, payload: 'Sorry, there was an error. Beerp boop'})
+  }
+}
+
+export const getPaymentsByGame = (data, callback) => async dispatch => {
+  try {
+    const response = await axios.post(
+      `api/payouts/`,
+      data
+    );
+    dispatch({ type: GET_PAYOUTS, payload: response.data });
+    callback();
+  } catch (e) {
+    dispatch({ type: PAYMENTS_ERROR, payload: 'Sorry, an error occurred. Please try again.' })
   }
 }
