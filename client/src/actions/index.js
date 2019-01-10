@@ -195,7 +195,7 @@ export const saveProfile = (username, profile, callback) => async dispatch => {
 
 export const sendAllOutstandingPayouts = callback => async dispatch => {
   try {
-    const response = await axios.get(`api/payouts`);
+    const response = await axios.get(`api/sendPayouts`);
     dispatch({ type: SEND_PAYOUTS, payload: response.data });
     callback();
   } catch (e) {
