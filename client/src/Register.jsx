@@ -90,9 +90,15 @@ class Register extends Component {
             <input className='form-control' type='password' name='passwordConfirm' id='passwordConfirm' required onChange={this.handleChange} />
           </div>
           <div className='form-group'>
+            <label htmlFor='playerType'>Player Type: </label>
+              <select className='form-control' name='playerType' id='playerType' onChange={this.handleChange} >
+                <option value='player' selected>Player</option>
+                <option value='goalie'>Goalie</option>
+              </select>
+          </div>
+          <div className='form-group'>
             <label htmlFor='location'>How did you hear about Hockey Compass? </label>
             <select className='form-control' name='referralType' id='referralType' onChange={this.handleChange} >
-              <option></option>
               <option value='friend'>Word of Mouth</option>
               <option value='search'>Google / Search</option>
               <option value='other'>Other</option>

@@ -15,6 +15,7 @@ const userSchema = new Schema({
     payoutsEmail: {type: String, unique: true, lowercase: true, match: [/\S+@\S+\.\S+/, 'is invalid']},
     emailList: [String],
     notify: {type: Boolean, default: true},
+    playerType: String,
     payments: [{
       game: String,
       from: String,

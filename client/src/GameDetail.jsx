@@ -22,6 +22,7 @@ class GameDetail extends Component {
       date: new Date(),
       type: 'public',
       emailList: this.props.user.profile.emailList,
+      infoMessage: '',
       errorMessage: ''
     }
   }
@@ -36,6 +37,7 @@ class GameDetail extends Component {
       const value = target.type === 'checkbox' ? target.checked : target.value;
       const name = target.name;
       this.setState({
+        infoMessage: '',
         [name]: value
       });
     }
@@ -116,6 +118,7 @@ class GameDetail extends Component {
     }
     
     //create the game
+    localStorage.setItem('gameSettings', JSON.stringify(game));
     if (needsConfirmation && window.confirm(confirmText)) {
       this.props.newGame(game, () => {
         this.props.history.push('/games');
@@ -134,6 +137,9 @@ class GameDetail extends Component {
       this.props.getGameDetails(match.params.id, () => {
         this.setState({...this.props.games.current})
       });
+    } else if (localStorage.getItem('gameSettings')) {
+      this.setState(JSON.parse(localStorage.getItem('gameSettings')))
+      this.setState({infoMessage: 'We pre-filled this form using data from your last game. Change what you need and hit Create!'})
     }
   }
 
@@ -141,7 +147,7 @@ class GameDetail extends Component {
     console.log(this.state)
     const { user, venues, match } = this.props;
     const game = this.state;
-    const { errorMessage } = this.state;
+    const { infoMessage, errorMessage } = this.state;
     const isNew = match && !match.params.id;
     const buttonText = isNew ? 'Create Game' : 'Update Game';
     const costMessage = game.costPerPlayer ? <div>cost per player will be <span style={{fontSize: '16px', color: 'green'}}>${+game.costPerPlayer+HCFEE}</span> <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; ${HCFEE} HC fee</div> : '';
@@ -149,6 +155,7 @@ class GameDetail extends Component {
    return (
       <div className='game-detail'>
         <h1>{isNew ? 'New Game' : this.state.name}</h1>
+        {infoMessage && <div style={{background: 'rgba(48, 169, 49, 0.8)', margin: '10px', maxWidth: '400px', padding: '10px', borderRadius: '5px', color: 'white'}}>{infoMessage}</div>}
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <form onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}>
           <div className='row'>
@@ -192,6 +199,10 @@ class GameDetail extends Component {
             <div className='form-group col-md-6'>
               <label htmlFor='maxPlayers'>Player Cap: </label>
               <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' min={1} value={game.maxPlayers} onChange={this.handleChange} />
+            </div>
+            <div className='form-group col-md-6'>
+              <label htmlFor='maxPlayers'>Goalie Cap: </label>
+              <input className='form-control' type='number' name='goalieCount' id='goalieCount' min={0} value={game.goalieCount} onChange={this.handleChange} />
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='costPerPlayer'>Cost Per Player: </label>

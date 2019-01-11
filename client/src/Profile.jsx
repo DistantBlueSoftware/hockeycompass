@@ -16,7 +16,8 @@ class Profile extends Component {
     this.state = {
       payoutsEmail: user.profile && user.profile.payoutsEmail ? user.profile.payoutsEmail : user.email,
       emailList: '',
-      notify: user.profile && user.profile.notify
+      notify: user.profile && user.profile.notify,
+      playerType: user.profile && user.profile.playerType,
     }
   }
   
@@ -57,38 +58,39 @@ class Profile extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { notify } = this.state;
+    const { notify, playerType } = this.state;
     let currentList = this.props.user.profile ? this.props.user.profile.emailList : [];
     let invalidEmails = [];
     const emailList = this.state.emailList.match(emailRegexTest);
-    emailList.filter(email => email.length > 0).forEach(email => {
-      if (!utils.validateEmail(email) || email === '') {
-        invalidEmails.push(email)
-      }
-    });
-    if (invalidEmails.length) {
-      this.setState({
-        errorMessage: `The following emails are invalid: ${invalidEmails.join('\n ')} \nPlease correct and retry.`
-      });
-    } else {
-      emailList.forEach(email => {
-        if (currentList.indexOf(email) === -1) {
-          currentList.push(email);
+    if (emailList) {
+      emailList.filter(email => email.length > 0).forEach(email => {
+        if (!utils.validateEmail(email) || email === '') {
+          invalidEmails.push(email)
         }
-      })
-      this.props.saveProfile(this.props.user.username, {emailList: currentList, notify}, () => {
-        this.setState({
-          errorMessage: '',
-          emailList: ''
-        })
       });
+      if (invalidEmails.length) {
+        this.setState({
+          errorMessage: `The following emails are invalid: ${invalidEmails.join('\n ')} \nPlease correct and retry.`
+        });
+      } else {
+        emailList.forEach(email => {
+          if (currentList.indexOf(email) === -1) {
+            currentList.push(email);
+          }
+        })
+      }
     }
-    
+    this.props.saveProfile(this.props.user.username, {emailList: currentList, notify, playerType}, () => {
+      this.setState({
+        errorMessage: '',
+        emailList: ''
+      })
+    });
   }
 
   render() {
     const { user } = this.props;
-    const { emailList, notify, errorMessage, payoutsEmail } = this.state;
+    const { playerType, emailList, notify, errorMessage, payoutsEmail } = this.state;
     const EmailList = user.profile && user.profile.emailList.length && user.profile.emailList.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
     let payoutsList, payoutsTotal, payoutGames;
     if (user.profile && user.profile.payments && user.profile.payments.length > 0) {      
@@ -131,6 +133,13 @@ class Profile extends Component {
         <div style={{padding: '20px'}}>
           <h3>Preferences:</h3>
           <form onSubmit={this.handleSubmit}>
+            <div className='form-group'>
+              <label htmlFor='playerType'>Player Type: </label>
+                <select className='form-control' name='playerType' id='playerType' value={playerType} onChange={this.handleChange} >
+                  <option value='player'>Player</option>
+                  <option value='goalie'>Goalie</option>
+                </select>
+            </div>
             <div className='form-check'>
               <input type='checkbox' className='form-check-input' name='notify' id='notify' checked={notify} onChange={this.handleChange} />
               <label className='form-check-label' htmlFor='notify'>Send me game notifications</label>
