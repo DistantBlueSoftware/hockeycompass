@@ -6,6 +6,7 @@ import * as actions from './actions';
 import requireAuth from './requireAuth';
 import {emailRegexTest} from './lib';
 import DatePicker from "react-datepicker";
+import { HCFEE } from './config';
  
 import "react-datepicker/dist/react-datepicker.css";
 import './GameDetail.css';
@@ -143,7 +144,7 @@ class GameDetail extends Component {
     const { errorMessage } = this.state;
     const isNew = match && !match.params.id;
     const buttonText = isNew ? 'Create Game' : 'Update Game';
-    const costMessage = game.costPerPlayer ? <div>cost per player will be <span style={{fontSize: '16px', color: 'green'}}>${+game.costPerPlayer+1}</span> <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; $1 HC fee</div> : '';
+    const costMessage = game.costPerPlayer ? <div>cost per player will be <span style={{fontSize: '16px', color: 'green'}}>${+game.costPerPlayer+HCFEE}</span> <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; ${HCFEE} HC fee</div> : '';
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
       <div className='game-detail'>

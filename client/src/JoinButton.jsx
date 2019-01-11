@@ -20,10 +20,11 @@ class JoinButton extends Component {
   }
 
   dropFromGame = (game, user) => {
-    console.log('dropping...')
+    if (window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer}.`)){
     this.props.removePlayer(game, user, () => {
+      //TODO: send the refund
       console.log(`${user.username} removed`);
-    })
+    })}
   }
 
   render () {

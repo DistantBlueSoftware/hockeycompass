@@ -1,15 +1,16 @@
 import React from 'react';
-import {Elements} from 'react-stripe-elements';
+// import {Elements} from 'react-stripe-elements';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import { PaypalCheckout } from './PaypalCheckout';
-import StripePaymentForm from './StripePaymentForm'
+// import StripePaymentForm from './StripePaymentForm'
 import * as actions from './actions';
+import { HCFEE } from './config';
 
 const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
   
   const showJoinButton = game.host === user.username;
-  const costWithFee = game.costPerPlayer + 1;
+  const costWithFee = game.costPerPlayer + HCFEE;
     return (
       <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
