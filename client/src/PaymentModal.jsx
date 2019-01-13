@@ -8,9 +8,9 @@ import * as actions from './actions';
 import { HCFEE } from './config';
 
 const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
-  
-  const showJoinButton = game.host === user.username;
-  const costWithFee = game.costPerPlayer + HCFEE;
+  const isGoalie = user.profile && user.profile.playerType === 'goalie'; 
+  const showJoinButton = game.host === user.username || isGoalie;
+  const costWithFee = isGoalie ? 0 : game.costPerPlayer + HCFEE;
     return (
       <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
