@@ -11,7 +11,7 @@ const GameSchema = new mongoose.Schema({
   hostID: {type: String},
   maxPlayers: {type: Number},
   goalieCount: {type: Number},
-  players: {type: [{name: String, type: String}], optional: true},
+  players: [{name: {type: String}, type: {type: String}}],
   costPerPlayer: {type: Number, default: 0},
   active: {type: Boolean, default: true},
   payoutDistributed: {type: Boolean, default: false}
