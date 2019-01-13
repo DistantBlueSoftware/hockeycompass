@@ -8,9 +8,10 @@ const GameSchema = new mongoose.Schema({
   invited: [String],
   location: {type: String},
   host: {type: String},
+  hostID: {type: String},
   maxPlayers: {type: Number},
   goalieCount: {type: Number},
-  players: {type: [String], optional: true},
+  players: {type: [{name: String, type: String}], optional: true},
   costPerPlayer: {type: Number, default: 0},
   active: {type: Boolean, default: true},
   payoutDistributed: {type: Boolean, default: false}

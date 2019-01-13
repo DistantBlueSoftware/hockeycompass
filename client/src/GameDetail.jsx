@@ -69,7 +69,7 @@ class GameDetail extends Component {
     let needsConfirmation = false;
     let confirmText = '';
     game.host = user.fullName || user.username;
-    game.currentPlayer = {fullName: user.fullName, type: user.profile && user.profile.playerType}
+    game.currentPlayer = {name: user.fullName, type: user.profile && user.profile.playerType}
     // game.date = moment(game.date + ' ' + game.time);
     // if (moment(game.date).diff(moment()) < 0) {
     //   this.setState({
@@ -109,10 +109,10 @@ class GameDetail extends Component {
         game.emailList = currentList;
         
         //save email list to user profile
-        this.props.saveProfile(this.props.user.username, {emailList: emails}, () => {
+        this.props.saveProfile(user.username, {emailList: emails}, () => {
           this.setState({
             errorMessage: '',
-            emailList: this.props.user.profile.emailList
+            emailList: user.profile.emailList
           })
         });
       } 
