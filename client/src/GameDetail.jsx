@@ -68,7 +68,7 @@ class GameDetail extends Component {
     let game = this.state;
     let needsConfirmation = false;
     let confirmText = '';
-    game.host = this.props.user.username;
+    game.host = user.fullName || user.username;
     game.currentPlayer = {fullName: user.fullName, type: user.profile && user.profile.playerType}
     // game.date = moment(game.date + ' ' + game.time);
     // if (moment(game.date).diff(moment()) < 0) {
