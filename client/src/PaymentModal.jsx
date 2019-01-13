@@ -43,7 +43,7 @@ const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
                 className='btn btn-success' 
                 data-dismiss='modal' 
                 onClick={() => handleAddPlayer()
-                } >Join
+                } >{isGoalie ? 'Join as Goalie' : 'Join'}
               </button> :
               <PaypalCheckout costWithFee={costWithFee} handleAddPlayer={handleAddPlayer}/>
             }

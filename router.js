@@ -77,7 +77,7 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, type, location, host, currentPlayer, invited, maxPlayers, costPerPlayer, goalieCount, emailList } = req.body;
+  const { name, date, type, location, host, hostID, currentPlayer, invited, maxPlayers, costPerPlayer, goalieCount, emailList } = req.body;
   const game = new Game({
     name,
     date,
@@ -86,6 +86,7 @@ router.post('/games', function (req, res, next) {
     host,
     maxPlayers,
     goalieCount,
+    hostID,
     invited: emailList && emailList.length ? emailList : [],
     costPerPlayer,
     players: [{name: currentPlayer.name, type: currentPlayer.type || 'player'}]
@@ -215,7 +216,7 @@ router.put('/games/:id/add', (req, res, next) => {
             .then(console.log)
             .catch(console.error);
           //send email to host informing them that a player has joined
-          User.findOne({username: game.host})
+          User.findOne({username: game.hostID || game.host})
             .exec()
             .then(user => {
               emailService.send({
