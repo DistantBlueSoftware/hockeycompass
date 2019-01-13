@@ -16,6 +16,7 @@ const userSchema = new Schema({
     emailList: [String],
     notify: {type: Boolean, default: true},
     playerType: String,
+    nickname: String,
     payments: [{
       game: String,
       from: String,
