@@ -40,6 +40,9 @@ class JoinButton extends Component {
     const buttonText = hovering ? 'Drop' : shouldDoAction ? 'Joined' : 'Locked';
     const buttonStyle = hovering ? {color: '#ffc107'} : {color: '#B2B2B2'};
     const doShowButton = shouldDoAction ? this.showDropButton : null
+    const playerNames = game.players.map(p => p.name);
+    
+    const isJoined = ~playerNames.indexOf(user.username) || ~playerNames.indexOf(user.fullName);
     let button;
 
     if (moment(game.date) < moment()) {
@@ -47,7 +50,7 @@ class JoinButton extends Component {
     }
     else if (user.authenticated) {
       //player has not joined, game is not full
-      if (game.players.indexOf(user.username) === -1 && game.players.length < game.maxPlayers) {
+      if (!isJoined && game.players.length < game.maxPlayers) {
         if (game.type.toLowerCase() === 'public') {
           button = <button className='btn btn-success' disabled={isDisabled} data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Join'}</button>
         } else {
@@ -60,7 +63,7 @@ class JoinButton extends Component {
             button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button> 
           }
         }
-      } else if (game.players.indexOf(user.username) === -1) {
+      } else if (!isJoined) {
         //game is full
         button = <span style={{color: 'red'}}>Full</span>
       } else {
