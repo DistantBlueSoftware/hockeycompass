@@ -9,8 +9,9 @@ import { HCFEE } from './config';
 
 const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
   const isGoalie = user.profile && user.profile.playerType === 'goalie'; 
-  const showJoinButton = game.host === user.username || isGoalie;
-  const costWithFee = isGoalie ? 0 : game.costPerPlayer + HCFEE;
+  const goalieSlots = game.players ? game.goalieCount - game.players.filter(p => p.type === 'goalie').length : game.goalieCount;
+  const showJoinButton = game.host === user.username || isGoalie && goalieSlots;
+  const costWithFee = isGoalie && goalieSlots ? 0 : game.costPerPlayer + HCFEE;
     return (
       <div className='modal fade' id='payment-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
@@ -31,6 +32,9 @@ const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
                   <StripePaymentForm game={game} user={user} costWithFee={costWithFee} setLoadingState={setLoadingState} />
                 </Elements>*/}
               </React.Fragment>
+            }
+            {isGoalie && !goalieSlots && 
+              <div className='message blue'>Bummer... all the goalie slots are filled! <br />But don't worry, you can join and skate out for ${costWithFee}. Just click below.</div>
             }
           </div>
           <div className='modal-footer' style={{alignItems: 'flex-start'}}>

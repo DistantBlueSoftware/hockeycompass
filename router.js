@@ -77,7 +77,7 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, type, location, host, currentPlayer, invited, maxPlayers, costPerPlayer, emailList } = req.body;
+  const { name, date, type, location, host, currentPlayer, invited, maxPlayers, costPerPlayer, goalieCount, emailList } = req.body;
   const game = new Game({
     name,
     date,
@@ -85,6 +85,7 @@ router.post('/games', function (req, res, next) {
     location,
     host,
     maxPlayers,
+    goalieCount,
     invited: emailList && emailList.length ? emailList : [],
     costPerPlayer,
     players: [{name: currentPlayer.name, type: currentPlayer.type || 'player'}]
@@ -265,7 +266,7 @@ router.put('/games/:id/drop', (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
     .then(game => {
-      const playerIndex = game.players.indexOf(req.body.username);
+      const playerIndex = game.players.map(p => p.name).indexOf(req.body.fullName);
       game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
       game.save()
         .then(game => res.json(game))
