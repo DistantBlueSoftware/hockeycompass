@@ -5,6 +5,14 @@ import storage from 'redux-persist/lib/storage';
 import reduxThunk from 'redux-thunk';
 import rootReducer from '../reducers';
 
+const middlewares = [reduxThunk];
+
+if (process.env.REACT_APP_ENV === 'localhost') {
+  const { logger } = require(`redux-logger`);
+ 
+  middlewares.push(logger);
+}
+
 const persistConfig = {
   key: 'root',
   storage,
@@ -18,6 +26,6 @@ export const store = createStore(
   {
     user: { authenticated: localStorage.getItem('token') }
   },
-  applyMiddleware(reduxThunk, logger));
+  applyMiddleware(...middlewares));
 
 export const persistor = persistStore(store);
