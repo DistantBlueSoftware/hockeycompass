@@ -140,6 +140,9 @@ class GameDetail extends Component {
       this.props.getGameDetails(match.params.id, () => {
         this.setState({...this.props.games.current})
       });
+    } else if (!localStorage.getItem('hasSeenCreateGameInfo')) {
+      this.setState({infoMessage: <span><i className='fas fa-info-circle' style={{marginRight: '10px'}}></i> Public games can be viewed and joined by the entire HC community; private games are invite-only.</span>});
+      localStorage.setItem('hasSeenCreateGameInfo', true);
     } else if (localStorage.getItem('gameSettings')) {
       this.setState(JSON.parse(localStorage.getItem('gameSettings')))
       this.setState({infoMessage: 'We pre-filled this form using data from your last game. Change what you need and hit Create!'})
