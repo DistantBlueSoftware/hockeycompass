@@ -16,6 +16,26 @@ body {
   background: #C4252D;
 }
 
+.message {
+  margin: 10px; 
+  max-width: 400px; 
+  padding: 10px; 
+  border-radius: 5px; 
+  color: white;
+}
+
+.message.green {
+  background: rgba(48, 169, 49, 0.8);
+}
+
+.message.blue {
+  background: rgba(14, 85, 130, 0.6);
+};
+
+.message.orange {
+  background: rgba(239, 197, 14, 0.6);
+};
+
 table.table-hover td:hover{
   cursor: pointer;
 }

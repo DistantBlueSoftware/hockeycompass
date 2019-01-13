@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import utils from '@distantbluesoftware/dbsutil';
-import moment from 'moment';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
 import {emailRegexTest} from './lib';
@@ -65,10 +64,12 @@ class GameDetail extends Component {
 
   handleNewGameSubmit = (e) => {
     e.preventDefault();
+    const { user } = this.props;
     let game = this.state;
     let needsConfirmation = false;
     let confirmText = '';
     game.host = this.props.user.username;
+    game.currentPlayer = {fullName: user.fullName, type: user.profile && user.profile.playerType}
     // game.date = moment(game.date + ' ' + game.time);
     // if (moment(game.date).diff(moment()) < 0) {
     //   this.setState({
@@ -116,9 +117,10 @@ class GameDetail extends Component {
         });
       } 
     }
+    // store game settings locally for next time
+    localStorage.setItem('gameSettings', JSON.stringify(game));
     
     //create the game
-    localStorage.setItem('gameSettings', JSON.stringify(game));
     if (needsConfirmation && window.confirm(confirmText)) {
       this.props.newGame(game, () => {
         this.props.history.push('/games');
@@ -155,7 +157,7 @@ class GameDetail extends Component {
    return (
       <div className='game-detail'>
         <h1>{isNew ? 'New Game' : this.state.name}</h1>
-        {infoMessage && <div style={{background: 'rgba(48, 169, 49, 0.8)', margin: '10px', maxWidth: '400px', padding: '10px', borderRadius: '5px', color: 'white'}}>{infoMessage}</div>}
+        {infoMessage && <div className='message green'>{infoMessage}</div>}
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <form onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}>
           <div className='row'>
