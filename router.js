@@ -87,7 +87,7 @@ router.post('/games', function (req, res, next) {
     maxPlayers,
     invited: emailList && emailList.length ? emailList : [],
     costPerPlayer,
-    players: [{name: currentPlayer.fullName, type: currentPlayer.type}]
+    players: [{name: currentPlayer.name, type: currentPlayer.type || 'player'}]
   });
 
   game.save()
@@ -188,14 +188,15 @@ router.delete('/games/:id', function (req, res, next) {
 });
 
 router.put('/games/:id/add', (req, res, next) => {
+  const { fullName, profile, username } = req.body;
   Game.findById(req.params.id)
     .exec()
     .then(game => {
-      game.players.push(req.body.username);
+      game.players.push({name: fullName, type: profile.playerType});
       game.save()
         .then(game => {
           //if player is not game host, send join game email
-          if (game.host !== req.body.username) {
+          if (game.host !== username) {
             emailService.send({
               template: 'join-game',
               message: {
@@ -205,6 +206,7 @@ router.put('/games/:id/add', (req, res, next) => {
                 name: game.name,
                 date: moment(game.date).format('MM/DD/YYYY h:mmA'),
                 location: game.location,
+                urlQuery: `${game.location.split(' ').join('+')}+MN`,
                 url: process.env.ROOT_URL,
                 id: req.params.id
               }
@@ -226,8 +228,7 @@ router.put('/games/:id/add', (req, res, next) => {
                   location: game.location,
                   numOfPlayers: game.players.length,
                   openings: game.maxPlayers - game.players.length,
-                  first: req.body.first,
-                  last: req.body.last
+                  playerInfo: req.body
                 }
               })
               .then(console.log)
