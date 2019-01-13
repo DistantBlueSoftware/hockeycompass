@@ -8,7 +8,8 @@ const INITIAL_STATE = {
 export default function(state = INITIAL_STATE, action) {
   switch (action.type) {
     case USER_AUTH:
-      return { ...state, ...action.payload, authenticated: true, errorMessage: '' };
+    const fullName = action.payload.firstName + ' ' + action.payload.lastName;
+      return { ...state, ...action.payload, fullName, authenticated: true, errorMessage: '' };
     case SAVE_PROFILE: 
       return { ...state, profile: {...action.payload}, errorMessage: '' };
     case LOGOUT:
