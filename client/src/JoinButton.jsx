@@ -20,12 +20,14 @@ class JoinButton extends Component {
   }
 
   dropFromGame = (game, user) => {
-    if (window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer}.`)){
+    const isGoalie = user.profile && user.profile.playerType === 'goalie';
+    const needsConfirm = isGoalie ? true : window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer}.`);
+    if (needsConfirm){
     this.props.removePlayer(game, user, () => {
       //TODO: send the refund
       // refund flow: hit Paypal refund API using the paymentID of their payment, then remove the payment from the Payments table
       // I think this means we need to store the paymentID in the Payments table
-      console.log(`${user.username} removed`);
+      console.log(`${user.fullName} removed`);
     })}
   }
 
