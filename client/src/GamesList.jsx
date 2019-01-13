@@ -43,9 +43,14 @@ class GamesList extends Component {
     })
   }
   
-  handleAddPlayer = () => {
+  handleAddPlayer = joiningAsPlayer => {
     this.setLoadingState(true);
-    this.props.addPlayer(this.state.modalData, this.props.user, () => {
+    // we want a copy of the user object so we don't accidentally modify their profile!
+    let currentUser = JSON.parse(JSON.stringify(this.props.user));
+    if (joiningAsPlayer) {
+      currentUser.profile.playerType = 'player';
+    }
+    this.props.addPlayer(this.state.modalData, currentUser, () => {
       this.setLoadingState(false);
     });
   }
