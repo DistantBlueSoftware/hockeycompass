@@ -28,7 +28,7 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
-if (process.env.REACT_APP_ENV !=='localhost') {
+if (!process.env.REACT_APP_ENV || process.env.REACT_APP_ENV !=='localhost') {
   const path = require('path');
   app.use(express.static(path.join(__dirname, 'client/build')));
 
