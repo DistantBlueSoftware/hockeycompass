@@ -1,13 +1,16 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import moment from 'moment';
 import utils from '@distantbluesoftware/dbsutil';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
 import {emailRegexTest} from './lib';
-import DatePicker from "react-datepicker";
+// import DatePicker from "react-datepicker";
+import Datetime from "react-datetime";
 import { HCFEE } from './config';
  
-import "react-datepicker/dist/react-datepicker.css";
+// import "react-datepicker/dist/react-datepicker.css";
+import "./react-datetime.css";
 import './GameDetail.css';
 
 const mapStateToProps = state => {
@@ -18,7 +21,7 @@ class GameDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: new Date(),
+      date: moment().add(1, 'days'),
       type: 'public',
       emailList: this.props.user.profile.emailList,
       infoMessage: '',
@@ -27,9 +30,13 @@ class GameDetail extends Component {
   }
 
   handleChange = (e) => {
-    if (e instanceof Date) {
+    if (moment.isMoment(e)) {
       this.setState({
         date: e
+      })
+    } else if (!e.target) {
+      this.setState({
+        date: moment(e)
       })
     } else {
       const target = e.target;
@@ -46,13 +53,12 @@ class GameDetail extends Component {
   handleGameUpdate = e => {
     e.preventDefault();
     let game = this.state;
-    // game.date = moment(game.date + ' ' + game.time);
-    // if (!moment(game.date).isValid()) {
-    //   this.setState({
-    //     errorMessage: 'Error: You must specify a date'
-    //   })
-    //   return;
-    // }
+    if (!moment(game.date).isValid()) {
+      this.setState({
+        errorMessage: 'Error: You must specify a date'
+      })
+      return;
+    }
     if (game.maxPlayers < game.players.length) {
       this.setState({errorMessage: `There are already ${game.players.length} players in the game!`})
       return;
@@ -138,7 +144,7 @@ class GameDetail extends Component {
     if (venues && venues.all.length === 0) this.props.listVenues();
     if (!game && match && match.params.id) {
       this.props.getGameDetails(match.params.id, () => {
-        this.setState({...this.props.games.current})
+        this.setState({...this.props.games.current, date: moment(this.props.games.current.date)})
       });
     } else if (!localStorage.getItem('hasSeenCreateGameInfo')) {
       this.setState({infoMessage: <span><i className='fas fa-info-circle' style={{marginRight: '10px'}}></i> Public games can be viewed and joined by the entire HC community; private games are invite-only.</span>});
@@ -167,14 +173,18 @@ class GameDetail extends Component {
           <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='date'>Date: </label>
-                <DatePicker className='form-control date-picker' selected={game.date}
+                <Datetime 
+                  value={game.date} 
+                  onChange={this.handleChange} 
+                />
+              {/*<DatePicker className='form-control date-picker' selected={game.date}
                   onChange={this.handleChange}
                   showTimeSelect
                   timeFormat="h:mm aa"
                   timeIntervals={15}
                   dateFormat="MM/DD/YYYY h:mm aa"
                   timeCaption="time"
-                />
+                />*/}
               {/*<input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />*/}
             </div>
             {/*<div className='form-group col-md-6'>

@@ -30,7 +30,7 @@ class AdminPayouts extends Component {
     const buttonText = this.state.paymentsSent ? 'Payments Sent!' : 'Send All Payments';
     const loadingOrReady = this.state.ajax ? <i className="fas fa-circle-notch fa-spin"></i> : buttonText;
     const buttonDisabled = this.state.paymentsSent ? 'disabled' : null;
-    const { games, sendPayouts } = this.props;
+    // const { games, sendPayouts } = this.props;
     return (
       <React.Fragment>
         <h3>Admin Payouts</h3>

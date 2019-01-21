@@ -151,9 +151,10 @@ router.put('/games/:id', (req, res, next) => {
         .then(async game => {
           if (hasMeaningfulChanges) {
             //get emails for joined users
+            //TODO: This is broken - player is an object and doesn't have username field (should)
             let emailList = [];
             for (const player of game.players) {
-              await User.findOne({username: player})
+              await User.findOne({username: player.username})
                 .exec()
                 .then(user => emailList.push(user.email))
             }
@@ -194,7 +195,7 @@ router.put('/games/:id/add', (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
     .then(game => {
-      game.players.push({name: fullName, type: profile.playerType});
+      game.players.push({username, name: fullName, type: profile.playerType});
       game.save()
         .then(game => {
           //if player is not game host, send join game email
@@ -267,7 +268,7 @@ router.put('/games/:id/drop', (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
     .then(game => {
-      const playerIndex = game.players.map(p => p.name).indexOf(req.body.fullName);
+      const playerIndex = game.players.map(p => p.username).indexOf(req.body.username);
       game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
       game.save()
         .then(game => res.json(game))
@@ -296,7 +297,7 @@ router.post('/games/:id/notification', (req, res, next) => {
   const isPrivate = req.body.type && req.body.type.toLowerCase() === 'private';
 
   if (isPrivate) {
-    User.findOne({username: req.body.host})
+    User.findOne({username: req.body.hostID || req.body.host})
       .exec()
       .then(user => {
         emailService.send({
@@ -319,7 +320,7 @@ router.post('/games/:id/notification', (req, res, next) => {
       .then(users => {
         const playerEmails = users
                               .filter(user => user.profile.notify)
-                              .filter(user => req.body.players.indexOf(user.username) === -1)
+                              .filter(user => req.body.players.map(p => p.username).indexOf(user.username) === -1)
                               .map(user => user.email)
                               .toString();
         emailService.send({

@@ -95,7 +95,7 @@ class Profile extends Component {
     let payoutsList, payoutsTotal, payoutGames;
     if (user.profile && user.profile.payments && user.profile.payments.length > 0) {      
       payoutGames = _.uniq(user.profile.payments, 'game').map(p => p.game);
-      payoutsList = user.profile.payments.map(payment => <div>{payment.from} - ${payment.amount}</div>)
+      // payoutsList = user.profile.payments.map(payment => <div>{payment.from} - ${payment.amount}</div>)
       payoutsTotal = user.profile.payments.reduce((acc, payment) => acc + payment.amount, 0)
     }
     const emailContainerStyle = {
