@@ -33,7 +33,11 @@ if (!process.env.REACT_APP_ENV || process.env.REACT_APP_ENV !=='localhost') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build/index.html'));
+    console.log('HOSTNAME')
+    console.log(req.hostname)
+    if (req) {
+      res.sendFile(path.join(__dirname, '/client/build/index.html'));
+    }
   });
 }
 
