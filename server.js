@@ -29,6 +29,16 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+if (!process.env.REACT_APP_ENV || process.env.REACT_APP_ENV !=='localhost') {
+  app.use(express.static(path.join(__dirname, 'client/build')));
+
+  app.get('*', (req, res) => {
+    if (req.path.split('/')[0]) 
+      if (req.path.split('/')[0] !== 'api') 
+        res.sendFile(path.join(__dirname, '/client/build/index.html'));
+  });
+}
+
 //To prevent errors from Cross Origin Resource Sharing, we will set our headers to allow CORS with middleware like so:
 app.use(function(req, res, next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
@@ -40,14 +50,6 @@ app.use(function(req, res, next) {
   res.setHeader('Cache-Control', 'no-cache');
   next();
 });
-
-if (!process.env.REACT_APP_ENV || process.env.REACT_APP_ENV !=='localhost') {
-  app.use(express.static(path.join(__dirname, 'client/build')));
-
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build/index.html'));
-  });
-}
 
 //Use our router configuration when we call /api
 app.use('/api', router);
