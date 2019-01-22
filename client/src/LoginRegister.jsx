@@ -8,22 +8,34 @@ class LoginRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: this.props.currentTab || 0
+      active: 0
     }
   }
   
-  switchTabs = (e) => {
-    this.setState({
-      active: e.target.dataset.tab
-    })
+  // switchTabs = (e) => {
+  //   console.log(e.target.dataset.tab)
+  //   this.setState({
+  //     active: e.target.dataset.tab
+  //   })
+  // }
+  
+  componentDidUpdate = prevProps => {
+    if (prevProps.match.path !== this.props.match.path) { 
+      let active = 0;
+      if (this.props.match.path === '/register') active = 1; 
+      this.setState({
+        active
+      });
+    }
   }
   
   render() {
     const {active} = this.state;
+    console.log(active)
     return (
       <Tabs 
         className='login-register' 
-        defaultIndex={active} 
+        selectedIndex={active} 
         selectedTabClassName='active' 
         selectedTabPanelClassName='active-tab-content'
         >

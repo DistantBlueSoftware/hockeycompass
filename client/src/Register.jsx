@@ -7,6 +7,7 @@ class Register extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      playerType: 'player',
       validationError: ''
     }
   }
@@ -47,7 +48,7 @@ class Register extends Component {
 
   render() {
     const {errorMessage} = this.props;
-    const {validationError, referralType} = this.state;
+    const {validationError, referralType, playerType} = this.state;
     return (
       <div className='container-fluid'>
         <Helmet>
@@ -91,8 +92,8 @@ class Register extends Component {
           </div>
           <div className='form-group'>
             <label htmlFor='playerType'>Player Type: </label>
-              <select className='form-control' name='playerType' id='playerType' onChange={this.handleChange} >
-                <option value='player' selected>Player</option>
+              <select className='form-control' value={playerType} name='playerType' id='playerType' onChange={this.handleChange} >
+                <option value='player'>Player</option>
                 <option value='goalie'>Goalie</option>
               </select>
           </div>
