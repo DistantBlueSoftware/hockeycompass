@@ -8,19 +8,12 @@ class LoginRegister extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      active: 0
+      active: this.props.currentTab || 0
     }
   }
   
-  // switchTabs = (e) => {
-  //   console.log(e.target.dataset.tab)
-  //   this.setState({
-  //     active: e.target.dataset.tab
-  //   })
-  // }
-  
   componentDidUpdate = prevProps => {
-    if (prevProps.match.path !== this.props.match.path) { 
+    if (prevProps.match && this.props.match && prevProps.match.path !== this.props.match.path) { 
       let active = 0;
       if (this.props.match.path === '/register') active = 1; 
       this.setState({
@@ -36,6 +29,7 @@ class LoginRegister extends Component {
       <Tabs 
         className='login-register' 
         selectedIndex={active} 
+        onSelect={tabIndex => this.setState({active: tabIndex})}
         selectedTabClassName='active' 
         selectedTabPanelClassName='active-tab-content'
         >
