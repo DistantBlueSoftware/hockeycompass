@@ -83,6 +83,11 @@ class GamesList extends Component {
           <link rel='canonical' href='https://hockeycompass.com/games' />
           </Helmet>
           {/*<button className='btn btn-warning'>View Past Games</button>*/}
+          { user.authenticated &&
+            <div className='text-center'>
+              <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
+            </div>
+          }
           <h1>Upcoming Games <span style={{fontSize: '16px'}}>(click a row to view roster)</span> </h1>
           <div className='table-responsive'>
             <table className='table table-striped table-bordered table-hover'>
@@ -130,11 +135,6 @@ class GamesList extends Component {
               </tbody>
             </table>
           </div>
-          { user.authenticated &&
-            <div className='text-center'>
-              <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
-            </div>
-          }
           <PaymentModal show={showModal} game={modalData} user={user} handleAddPlayer={this.handleAddPlayer} setLoadingState={this.setLoadingState} />
           <ContactModal show={showModal} game={modalData} user={user} />
           <RosterModal show={showModal} game={modalData} user={user} history={history} />

@@ -33,24 +33,26 @@ class LoginRegister extends Component {
   render() {
     const {active} = this.state;
     return (
-      <Tabs 
-        className='login-register' 
-        selectedIndex={active} 
-        onSelect={tabIndex => this.setState({active: tabIndex})}
-        selectedTabClassName='active' 
-        selectedTabPanelClassName='active-tab-content'
-        >
-        <TabList className='tabs'>
-      		<Tab className='tab-link'>Login</Tab>
-      		<Tab className='tab-link'>Register</Tab>
-      	</TabList>
-        <TabPanel className='tab-content'>
-          <Login {...this.props} />
-        </TabPanel>
-        <TabPanel className='tab-content'>
-          <Register {...this.props} />
-        </TabPanel>
-      </Tabs>
+      <div className='container-fluid'>
+        <Tabs 
+          className='login-register' 
+          selectedIndex={active} 
+          onSelect={tabIndex => this.setState({active: tabIndex})}
+          selectedTabClassName='active' 
+          selectedTabPanelClassName='active-tab-content'
+          >
+          <TabList className='tabs'>
+        		<Tab className='tab-link'>Login</Tab>
+        		<Tab className='tab-link'>Register</Tab>
+        	</TabList>
+          <TabPanel className='tab-content'>
+            <Login {...this.props} />
+          </TabPanel>
+          <TabPanel className='tab-content'>
+            <Register {...this.props} />
+          </TabPanel>
+        </Tabs>
+      </div>
     )
   }
 }

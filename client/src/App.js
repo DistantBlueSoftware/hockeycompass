@@ -10,6 +10,7 @@ import GameDetail from './GameDetail';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';
+import './animations.css';
 
 class App extends Component {
   render() {

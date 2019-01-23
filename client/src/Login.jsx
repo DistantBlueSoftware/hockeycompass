@@ -37,7 +37,7 @@ class Login extends Component {
   render() {
     const {errorMessage} = this.props;
     return (
-      <div className='Login container-fluid'>
+      <div className='Login'>
         <Helmet>
         <meta charSet='utf-8' />
         <title>Login - Hockey Compass - Navigate to Hockey</title>

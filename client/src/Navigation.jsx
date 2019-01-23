@@ -4,13 +4,21 @@ import { NavLink } from 'react-router-dom';
 import logo from './logo.png';
 import * as actions from './actions';
 
+const navStyle = {
+  backgroundColor: 'transparent',
+  position: 'fixed',
+  top: 0,
+  width: '100vw',
+  zIndex: 1000
+}
+
 const mapStateToProps = state => {
   return state;
 }
 
 
 const Navigation = ({user, doLogout}) => (
-  <nav className='navbar navbar-expand-lg navbar-light bg-light'>
+  <nav style={navStyle} className='navbar navbar-expand-lg navbar-light'>
     <NavLink className='navbar-brand' to='/'><img src={logo} width={'128px'} alt='Hockey Compass' /></NavLink>
     <button className='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
     <span className='navbar-toggler-icon'></span>

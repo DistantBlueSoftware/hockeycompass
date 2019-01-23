@@ -5,12 +5,53 @@
 }
 
 .Home-intro {
-  font-size: 60px;
+  font-size: 32px;
   color: white;
-  padding: 100px 10px;
+  margin-bottom: 25px;
 }
+
 .hero-image {
-  height: 90vh;
+  height: 100vh;
   background: no-repeat center center fixed;
-  background-size: cover;
+  /* background-size: cover; */
+}
+
+.hero-text {
+  width: 300px;
+  height: 250px;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(25, 81, 139,.9);
+  padding: 20px;
+  margin: 180px auto;
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+}
+@media screen and (min-width: 501px) {
+  .hero-text {
+    width: 500px;
+    height: 350px;
+  }
+  .Home-intro {
+    font-size: 48px;
+  }
+}
+
+.landing-button {
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  color: white;
+  background: transparent;
+  border: 2px solid white;
+}
+
+.landing-button:hover {
+  color: #19518b;
+  background: white;
 }

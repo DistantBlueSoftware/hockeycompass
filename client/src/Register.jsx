@@ -50,7 +50,7 @@ class Register extends Component {
     const {errorMessage} = this.props;
     const {validationError, referralType, playerType} = this.state;
     return (
-      <div className='container-fluid'>
+      <div>
         <Helmet>
         <meta charSet='utf-8' />
         <title>Register - Hockey Compass - Navigate to Hockey</title>

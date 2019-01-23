@@ -165,7 +165,7 @@ class GameDetail extends Component {
     const costMessage = game.costPerPlayer ? <div>cost per player will be <span style={{fontSize: '16px', color: 'green'}}>${+game.costPerPlayer+HCFEE}</span> <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; ${HCFEE} HC fee</div> : '';
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
-      <div className='game-detail'>
+      <div className='game-detail container-fluid'>
         <h1>{isNew ? 'New Game' : this.state.name}</h1>
         {infoMessage && <div className='message green'>{infoMessage}</div>}
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
