@@ -13,7 +13,7 @@ class LoginRegister extends Component {
   }
   
   componentDidUpdate = prevProps => {
-    if (prevProps.match && this.props.match && prevProps.match.path !== this.props.match.path) { 
+    if (this.props.match && (prevProps.match.path !== this.props.match.path)) { 
       let active = 0;
       if (this.props.match.path === '/register') active = 1; 
       this.setState({
@@ -22,9 +22,16 @@ class LoginRegister extends Component {
     }
   }
   
+  componentDidMount = () => {
+    let active = 0;
+    if (this.props.match && this.props.match.path === '/register') active = 1; 
+    this.setState({
+      active
+    })
+  }
+  
   render() {
     const {active} = this.state;
-    console.log(active)
     return (
       <Tabs 
         className='login-register' 
