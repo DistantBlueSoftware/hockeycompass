@@ -5,7 +5,7 @@ import logo from './logo.png';
 import * as actions from './actions';
 
 const navStyle = {
-  backgroundColor: 'transparent',
+  backgroundColor: 'rgba(0,0,0,0.6)',
   position: 'fixed',
   top: 0,
   width: '100vw',

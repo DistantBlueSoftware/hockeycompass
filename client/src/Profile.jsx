@@ -4,6 +4,7 @@ import utils from '@distantbluesoftware/dbsutil';
 import _ from 'underscore';
 import * as actions from './actions';
 import {emailRegexTest} from './lib';
+import requireAuth from './requireAuth';
 
 const mapStateToProps = state => {
   return { ...state };
@@ -182,4 +183,4 @@ const EmailPill = ({email, removeEmail}) => {
   )
 }
 
-export default connect(mapStateToProps, actions)(Profile);
+export default connect(mapStateToProps, actions)(requireAuth(Profile));

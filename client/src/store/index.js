@@ -6,7 +6,7 @@ import rootReducer from '../reducers';
 
 const middlewares = [reduxThunk];
 
-if (process.env.REACT_APP_ENV === 'localhost') {
+if (process.env.NODE_ENV === 'development') {
   const { logger } = require(`redux-logger`);
  
   middlewares.push(logger);

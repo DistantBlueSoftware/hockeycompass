@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import AdminPayouts from './AdminPayouts';
+import requireAuth from './requireAuth';
 import * as actions from './actions';
 
 const mapStateToProps = state => {
@@ -32,4 +33,4 @@ class AdminDashboard extends Component {
   }
 }
 
-export default connect(mapStateToProps, actions)(AdminDashboard)
+export default connect(mapStateToProps, actions)(requireAuth(AdminDashboard))
