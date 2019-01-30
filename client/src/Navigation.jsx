@@ -5,11 +5,13 @@ import logo from './logo.png';
 import * as actions from './actions';
 
 const navStyle = {
-  backgroundColor: 'rgba(0,0,0,0.6)',
+  backgroundColor: 'linear-gradient(rgba(0,0,0,0.3),rgba(0,0,0,0.6))',
   position: 'fixed',
   top: 0,
   width: '100vw',
-  zIndex: 1000
+  zIndex: 1000,
+  height: '65px',
+  background: 'rgba(25, 81, 139,.6)'
 }
 
 const mapStateToProps = state => {
@@ -19,7 +21,7 @@ const mapStateToProps = state => {
 
 const Navigation = ({user, doLogout}) => (
   <nav style={navStyle} className='navbar navbar-expand-lg navbar-light'>
-    <NavLink className='navbar-brand' to='/'><img src={logo} width={'128px'} alt='Hockey Compass' /></NavLink>
+    <NavLink className='navbar-brand' to='/' style={{paddingTop: '1rem'}}><img src={logo} width={'128px'} alt='Hockey Compass' /></NavLink>
     <button className='navbar-toggler' type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation'>
     <span className='navbar-toggler-icon'></span>
   </button>

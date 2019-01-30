@@ -67,7 +67,7 @@ class GamesList extends Component {
   render() {
     if (!this.props.games.games.length) {
       return (
-        <div style={{padding: '20px'}}>
+        <div style={{padding: '20px', marginTop: '70px'}}>
           <Skeleton width={'450px'} height={'40px'} />
           <Skeleton width={'100vw'} height={'500px'} />
         </div>
