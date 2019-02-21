@@ -14,7 +14,7 @@ export default ChildComponent => {
     }
 
     shouldNavigateAway() {
-      if (!this.props.user.authenticated) {
+      if (!this.props.user || !this.props.user.authenticated) {
         this.props.history.push('/games');
       }
     }
