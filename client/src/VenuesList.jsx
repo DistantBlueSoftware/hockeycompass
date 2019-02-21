@@ -4,6 +4,7 @@ import Helmet from 'react-helmet';
 import * as actions from './actions';
 import { AdBanner } from './AdBanner';
 import VenueModal from './VenueModal';
+import _ from 'underscore'
 
 const mapStateToProps = state => {
   return {...state};
@@ -15,7 +16,8 @@ class VenuesList extends Component {
     this.state = {
       loading: false,
       showModal: false,
-      modalData: props.venues.all[1]
+      modalData: props.venues.all[1],
+      currentSort: 'name'
     }
   }
   componentDidMount() {
@@ -38,7 +40,7 @@ setCurrentVenue = (venue, needsAuth) => {
 
   render() {
     const { venues, user } = this.props;
-    const { modalData, showModal } = this.state;
+    const { modalData, showModal, currentSort } = this.state;
     return (
     <div className='VenuesList container-fluid'>
       <Helmet>
@@ -59,7 +61,7 @@ setCurrentVenue = (venue, needsAuth) => {
               <th>Phone</th>
               <th>Website</th>
             </tr>
-            {venues.all
+            {_.sortBy(venues.all, currentSort)
               .map((venue, index) => (
               <tr key={index} onClick={e => this.setCurrentVenue(venue)}>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>

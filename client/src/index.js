@@ -16,4 +16,4 @@ ReactDOM.render(
       {/*</StripeProvider>*/}
     </PersistGate>
   </Provider>, document.getElementById('root'));
-registerServiceWorker();
+// registerServiceWorker();
