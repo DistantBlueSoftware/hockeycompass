@@ -2,6 +2,7 @@ import React from 'react';
 import moment from 'moment';
 import { connect } from 'react-redux';
 import * as actions from './actions';
+import { HCFEE } from './config';
 
 const mapStateToProps = state => {
   return {...state};
@@ -12,7 +13,7 @@ const JoinGame = ({...props}) => {
   const game = games.games.find(game => game._id === match.params.id);
   if (game.players.length < game.maxPlayers) {
     if (game.players.indexOf(user.username) === -1) {
-      const costWithFee = game.costPerPlayer + 1;
+      const costWithFee = game.costPerPlayer + HCFEE;
       const onToken = token => {
         processPayment(token, costWithFee, game, user, addPlayer, () => this.props.router.push('/games'));
         }

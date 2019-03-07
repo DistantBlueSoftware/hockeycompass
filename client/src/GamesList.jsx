@@ -138,7 +138,6 @@ class GamesList extends Component {
           <PaymentModal show={showModal} game={modalData} user={user} handleAddPlayer={this.handleAddPlayer} setLoadingState={this.setLoadingState} />
           <ContactModal show={showModal} game={modalData} user={user} />
           <RosterModal show={showModal} game={modalData} user={user} history={history} />
-          <AdBanner />
         </div>
       )
     }

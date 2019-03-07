@@ -28,7 +28,6 @@ class AdminDashboard extends Component {
     return (
       <div className='container-fluid'>
         <h1>Admin Portal</h1>
-        <Link to='/admin/upload'>Venue Upload</Link>
         <AdminPayouts games={awaitingPayout} />
       </div>
     )

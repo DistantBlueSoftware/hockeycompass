@@ -34,8 +34,6 @@ const Home = ({user}) => (
       */}
       
     </div>
-
-    <AdBanner />
   </div>
 )
 
