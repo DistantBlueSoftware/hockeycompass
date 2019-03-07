@@ -1,0 +1,11 @@
+head
+  //link(rel='stylesheet', href='/css/notify.css', data-inline)
+//img(src='logo.png')
+h1 Game Canceled - #{name} 
+p The following game has been canceled.
+p Game Name: #{name}
+p Date: #{date}
+p Location: #{location}
+p View details here:
+  a(href=`http://${url}/game/join/${id}`)
+    button View Game

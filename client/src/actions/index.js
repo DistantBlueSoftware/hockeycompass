@@ -58,7 +58,7 @@ export const doRegister = (user, callback) => async dispatch => {
 }
 
 
-export const doLogin = (user, callback) => async dispatch => {
+export const doLogin = (user, success = ()=>{}, error=()=>{}) => async dispatch => {
   try {
     const response = await axios.post(
       `/api/login`,
@@ -66,9 +66,10 @@ export const doLogin = (user, callback) => async dispatch => {
     );
     dispatch ({ type: USER_AUTH, payload: response.data });
     localStorage.setItem('token', response.data.token);
-    callback();
+    success();
   } catch (e) {
   dispatch({ type: AUTH_ERROR, payload: 'Invalid login credentials' });
+    error();
 }
 }
 

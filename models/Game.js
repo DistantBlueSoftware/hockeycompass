@@ -14,7 +14,7 @@ const GameSchema = new mongoose.Schema({
   players: [{username: {type: String}, name: {type: String}, type: {type: String}}],
   costPerPlayer: {type: Number, default: 0},
   active: {type: Boolean, default: true},
-  payoutDistributed: {type: Boolean, default: false}
+  payoutDistributed: {type: Boolean, default: false},
 });
 
 module.exports = mongoose.model('Game', GameSchema);

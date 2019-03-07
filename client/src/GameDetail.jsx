@@ -25,7 +25,7 @@ class GameDetail extends Component {
       type: 'public',
       emailList: this.props.user.profile.emailList,
       infoMessage: '',
-      errorMessage: ''
+      errorMessage: '',
     }
   }
 
@@ -50,9 +50,14 @@ class GameDetail extends Component {
     
   }
   
-  handleGameUpdate = e => {
+  handleGameUpdate = (e, params) => {
     e.preventDefault();
     let game = this.state;
+    if (params) {
+      for (let param in params) {
+        game[param] = params[param];
+      }
+    }
     if (!moment(game.date).isValid()) {
       this.setState({
         errorMessage: 'Error: You must specify a date'
@@ -136,6 +141,16 @@ class GameDetail extends Component {
       this.props.newGame(game, () => {
         this.props.history.push('/games');
       });
+    }
+  }
+  
+  cancelGame = e => {
+    e.preventDefault();
+    if (window.confirm('are you sure you want to cancel this game?')) {
+      this.setState({
+        active: false
+      })
+      this.handleGameUpdate(e, {active: false})
     }
   }
   
@@ -241,7 +256,10 @@ class GameDetail extends Component {
               </div>
             }
           </div>
-          <button type='submit' className='btn btn-primary'>{buttonText}</button>
+          <div className='buttons-section'>
+            <button type='submit' className='btn btn-primary'>{buttonText}</button>
+            {!isNew && <button className='btn btn-danger' onClick={this.cancelGame}>Cancel Game</button>}
+          </div>
         </form>
       </div>
     )

@@ -149,14 +149,38 @@ router.put('/games/:id', (req, res, next) => {
       }
       game.save()
         .then(async game => {
-          if (hasMeaningfulChanges) {
+          if (!game.active) {
+            let emailList = [];
+            for (const player of game.players) {
+              await User.findOne({username: player.username})
+                .exec()
+                .then(user => user && emailList.push(user.email))
+            }
+            
+            emailService.send({
+              template: 'game-canceled',
+              message: {
+                bcc: emailList
+              },
+              locals: {
+                name: game.name,
+                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                location: game.location,
+                url: process.env.ROOT_URL,
+                id: req.params.id
+              }
+            })
+            .then(console.log)
+            .catch(console.error);
+          }
+          else if (hasMeaningfulChanges) {
             //get emails for joined users
             //TODO: This is broken - player is an object and doesn't have username field (should)
             let emailList = [];
             for (const player of game.players) {
               await User.findOne({username: player.username})
                 .exec()
-                .then(user => emailList.push(user.email))
+                .then(user => user && emailList.push(user.email))
             }
           
             emailService.send({

@@ -6,10 +6,15 @@ import * as actions from './actions';
 class Login extends Component {
   constructor(props) {
     super(props);
-    this.state = {}
+    this.state = {
+      errorMessage: ''
+    }
   }
 
   handleChange = (e) => {
+    this.setState({
+      errorMessage: ''
+    })
     const target = e.target;
       const value = target.type === 'checkbox' ? target.checked : target.value;
       const name = target.name;
@@ -31,11 +36,11 @@ class Login extends Component {
       } else {
         this.props.history.push('/games');
       }
-    });
+    }, () => this.setState({errorMessage: 'Hmm, we didn\'t recognize that info. Try again?'}));
   }
 
   render() {
-    const {errorMessage} = this.props;
+    const {errorMessage} = this.state;
     return (
       <div className='Login'>
         <Helmet>
@@ -43,6 +48,7 @@ class Login extends Component {
         <title>Login - Hockey Compass - Navigate to Hockey</title>
         <link rel='canonical' href='https://hockeycompass.com/login' />
         </Helmet>
+        {errorMessage && <div className='message red'>{this.state.errorMessage}</div>}
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label htmlFor='usernameOrEmail'>Username or Email: </label>
@@ -53,7 +59,6 @@ class Login extends Component {
             <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
           </div>
           <button type='submit' className='btn btn-primary'>Login</button>
-          {errorMessage && <span style={{marginLeft: '20px', fontSize: '20px', color: 'red'}}>{errorMessage}</span>}
         </form>
       </div>
     )
