@@ -18,10 +18,10 @@ const Home = ({user}) => (
     <title>Hockey Compass - Navigate to Hockey</title>
     <link rel='canonical' href='https://hockeycompass.com/' />
     </Helmet>
-    <div className='hero-image' style={{backgroundImage: `linear-gradient(rgba(255,255,255,0.7), rgba(0,0,0,0.6)), url(${'hockey.jpg'})`}}>
-      <div className='hero-text slideRight'>
+    <div className='hero-image' style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.5), rgba(25, 81, 139, 0.05)), url(${'hchero.jpg'})`}}>
+      <div className='hero-text'>
         <h1 className='Home-intro'>
-          Hockey Compass
+         Navigate to hockey.
         </h1>
         <Link to='/games'><button className='landing-button btn btn-large'><i className='far fa-compass' style={{fontSize: '32px', marginRight: '10px'}}/>View Games</button></Link>
       </div>

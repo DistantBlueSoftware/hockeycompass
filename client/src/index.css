@@ -25,6 +25,11 @@ a, a:active, a:visited, a:hover {
   color: rgba(255,255,255,0.7);
 }
 
+.btn {
+  padding: 10px 20px;
+  border-radius: 1000px;
+}
+
 .btn-primary {
   background: #154b8b;
 }
@@ -43,6 +48,10 @@ a, a:active, a:visited, a:hover {
 
 .message.green {
   background: rgba(48, 169, 49, 0.8);
+}
+
+.message.red {
+  background: rgba(204, 35, 55, 0.8);
 }
 
 .message.blue {
