@@ -27,6 +27,7 @@ a, a:active, a:visited, a:hover {
 
 .btn {
   padding: 10px 20px;
+  min-width: 90px;
   border-radius: 1000px;
 }
 

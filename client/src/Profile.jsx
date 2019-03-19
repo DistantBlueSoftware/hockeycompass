@@ -1,10 +1,24 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import utils from '@distantbluesoftware/dbsutil';
 import _ from 'underscore';
 import * as actions from './actions';
 import {emailRegexTest} from './lib';
 import requireAuth from './requireAuth';
+
+const ProfileContainer = styled.div`
+	display: flex;
+  flex-flow: column;
+	align-items: center;
+	justify-content: center;
+  margin: 110px auto 0 auto;
+	padding: 10px;
+  border-radius: 5px;
+  border: 2px solid #154b8b;
+  transition: all 0.3s;
+	max-width: 800px;
+`
 
 const mapStateToProps = state => {
   return { ...state };
@@ -104,7 +118,7 @@ class Profile extends Component {
       flexFlow: 'row wrap'
     }
     return (
-      <div className='container-fluid'>
+      <ProfileContainer>
         <h1>{user.username} - profile</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         {user.profile && user.profile.emailList && user.profile.emailList.length > 0 &&
@@ -141,19 +155,22 @@ class Profile extends Component {
                   <option value='goalie'>Goalie</option>
                 </select>
             </div>
+						<h4>Notifications:</h4>
             <div className='form-check'>
               <input type='checkbox' className='form-check-input' name='notify' id='notify' checked={notify} onChange={this.handleChange} />
               <label className='form-check-label' htmlFor='notify'>Send me game notifications</label>
             </div>
-            <h3>Email List:</h3>
+            <h3 style={{marginTop: '20px'}}>Email List:</h3>
             <div className='form-group'>
-              <label className='form-label' htmlFor='emailList'>Paste an email list here. Don't worry if there are duplicates or extra stuff in there; we'll find the emails for you.</label>
+              <label className='form-label' htmlFor='emailList'>Paste an email list here. You don't have to trim out any extraneous characters or worry about formatting; our algorithm will pick the emails out for you.</label>
               <textarea className='form-control' name='emailList' value={emailList} onChange={this.handleChange}></textarea>
             </div>
-            <button className='btn btn-success' type='submit'>Save Changes</button>
+						<div style={{textAlign: 'center'}}>
+            	<button className='btn btn-success' type='submit'>Save Changes</button>
+						</div>
           </form>
         </div>
-      </div>
+      </ProfileContainer>
     )
   }
 } 

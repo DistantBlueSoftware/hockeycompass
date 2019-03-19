@@ -3,6 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
+import { HCFEE } from './config';
 
 class JoinButton extends Component {
   constructor(props) {
@@ -21,7 +22,7 @@ class JoinButton extends Component {
 
   dropFromGame = (game, user) => {
     const isGoalie = user.profile && user.profile.playerType === 'goalie';
-    const needsConfirm = isGoalie ? true : window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer}.`);
+    const needsConfirm = isGoalie ? true : window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer + HCFEE}.`);
     if (needsConfirm){
     this.props.removePlayer(game, user, () => {
       //TODO: send the refund
