@@ -43,13 +43,16 @@ class GamesList extends Component {
     })
   }
   
-  handleAddPlayer = joiningAsPlayer => {
+  handleAddPlayer = args => {
     this.setLoadingState(true);
     // we want a copy of the user object so we don't accidentally modify their profile!
     let currentUser = JSON.parse(JSON.stringify(this.props.user));
-    if (joiningAsPlayer) {
-      currentUser.profile.playerType = 'player';
+    if (args) {
+      if (args.joiningAsPlayer) currentUser.profile.playerType = 'player';
+      if (args.paymentID) currentUser.paymentID = args.paymentID;
+      console.log(currentUser)
     }
+    
     this.props.addPlayer(this.state.modalData, currentUser, () => {
       this.setLoadingState(false);
     });
@@ -65,7 +68,9 @@ class GamesList extends Component {
   }
 
   render() {
-    if (!this.props.games.games.length) {
+    const { games, user, history } = this.props;
+    const { loading, modalData, showModal } = this.state;
+    if (loading) {
       return (
         <div style={{padding: '20px', marginTop: '70px'}}>
           <Skeleton width={'450px'} height={'40px'} />
@@ -73,8 +78,8 @@ class GamesList extends Component {
         </div>
       )
     } else {
-      const { games, user, history } = this.props;
-      const { loading, modalData, showModal } = this.state;
+      // if (!loading && !games.games.length) return <h1>No Games Yet</h1>
+      // else 
       return (
         <div className='GamesList container-fluid'>
           <Helmet>
