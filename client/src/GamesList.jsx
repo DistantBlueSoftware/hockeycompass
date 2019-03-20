@@ -70,6 +70,7 @@ class GamesList extends Component {
   render() {
     const { games, user, history } = this.props;
     const { loading, modalData, showModal } = this.state;
+    const newGameLink = user && user.authenticated ? '/newgame' : '/login';
     if (loading) {
       return (
         <div style={{padding: '20px', marginTop: '70px'}}>
@@ -88,11 +89,9 @@ class GamesList extends Component {
           <link rel='canonical' href='https://hockeycompass.com/games' />
           </Helmet>
           {/*<button className='btn btn-warning'>View Past Games</button>*/}
-          { user.authenticated &&
-            <div className='text-center'>
-              <Link to='/newgame'><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
-            </div>
-          }
+          <div className='text-center'>
+            <Link to={newGameLink}><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
+          </div>
           <h1>Upcoming Games <span style={{fontSize: '16px'}}>(click a row to view roster)</span> </h1>
           <div className='table-responsive'>
             <table className='table table-striped table-bordered table-hover'>
