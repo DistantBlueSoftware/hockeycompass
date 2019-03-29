@@ -16,7 +16,6 @@ const Navbar = styled.nav`
 `
 
 const mapStateToProps = state => {
-  console.log(state)
   return state;
 }
 
