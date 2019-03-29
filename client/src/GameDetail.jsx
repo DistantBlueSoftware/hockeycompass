@@ -250,7 +250,7 @@ class GameDetail extends Component {
             </div>
             {this.state.type === 'private' &&
               <div className='form-group col-md-12'>
-                <label htmlFor='emailList'>Paste an email list here. Don't worry if there are duplicates or extra stuff in there; we'll find the emails for you.</label>
+                <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
                 <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emailList}></textarea>
               </div>
             }

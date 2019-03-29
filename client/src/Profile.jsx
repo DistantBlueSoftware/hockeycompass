@@ -162,7 +162,7 @@ class Profile extends Component {
             </div>
             <h3 style={{marginTop: '20px'}}>Email List:</h3>
             <div className='form-group'>
-              <label className='form-label' htmlFor='emailList'>Paste an email list here. You don't have to trim out any extraneous characters or worry about formatting; our algorithm will pick the emails out for you.</label>
+              <label className='form-label' htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
               <textarea className='form-control' name='emailList' value={emailList} onChange={this.handleChange}></textarea>
             </div>
 						<div style={{textAlign: 'center'}}>
