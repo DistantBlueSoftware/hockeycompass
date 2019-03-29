@@ -171,7 +171,6 @@ class GameDetail extends Component {
   }
 
   render() {
-    console.log(this.state)
     const { user, venues, match } = this.props;
     const game = this.state;
     const { infoMessage, errorMessage } = this.state;
