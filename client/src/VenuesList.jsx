@@ -17,6 +17,17 @@ const TitleWithSearch = styled.div`
   justify-content: space-between;
 `
 
+const ClickableRow = styled.tr`
+  cursor: pointer;
+`
+
+const StyledInput = styled.input`
+  border-radius: 5px;
+  padding: 5px;
+  border: 2px solid rgb(25, 81, 139);
+  margin-left: 10px;
+`
+
 class VenuesList extends Component {
   constructor(props) {
     super(props);
@@ -56,7 +67,7 @@ setCurrentVenue = (venue, needsAuth) => {
   }
   
   filterVenues = venue => {
-    return venue.name.toLowerCase().includes(this.state.search.toLowerCase())
+    return venue.name.toLowerCase().includes(this.state.search.toLowerCase()) || venue.city.toLowerCase().includes(this.state.search.toLowerCase())
   }
 
   render() {
@@ -73,7 +84,7 @@ setCurrentVenue = (venue, needsAuth) => {
         <h1>Minnesota Ice Arenas</h1>
         <div>
           <label htmlFor='search'>Search: </label>
-          <input type='text' name='search' id='search' onChange={this.handleChange}></input>
+          <StyledInput type='text' name='search' id='search' onChange={this.handleChange}></StyledInput>
         </div>
       </TitleWithSearch>
       <div className='table-responsive'>
@@ -91,15 +102,15 @@ setCurrentVenue = (venue, needsAuth) => {
             {_.sortBy(venues.all, currentSort)
               .filter(venue => this.filterVenues(venue))
               .map((venue, index) => (
-              <tr key={index} onClick={e => this.setCurrentVenue(venue)}>
+              <ClickableRow key={index} onClick={e => this.setCurrentVenue(venue)}>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.address}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.city}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
-                <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Website</a></td>
-              </tr>
+                <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Click Here</a></td>
+              </ClickableRow>
             ))}
           </tbody>
         </table>
