@@ -17,11 +17,21 @@ class VenuesList extends Component {
       loading: false,
       showModal: false,
       modalData: props.venues.all[1],
-      currentSort: 'name'
+      currentSort: 'name',
+      search: ''
     }
   }
   componentDidMount() {
     this.props.listVenues();
+  }
+  
+  handleChange = (e) => {
+    const target = e.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+      this.setState({
+        [name]: value
+      });
   }
   
   setLoadingState = bool => {
@@ -37,6 +47,10 @@ setCurrentVenue = (venue, needsAuth) => {
       this.props.history.push(`/login`);
     }
   }
+  
+  filterVenues = venue => {
+    return venue.name.toLowerCase().includes(this.state.search.toLowerCase())
+  }
 
   render() {
     const { venues, user } = this.props;
@@ -49,6 +63,8 @@ setCurrentVenue = (venue, needsAuth) => {
       <link rel='canonical' href='https://hockeycompass.com/venues' />
       </Helmet>
       <h1>Minnesota Ice Arenas</h1>
+      <label htmlFor='search'>Search: </label>
+      <input type='text' name='search' id='search' onChange={this.handleChange}></input>
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
@@ -62,6 +78,7 @@ setCurrentVenue = (venue, needsAuth) => {
               <th>Website</th>
             </tr>
             {_.sortBy(venues.all, currentSort)
+              .filter(venue => this.filterVenues(venue))
               .map((venue, index) => (
               <tr key={index} onClick={e => this.setCurrentVenue(venue)}>
                 <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>
