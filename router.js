@@ -270,11 +270,13 @@ router.put('/games/:id/add', (req, res, next) => {
                 .catch(err => next(err));
             })
             .catch(err => next(err));
+            console.log(req.body.paymentID)
             //create a record for future payout to host 
             const paymentDetail = new Payment({
               gameID: game._id,
               gameHost: game.host,
               payer: req.body.username,
+              paymentID: req.body.paymentID,
               payoutDate: game.date,
               amount: game.costPerPlayer,
             });
@@ -295,7 +297,13 @@ router.put('/games/:id/drop', (req, res, next) => {
       const playerIndex = game.players.map(p => p.username).indexOf(req.body.username);
       game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
       game.save()
-        .then(game => res.json(game))
+        .then(game => {
+          //TODO: send the refund
+          // refund flow: hit Paypal refund API using the paymentID of their payment, then remove the payment from the Payments table
+          // I think this means we need to store the paymentID in the Payments table
+          
+          res.json(game)}
+        )
         .catch(err => next(err));
     })
     .catch(err => next(err));
@@ -347,7 +355,7 @@ router.post('/games/:id/notification', (req, res, next) => {
                               .filter(user => req.body.players.map(p => p.username).indexOf(user.username) === -1)
                               .map(user => user.email)
                               .toString();
-        emailService.send({
+        if (playerEmails) emailService.send({
           template: 'notify-all',
           message: {
             to: 'no-reply@hockeycompass.com',
@@ -361,7 +369,7 @@ router.post('/games/:id/notification', (req, res, next) => {
             id: req.params.id
           }
         })
-        .then(console.log)
+        .then(console.log('Message sent'))
         .catch(console.error);
 
         //SMS notifications through Nexmo
@@ -464,6 +472,8 @@ router.get('/sendPayouts', (req, res, next) => {
 router.post('/payouts', (req, res, next) => {
   let pbg = [];
   console.log(req.body)
+  res.json(req.body)
+  
   // req.body.forEach(game => {
   //   Payment.find({gameID: game._id})
   //     .exec()

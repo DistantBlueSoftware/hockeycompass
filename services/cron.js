@@ -22,7 +22,6 @@ const EmailCheck = new CronJob('* * * * *', function() {
                 body: game
               }, (err, res, body) => {
                 if (err) console.log(err);
-                console.log('Email sent');
                 queue[k].remove();
               })
             })

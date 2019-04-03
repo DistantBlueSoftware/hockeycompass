@@ -180,7 +180,7 @@ class GameDetail extends Component {
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
       <div className='game-detail container-fluid'>
-        <h1>{isNew ? 'New Game' : this.state.name}</h1>
+        <h1>{isNew ? 'My New Game' : this.state.name}</h1>
         {infoMessage && <div className='message green'>{infoMessage}</div>}
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         <form onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}>
@@ -236,7 +236,7 @@ class GameDetail extends Component {
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='costPerPlayer'>Cost Per Player: </label>
-              <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} step='.01' value={game.costPerPlayer} onChange={this.handleChange} />
+              <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} value={game.costPerPlayer} onChange={this.handleChange} />
               {costMessage}
             </div>
           </div>

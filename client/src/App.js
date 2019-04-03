@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import Navigation from './Navigation';
 import { NotFound } from './NotFound';
+import { Footer } from './Footer';
 import Home from './Home';
 import LoginRegister from './LoginRegister';
 import Profile from './Profile';
@@ -34,6 +35,7 @@ class App extends Component {
               <Route exact path='/admin/upload' component={Upload} />
               <Route path='*' component={NotFound} />
             </Switch>
+            <Footer />
           </React.Fragment>
         </Router>
       </div>

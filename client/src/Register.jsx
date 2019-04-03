@@ -40,10 +40,10 @@ class Register extends Component {
   
   componentDidMount() {
     //phone number formatter
-    document.getElementById('phone').addEventListener('input', function (e) {
-      var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
-      e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
-    });
+    // document.getElementById('phone').addEventListener('input', function (e) {
+    //   var x = e.target.value.replace(/\D/g, '').match(/(\d{0,3})(\d{0,3})(\d{0,4})/);
+    //   e.target.value = !x[2] ? x[1] : '(' + x[1] + ') ' + x[2] + (x[3] ? '-' + x[3] : '');
+    // });
   }
 
   render() {
@@ -58,13 +58,11 @@ class Register extends Component {
         </Helmet>
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
-            <label htmlFor='email'>Email: </label>
-            <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
-            <p style={{color: '#B52C32'}}>Note: this is the address we will use for your game payouts via PayPal.</p>
-          </div>
-          <div className='form-group'>
-            <label htmlFor='username'>Username: </label>
-            <input className='form-control' type='text' name='username' id='username' required onChange={this.handleChange} />
+            <label htmlFor='playerType'>Player Type: </label>
+              <select className='form-control' value={playerType} name='playerType' id='playerType' onChange={this.handleChange} >
+                <option value='player'>Player</option>
+                <option value='goalie'>Goalie</option>
+              </select>
           </div>
           <div className='form-group'>
             <label htmlFor='name'>First Name: </label>
@@ -74,13 +72,22 @@ class Register extends Component {
             <label htmlFor='name'>Last Name: </label>
             <input className='form-control' type='text' name='lastName' id='lastName' onChange={this.handleChange} />
           </div>
-          <div className='form-group'>
+          {/*<div className='form-group'>
             <label htmlFor='phone'>Phone: </label>
             <input className='form-control' type='tel' name='phone' id='phone' onChange={this.handleChange} />
+          </div>*/}
+          
+          <div className='form-group'>
+            <label htmlFor='email'>Email: </label>
+            <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='zipCode'>Zip Code: </label>
             <input className='form-control' type='text' name='zipCode' id='zipCode' maxLength={5} onChange={this.handleChange} />
+          </div>
+          <div className='form-group'>
+            <label htmlFor='username'>Username: </label>
+            <input className='form-control' type='text' name='username' id='username' required onChange={this.handleChange} />
           </div>
           <div className='form-group'>
             <label htmlFor='password'>Password: </label>
@@ -90,13 +97,7 @@ class Register extends Component {
             <label htmlFor='passwordConfirm'>Confirm Password: </label>
             <input className='form-control' type='password' name='passwordConfirm' id='passwordConfirm' required onChange={this.handleChange} />
           </div>
-          <div className='form-group'>
-            <label htmlFor='playerType'>Player Type: </label>
-              <select className='form-control' value={playerType} name='playerType' id='playerType' onChange={this.handleChange} >
-                <option value='player'>Player</option>
-                <option value='goalie'>Goalie</option>
-              </select>
-          </div>
+        
           <div className='form-group'>
             <label htmlFor='location'>How did you hear about Hockey Compass? </label>
             <select className='form-control' name='referralType' id='referralType' onChange={this.handleChange} >
