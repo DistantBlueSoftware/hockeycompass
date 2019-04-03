@@ -11,19 +11,22 @@ const Payment = require('../models/Payment');
 const EmailCheck = new CronJob('* * * * *', function() {
   EmailQueue.find({})
     .then(queue => {
+      if (!queue) return;
       for (const k in queue) {
         if (moment(queue[k].sendDate).isBefore(moment())) {
           Game.findById(queue[k].gameID)
             .exec()
             .then(game => {
-              request.post({
-                url: `http://${process.env.ROOT_URL}/api/games/${game._id}/notification`,
-                json: true,
-                body: game
-              }, (err, res, body) => {
-                if (err) console.log(err);
-                queue[k].remove();
-              })
+              if (game) {
+                request.post({
+                  url: `http://${process.env.ROOT_URL}/api/games/${game._id}/notification`,
+                  json: true,
+                  body: game
+                }, (err, res, body) => {
+                  if (err) console.log(err);
+                  queue[k].remove();
+                })
+              } 
             })
             .catch(err => console.log(err))
           
