@@ -5,10 +5,17 @@ import * as actions from './actions';
 import { AdBanner } from './AdBanner';
 import VenueModal from './VenueModal';
 import _ from 'underscore'
+import styled from 'styled-components'
 
 const mapStateToProps = state => {
   return {...state};
 }
+
+const TitleWithSearch = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`
 
 class VenuesList extends Component {
   constructor(props) {
@@ -62,9 +69,13 @@ setCurrentVenue = (venue, needsAuth) => {
       <title>Hockey Arenas - Hockey Compass - Navigate to Hockey</title>
       <link rel='canonical' href='https://hockeycompass.com/venues' />
       </Helmet>
-      <h1>Minnesota Ice Arenas</h1>
-      <label htmlFor='search'>Search: </label>
-      <input type='text' name='search' id='search' onChange={this.handleChange}></input>
+      <TitleWithSearch>
+        <h1>Minnesota Ice Arenas</h1>
+        <div>
+          <label htmlFor='search'>Search: </label>
+          <input type='text' name='search' id='search' onChange={this.handleChange}></input>
+        </div>
+      </TitleWithSearch>
       <div className='table-responsive'>
         <table className='table table-striped table-bordered table-hover'>
           <tbody>
