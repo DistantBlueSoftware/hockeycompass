@@ -11,10 +11,21 @@ import JoinButton from './JoinButton';
 import PaymentModal from './PaymentModal';
 import ContactModal from './ContactModal';
 import RosterModal from './RosterModal';
+import styled from 'styled-components';
 
 const mapStateToProps = state => {
   return {...state};
 }
+
+const EmptyGamesState = styled.div`
+  height: 60vh;
+  max-width: 500px;
+  display:flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+`
 
 class GamesList extends Component {
   constructor(props) {
@@ -50,7 +61,6 @@ class GamesList extends Component {
     if (args) {
       if (args.joiningAsPlayer) currentUser.profile.playerType = 'player';
       if (args.paymentID) currentUser.paymentID = args.paymentID;
-      console.log(currentUser)
     }
     
     this.props.addPlayer(this.state.modalData, currentUser, () => {
@@ -70,7 +80,7 @@ class GamesList extends Component {
   render() {
     const { games, user, history } = this.props;
     const { loading, modalData, showModal } = this.state;
-    const newGameLink = user && user.authenticated ? '/newgame' : '/login';
+    const newGameLink = user && user.authenticated ? '/newgame' : '/login?route=newgame';
     if (loading) {
       return (
         <div style={{padding: '20px', marginTop: '70px'}}>
@@ -79,8 +89,13 @@ class GamesList extends Component {
         </div>
       )
     } else {
-      // if (!loading && !games.games.length) return <h1>No Games Yet</h1>
-      // else 
+      if (!games.games.length) return (
+        <EmptyGamesState className='container-fluid'>
+          <h3>Nobody's skating right now. Make everyone's day, host a game!</h3>
+          <Link to={newGameLink}><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
+        </EmptyGamesState>
+        )
+      else 
       return (
         <div className='GamesList container-fluid'>
           <Helmet>
