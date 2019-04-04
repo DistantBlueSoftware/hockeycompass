@@ -9,8 +9,6 @@ const mailgunOptions = {
   }
 }
 
-console.log(mailgunOptions)
-
 const transport = mailgunTransport(mailgunOptions);
 
 const email = new Email({
