@@ -1,5 +1,6 @@
 const Email = require('email-templates');
 const path = require('path');
+const nodemailer = require('nodemailer');
 const mailgunTransport = require('nodemailer-mailgun-transport');
 
 const mailgunOptions = {
@@ -9,7 +10,7 @@ const mailgunOptions = {
   }
 }
 
-const transport = mailgunTransport(mailgunOptions);
+const transport = nodemailer.createTransport(mailgunTransport(mailgunOptions));
 
 const email = new Email({
   juice: true,
