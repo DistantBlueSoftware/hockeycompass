@@ -10,6 +10,7 @@ a, a:active, a:visited, a:hover {
 
 .container-fluid {
   animation: hcFadeIn .6s ease-in-out;
+  min-height: 75vh;
 }
 
 .container-fluid:not(.Home):not(.VenuesList) {
