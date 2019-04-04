@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as actions from './actions';
 
 const mapStateToProps = state => {
@@ -25,10 +26,11 @@ class VenueModal extends Component {
   handleSubmit = (e) => {
     e.preventDefault();
   }
-
+  
   render() {
-    let {venue, user} = this.props;
+    let {venue, user, hostGame} = this.props;
     if (!venue) venue = {};
+    const venueLink = `/newgame?venue=${venue.name}`
     return (
       <div className='modal fade' id='venue-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
@@ -56,6 +58,7 @@ class VenueModal extends Component {
             {user.authenticated && user.isAdmin &&
               <button className='btn btn-primary' data-dismiss='modal' >Edit Venue</button>
             }
+            <button className='btn btn-primary' onClick={() => hostGame(venue)}>Host a Game Here</button>
             <button className='btn btn-danger' data-dismiss='modal' >Close</button>
           </div>
         </div>

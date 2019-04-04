@@ -60,14 +60,18 @@ a, a:active, a:visited, a:hover {
 
 .message.blue {
   background: rgba(14, 85, 130, 0.6);
-};
+}
 
 .message.orange {
   background: rgba(239, 197, 14, 0.6);
-};
+}
 
 table.table-hover td:hover{
   cursor: pointer;
+}
+
+.ReactModal__Overlay {
+  background-color: rgba(0,0,0,0.7);
 }
 
 @keyframes hcFadeIn {

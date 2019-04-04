@@ -29,6 +29,7 @@ class App extends Component {
               <Route exact path='/games' component={GamesList} />
               <Route exact path='/venues' component={VenuesList} />
               <Route exact path='/newgame' component={GameDetail} />
+              <Route exact path='/newgame/:venue' component={GameDetail} />
               <Route exact path='/game/join/:id' render={() => <GamesList openModal={'payment-modal'} />} />
               <Route exact path='/game/:id/edit' component={GameDetail} />} />
               <Route exact path='/admin' component={AdminDashboard} />

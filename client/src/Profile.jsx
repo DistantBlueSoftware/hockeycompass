@@ -118,7 +118,7 @@ class Profile extends Component {
       flexFlow: 'row wrap'
     }
     return (
-      <ProfileContainer>
+      <ProfileContainer className='container-fluid'>
         <h1>{user.username} - profile</h1>
         {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
         {user.profile && user.profile.emailList && user.profile.emailList.length > 0 &&

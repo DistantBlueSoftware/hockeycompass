@@ -9,6 +9,7 @@ import {emailRegexTest} from './lib';
 import Datetime from "react-datetime";
 import styled from 'styled-components'
 import { HCFEE } from './config';
+import ReactTooltip from 'react-tooltip';
  
 // import "react-datepicker/dist/react-datepicker.css";
 import "./react-datetime.css";
@@ -84,7 +85,7 @@ class GameDetail extends Component {
 
   handleNewGameSubmit = (e) => {
     e.preventDefault();
-    const { user, match } = this.props;
+    const { user } = this.props;
     let game = this.state;
     let needsConfirmation = false;
     let confirmText = '';
@@ -212,7 +213,7 @@ class GameDetail extends Component {
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>
-              <select className='form-control' name='location' id='location' required value={game.location} onChange={this.handleChange} >
+              <select className='form-control' name='location' id='location' required value={game.location || match.params.venue} onChange={this.handleChange} >
                 <option></option>
                 {arenaNames}
               </select>
@@ -267,6 +268,8 @@ class GameDetail extends Component {
             {!isNew && <button className='btn btn-danger' onClick={this.cancelGame}>Cancel Game</button>}
           </div>
         </form>
+        
+        <ReactTooltip html={true} />
       </div>
     )
   }

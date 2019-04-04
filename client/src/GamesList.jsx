@@ -45,8 +45,15 @@ class GamesList extends Component {
       //TODO: logic check that the game can be joined (is not locked)
       window.$("#payment-modal").modal();
     })
-    if (games && games.games.length === 0) this.props.listGames(() => this.setState({pageLoading: false}));
-    if (venues && venues.all.length === 0) this.props.listVenues();
+    if (games && games.games.length === 0) {
+      this.props.listGames(() => {
+        if (venues && venues.all.length === 0) this.props.listVenues();
+        this.setState({pageLoading: false})
+      })
+    } else {
+      this.setState({pageLoading: false})
+    }
+    
     
   }
   

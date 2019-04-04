@@ -88,6 +88,15 @@ setCurrentVenue = (venue, needsAuth) => {
   filterVenues = venue => {
     return venue.name.toLowerCase().includes(this.state.search.toLowerCase()) || venue.city.toLowerCase().includes(this.state.search.toLowerCase())
   }
+  
+  hostGame = venue => {
+    const modal = document.getElementById('venue-modal');
+    modal.style.display = 'none';
+    const bg = document.querySelector('.modal-backdrop')
+    bg.classList.remove('show');
+    bg.style.display = 'none';
+    this.props.history.push(`/newgame/${venue.name}`)
+  }
 
   render() {
     const { venues, user } = this.props;
@@ -135,7 +144,7 @@ setCurrentVenue = (venue, needsAuth) => {
               </tbody>
             </table>
           </div>
-          <VenueModal show={showModal} venue={modalData} user={user} />
+          <VenueModal show={showModal} venue={modalData} user={user} hostGame={this.hostGame} />
         </VenueContainer>
       </VenueBackground>
   )
