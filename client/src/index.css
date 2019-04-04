@@ -8,7 +8,7 @@ a, a:active, a:visited, a:hover {
   text-decoration: none;
 }
 
-.container-fluid:not(.Home) {
+.container-fluid:not(.Home):not(.VenuesList) {
   margin-top: 110px;
   animation: hcFadeIn .6s ease-in-out;
 }
