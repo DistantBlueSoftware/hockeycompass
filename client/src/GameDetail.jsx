@@ -7,6 +7,7 @@ import requireAuth from './requireAuth';
 import {emailRegexTest} from './lib';
 // import DatePicker from "react-datepicker";
 import Datetime from "react-datetime";
+import styled from 'styled-components'
 import { HCFEE } from './config';
  
 // import "react-datepicker/dist/react-datepicker.css";
@@ -17,6 +18,13 @@ const mapStateToProps = state => {
   return {...state};
 }
 
+const Icon = styled.i`
+  position: absolute;
+  top: 43px;
+  left: 24px;
+  color: rgba(25, 81, 139,0.7);
+`
+
 class GameDetail extends Component {
   constructor(props) {
     super(props);
@@ -25,6 +33,7 @@ class GameDetail extends Component {
       type: 'public',
       emailList: this.props.user.profile.emailList,
       infoMessage: '',
+      messageColor: 'green',
       errorMessage: '',
     }
   }
@@ -75,7 +84,7 @@ class GameDetail extends Component {
 
   handleNewGameSubmit = (e) => {
     e.preventDefault();
-    const { user } = this.props;
+    const { user, match } = this.props;
     let game = this.state;
     let needsConfirmation = false;
     let confirmText = '';
@@ -131,7 +140,7 @@ class GameDetail extends Component {
     }
     // store game settings locally for next time
     localStorage.setItem('gameSettings', JSON.stringify(game));
-    
+    localStorage.setItem('returningHost', true);
     //create the game
     if (needsConfirmation && window.confirm(confirmText)) {
       this.props.newGame(game, () => {
@@ -161,9 +170,8 @@ class GameDetail extends Component {
       this.props.getGameDetails(match.params.id, () => {
         this.setState({...this.props.games.current, date: moment(this.props.games.current.date)})
       });
-    } else if (!localStorage.getItem('hasSeenCreateGameInfo')) {
-      this.setState({infoMessage: <span><i className='fas fa-info-circle' style={{marginRight: '10px'}}></i> Public games can be viewed and joined by the entire HC community; private games are invite-only.</span>});
-      localStorage.setItem('hasSeenCreateGameInfo', true);
+    } else if (!localStorage.getItem('returningHost')) {
+      this.setState({infoMessage: 'We will use the email address you have on file for payouts. If this is not a valid PayPal email, you won\'t be able to get paid! \n Check it in your profile.', messageType: 'orange'})
     } else if (localStorage.getItem('gameSettings')) {
       this.setState(JSON.parse(localStorage.getItem('gameSettings')))
       this.setState({infoMessage: 'We pre-filled this form using data from your last game. Change what you need and hit Create!'})
@@ -173,16 +181,17 @@ class GameDetail extends Component {
   render() {
     const { user, venues, match } = this.props;
     const game = this.state;
-    const { infoMessage, errorMessage } = this.state;
+    const { infoMessage, errorMessage, messageColor } = this.state;
+    const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
-    const buttonText = isNew ? 'Create Game' : 'Update Game';
+    const buttonText = isNew ? 'Hockey Time!' : 'Update Game';
     const costMessage = game.costPerPlayer ? <div>cost per player will be <span style={{fontSize: '16px', color: 'green'}}>${+game.costPerPlayer+HCFEE}</span> <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; ${HCFEE} HC fee</div> : '';
     const arenaNames = venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
    return (
       <div className='game-detail container-fluid'>
         <h1>{isNew ? 'My New Game' : this.state.name}</h1>
-        {infoMessage && <div className='message green'>{infoMessage}</div>}
-        {errorMessage && <div style={{color: 'red'}}>{errorMessage}</div>}
+        {infoMessage && <div className={messageClass}>{infoMessage}</div>}
+        {errorMessage && <div className='message red'>{errorMessage}</div>}
         <form onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}>
           <div className='row'>
             <div className='form-group col-md-6'>
@@ -201,12 +210,6 @@ class GameDetail extends Component {
                 />*/}
               {/*<input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />*/}
             </div>
-            {/*<div className='form-group col-md-6'>
-              <label htmlFor='time'>Time: </label>
-              <input className='form-control' type='time' name='time' id='time' required value={game.time} onChange={this.handleChange} />
-            </div>*/}
-          </div>
-          <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>
               <select className='form-control' name='location' id='location' required value={game.location} onChange={this.handleChange} >
@@ -214,40 +217,44 @@ class GameDetail extends Component {
                 {arenaNames}
               </select>
             </div>
+            {/*<div className='form-group col-md-6'>
+              <label htmlFor='time'>Time: </label>
+              <input className='form-control' type='time' name='time' id='time' required value={game.time} onChange={this.handleChange} />
+            </div>*/}
+          </div>
+          <div className='row'>
             <div className='form-group col-md-6'>
               <label htmlFor='name'>Game Name: </label>
               <input className='form-control' type='text' name='name' id='name' required value={game.name} onChange={this.handleChange} />
             </div>
-          </div>
-          <div className='row'>
-            <div className='form-group col-md-6'>
-              <label htmlFor='creator'>Game Host: </label>
-              <input className='form-control' type='text' name='host' id='host' value={game.host || user.username} readOnly />
-            </div>
-          </div>
-          <div className='row'>
-            <div className='form-group col-md-6'>
+            <div className='form-group col-md-3'>
               <label htmlFor='maxPlayers'>Player Cap: </label>
               <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' min={1} value={game.maxPlayers} onChange={this.handleChange} />
             </div>
-            <div className='form-group col-md-6'>
+            <div className='form-group col-md-3'>
               <label htmlFor='maxPlayers'>Goalie Cap: </label>
               <input className='form-control' type='number' name='goalieCount' id='goalieCount' min={0} value={game.goalieCount} onChange={this.handleChange} />
-            </div>
-            <div className='form-group col-md-6'>
-              <label htmlFor='costPerPlayer'>Cost Per Player: </label>
-              <input className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} value={game.costPerPlayer} onChange={this.handleChange} />
-              {costMessage}
             </div>
           </div>
           <div className='row'>
             <div className='form-group col-md-6'>
-              <label htmlFor='type'>Type: </label>
+              <label htmlFor='costPerPlayer'>Cost Per Player: </label>
+              <div>
+                <Icon className='fas fa-dollar-sign'></Icon>
+                <input style={{maxWidth: '100px', paddingLeft: '20px'}} className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} value={game.costPerPlayer} onChange={this.handleChange} />
+              </div>
+              {costMessage}
+            </div>
+            <div className='form-group col-md-6'>
+              <label htmlFor='type'>Type: <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='<h5 style="text-align:center;">What&apos;s the difference between public and private?</h5><p>Public games can be viewed and joined by the entire HC community; private games are invite-only.</p>'></i></label>
               <select className='form-control' name='type' id='type' value={game.type} onChange={this.handleChange} >
                 <option value='public'>Public</option>
                 <option value='private'>Private</option>
               </select>
             </div>
+          </div>
+          <div className='row'>
+            
             {this.state.type === 'private' &&
               <div className='form-group col-md-12'>
                 <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
@@ -255,7 +262,7 @@ class GameDetail extends Component {
               </div>
             }
           </div>
-          <div className='buttons-section'>
+          <div className='buttons-section' style={{textAlign: 'center'}}>
             <button type='submit' className='btn btn-primary'>{buttonText}</button>
             {!isNew && <button className='btn btn-danger' onClick={this.cancelGame}>Cancel Game</button>}
           </div>

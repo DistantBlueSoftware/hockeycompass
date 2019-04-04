@@ -32,6 +32,7 @@ class GamesList extends Component {
     super(props);
     this.state = {
       loading: false,
+      pageLoading: true,
       showModal: false,
       modalData: props.games.games[1]
     }
@@ -44,8 +45,9 @@ class GamesList extends Component {
       //TODO: logic check that the game can be joined (is not locked)
       window.$("#payment-modal").modal();
     })
-    if (games && games.games.length === 0) this.props.listGames();
+    if (games && games.games.length === 0) this.props.listGames(() => this.setState({pageLoading: false}));
     if (venues && venues.all.length === 0) this.props.listVenues();
+    
   }
   
   setLoadingState = bool => {
@@ -79,9 +81,9 @@ class GamesList extends Component {
 
   render() {
     const { games, user, history } = this.props;
-    const { loading, modalData, showModal } = this.state;
+    const { loading, pageLoading, modalData, showModal } = this.state;
     const newGameLink = user && user.authenticated ? '/newgame' : '/login?route=newgame';
-    if (loading) {
+    if (pageLoading) {
       return (
         <div style={{padding: '20px', marginTop: '70px'}}>
           <Skeleton width={'450px'} height={'40px'} />
