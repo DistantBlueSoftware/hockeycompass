@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import Helmet from 'react-helmet';
+import ReactTooltip from 'react-tooltip';
 import * as actions from './actions';
 
 class Register extends Component {
@@ -82,7 +83,7 @@ class Register extends Component {
             <input className='form-control' type='email' name='email' id='email' placeholder='email@address.com' required onChange={this.handleChange} />
           </div>
           <div className='form-group'>
-            <label htmlFor='zipCode'>Zip Code: </label>
+            <label htmlFor='zipCode'>Zip Code: <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='<h5 style="text-align:center;">Why do we ask for this?</h5><p>We use your zip code to alert you of open games near you!</p>'></i></label>
             <input className='form-control' type='text' name='zipCode' id='zipCode' maxLength={5} onChange={this.handleChange} />
           </div>
           <div className='form-group'>
@@ -116,6 +117,7 @@ class Register extends Component {
           <button type='submit' className='btn btn-primary'>Register</button>
           {errorMessage && <span style={{marginLeft: '20px', fontSize: '20px', color: 'red'}}>{errorMessage}</span>}
         </form>
+        <ReactTooltip html={true} />
       </div>
     )
   }

@@ -34,8 +34,8 @@ class Navigation extends React.Component {
   
   componentDidMount() {
     document.addEventListener('scroll', () => {
-      const navColor = window.scrollY < window.innerHeight - 100 ? 'transparent' : 'rgb(25, 81, 139)';
-      if (navColor !== this.state.navColor) this.setState({navColor}) 
+      const navColor = window.scrollY < window.innerHeight - 200 ? 'transparent' : 'rgb(25, 81, 139)';
+      if (this.props.location.pathname === '/' && navColor !== this.state.navColor) this.setState({navColor}) 
     })
   }
   

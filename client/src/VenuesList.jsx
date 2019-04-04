@@ -11,6 +11,24 @@ const mapStateToProps = state => {
   return {...state};
 }
 
+const VenueBackground = styled.div`
+  background: center center;
+  background-image: url('rink.jpg');
+  background-size: cover;
+  background-attachment: fixed;
+  width: 100vw;
+  padding-top: 20px;
+`
+
+const VenueContainer = styled.div`
+position: relative;
+  background: rgba(255,255,255,0.9);
+  max-width: 1000px;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 70px;
+`
+
 const TitleWithSearch = styled.div`
   display: flex;
   align-items: center;
@@ -26,6 +44,7 @@ const StyledInput = styled.input`
   padding: 5px;
   border: 2px solid rgb(25, 81, 139);
   margin-left: 10px;
+  margin-right: 10px;
 `
 
 class VenuesList extends Component {
@@ -74,50 +93,51 @@ setCurrentVenue = (venue, needsAuth) => {
     const { venues, user } = this.props;
     const { modalData, showModal, currentSort } = this.state;
     return (
-    <div className='VenuesList container-fluid'>
-      <Helmet>
-      <meta charSet='utf-8' />
-      <title>Hockey Arenas - Hockey Compass - Navigate to Hockey</title>
-      <link rel='canonical' href='https://hockeycompass.com/venues' />
-      </Helmet>
-      <TitleWithSearch>
-        <h1>Minnesota Ice Arenas</h1>
-        <div>
-          <label htmlFor='search'>Search: </label>
-          <StyledInput type='text' name='search' id='search' onChange={this.handleChange}></StyledInput>
-        </div>
-      </TitleWithSearch>
-      <div className='table-responsive'>
-        <table className='table table-striped table-bordered table-hover'>
-          <tbody>
-            <tr>
-              <th>Name</th>
-              <th>Address</th>
-              <th>City</th>
-              <th>State</th>
-              <th>Zip</th>
-              <th>Phone</th>
-              <th>Website</th>
-            </tr>
-            {_.sortBy(venues.all, currentSort)
-              .filter(venue => this.filterVenues(venue))
-              .map((venue, index) => (
-              <ClickableRow key={index} onClick={e => this.setCurrentVenue(venue)}>
-                <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>
-                <td data-toggle='modal' data-target='#venue-modal'>{venue.address}</td>
-                <td data-toggle='modal' data-target='#venue-modal'>{venue.city}</td>
-                <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
-                <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
-                <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
-                <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Click Here</a></td>
-              </ClickableRow>
-            ))}
-          </tbody>
-        </table>
-      </div>
-      <AdBanner />
-      <VenueModal show={showModal} venue={modalData} user={user} />
-    </div>
+      <VenueBackground>
+        <VenueContainer className='container-fluid VenuesList'>
+          <Helmet>
+          <meta charSet='utf-8' />
+          <title>Hockey Arenas - Hockey Compass - Navigate to Hockey</title>
+          <link rel='canonical' href='https://hockeycompass.com/venues' />
+          </Helmet>
+          <TitleWithSearch>
+            <h1>Minnesota Ice Arenas</h1>
+            <div>
+              <label htmlFor='search'>Search: </label>
+              <StyledInput type='text' name='search' id='search' onChange={this.handleChange}></StyledInput>
+            </div>
+          </TitleWithSearch>
+          <div className='table-responsive'>
+            <table className='table table-striped table-bordered table-hover'>
+              <tbody>
+                <tr>
+                  <th>Name</th>
+                  <th>Address</th>
+                  <th>City</th>
+                  <th>State</th>
+                  <th>Zip</th>
+                  <th>Phone</th>
+                  <th>Website</th>
+                </tr>
+                {_.sortBy(venues.all, currentSort)
+                  .filter(venue => this.filterVenues(venue))
+                  .map((venue, index) => (
+                  <ClickableRow key={index} onClick={e => this.setCurrentVenue(venue)}>
+                    <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>
+                    <td data-toggle='modal' data-target='#venue-modal'>{venue.address}</td>
+                    <td data-toggle='modal' data-target='#venue-modal'>{venue.city}</td>
+                    <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
+                    <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
+                    <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
+                    <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Click Here</a></td>
+                  </ClickableRow>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <VenueModal show={showModal} venue={modalData} user={user} />
+        </VenueContainer>
+      </VenueBackground>
   )
   }
 
