@@ -1,0 +1,9 @@
+head
+  //link(rel='stylesheet', href='/css/notify.css', data-inline)
+//img(src='logo.png')
+h1 Forgot Password?
+p Click here to reset your password.
+  a(href=`https://${url}/reset/${token}`)
+    button Reset
+p Or if that button doesn't work, copy and paste this link into your browser: 
+  a(href=`https://${url}/reset/${token}`) https://#{url}/reset/#{token}

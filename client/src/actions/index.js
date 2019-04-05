@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { RESET_PASSWORD, CHANGE_PASSWORD, GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -224,5 +224,41 @@ export const getPaymentsByGame = (data, callback) => async dispatch => {
     callback();
   } catch (e) {
     dispatch({ type: PAYMENTS_ERROR, payload: 'Sorry, an error occurred. Please try again.' })
+  }
+}
+
+export const resetPassword = email => async dispatch => {
+  try {
+    const response = await axios.post(
+      `/api/reset-password`,
+      {email}
+    );
+    dispatch({ type: RESET_PASSWORD, payload: response.data });
+  } catch (e) {
+    dispatch({ type: AUTH_ERROR, payload: 'That didn\'t work. Try again later?'})
+  }
+}
+
+export const getResetToken = token => async dispatch => {
+  try {
+    const response = await axios.get(
+      `/api/reset/${token}`
+    );
+    dispatch({ type: RESET_PASSWORD, payload: response.data });
+  } catch (e) {
+    dispatch({ type: AUTH_ERROR, payload: 'That didn\'t work. Try again later?'})
+  }
+}
+
+export const changePassword = (token, password, cb) => async dispatch => {
+  try {
+    const response = await axios.post(
+      `/api/reset/${token}`,
+      {password}
+    );
+    dispatch({ type: CHANGE_PASSWORD, payload: response.data });
+    if (cb) cb();
+  } catch (e) {
+    dispatch({ type: AUTH_ERROR, payload: 'Sorry, we couldn\'t change your password at this time. Please try again later.' })
   }
 }

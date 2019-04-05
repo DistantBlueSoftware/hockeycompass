@@ -24,6 +24,8 @@ const userSchema = new Schema({
     }]
   },
   role: {type: Number, default: 0},
+  resetToken: String,
+  resetExpires: Date,
   metrics: {
     loginCount: Number,
     joinDate: Date,
@@ -35,20 +37,18 @@ const userSchema = new Schema({
 
 userSchema.pre('save', function(next) {
   const user = this;
+  if (!user.isModified('password')) return next();
   ModelClass.findById(this._id)
     .exec()
-    .then(userExists => {
-      //TODO: only salts pw if user is new, will have to update logic for pw reset
-      if (!userExists) {
-        bcrypt.genSalt(10, function(err, salt) {
+    .then(() => {
+      bcrypt.genSalt(10, function(err, salt) {
+        if (err) return next(err);
+        bcrypt.hash(user.password, salt, null, function(err, hash) {
           if (err) return next(err);
-          bcrypt.hash(user.password, salt, null, function(err, hash) {
-            if (err) return next(err);
-            user.password = hash;
-            next();
-          });
+          user.password = hash;
+          next();
         });
-      } else next();
+      });
     })
     .catch(err => next(err))
   

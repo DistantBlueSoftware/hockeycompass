@@ -11,6 +11,7 @@ import GameDetail from './GameDetail';
 import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';
+import PasswordReset from './PasswordReset';
 import './animations.css';
 
 class App extends Component {
@@ -34,6 +35,7 @@ class App extends Component {
               <Route exact path='/game/:id/edit' component={GameDetail} />} />
               <Route exact path='/admin' component={AdminDashboard} />
               <Route exact path='/admin/upload' component={Upload} />
+              <Route exact path='/reset/:token' component={PasswordReset} />
               <Route path='*' component={NotFound} />
             </Switch>
             <Footer />

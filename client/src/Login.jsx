@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet';
 import * as actions from './actions';
+import {emailRegexTest} from './lib';
 
 class Login extends Component {
   constructor(props) {
@@ -13,7 +15,8 @@ class Login extends Component {
 
   handleChange = (e) => {
     this.setState({
-      errorMessage: ''
+      errorMessage: '',
+      infoMessage: ''
     })
     const target = e.target;
       const value = target.type === 'checkbox' ? target.checked : target.value;
@@ -29,18 +32,31 @@ class Login extends Component {
       usernameOrEmail: this.state.usernameOrEmail,
       password: this.state.password
     }
-    const id = this.props.match && this.props.match.params ? this.props.match.params.id : null;
+    const {id, route} = this.props.match && this.props.match.params ? this.props.match.params : null;
     this.props.doLogin(user, () => {
       if (id) {
         this.props.history.push(`/game/join/${id}`);
-      } else {
+      } else if (route) {
+        this.props.history.push(`/${route}`);
+      }
+      else {
         this.props.history.push('/games');
       }
     }, () => this.setState({errorMessage: 'Hmm, we didn\'t recognize that info. Try again?'}));
   }
+  
+  passwordReset = () => {
+    let infoMessage;
+    if (this.state.usernameOrEmail && this.state.usernameOrEmail.match(emailRegexTest)) {
+      this.props.resetPassword(this.state.usernameOrEmail);
+      infoMessage = 'We\'ve sent a reset email to the address you entered. Check it and follow the instructions therein!'
+    }
+    else infoMessage = 'Enter your email and click reset'
+    this.setState({infoMessage, errorMessage: ''})
+  }
 
   render() {
-    const {errorMessage} = this.state;
+    const {errorMessage, infoMessage} = this.state;
     return (
       <div className='Login'>
         <Helmet>
@@ -49,6 +65,7 @@ class Login extends Component {
         <link rel='canonical' href='https://hockeycompass.com/login' />
         </Helmet>
         {errorMessage && <div className='message red'>{this.state.errorMessage}</div>}
+        {infoMessage && <div className='message orange'>{this.state.infoMessage}</div>}
         <form onSubmit={this.handleSubmit}>
           <div className='form-group'>
             <label htmlFor='usernameOrEmail'>Username or Email: </label>
@@ -58,8 +75,12 @@ class Login extends Component {
             <label htmlFor='password'>Password: </label>
             <input className='form-control' type='password' name='password' id='password' onChange={this.handleChange} />
           </div>
-          <button type='submit' className='btn btn-primary'>Login</button>
+          <div style={{display: 'flex', alignItems: 'center'}}>
+            <button type='submit' className='btn btn-primary'>Login</button>
+            <div onClick={this.passwordReset} style={{marginLeft: '20px', cursor: 'pointer', color: 'rgb(25, 81, 139)'}}>Forgot your password?</div>
+          </div>
         </form>
+        
       </div>
     )
   }

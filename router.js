@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const request = require('request');
+const crypto = require('crypto');
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY_TEST);
 const Nexmo = require('nexmo');
 const emailService = require('./emailService');
@@ -551,6 +552,63 @@ router.get('/activePayments', (req, res, next) => {
   Payment.find({paid: false})
     .then(payments => res.json(payments))
     .catch((err) => next(err));
+});
+
+router.post('/reset-password', (req, res, next) => {
+  if (req.body.email) {
+    User.findOne({email: req.body.email})
+      .exec()
+      .then(user => {
+        if (user) {
+          crypto.randomBytes(20, (err, buf) => {
+            const token = buf.toString('hex');
+            user.resetToken = token;
+            user.resetExpires = Date.now() + 3600000; // 1 hour
+            user.save()
+              .catch(err => next(err))
+            emailService.send({
+              template: 'forgot-password',
+              message: {
+                to: 'no-reply@hockeycompass.com',
+                bcc: req.body.email
+              },
+              locals: {
+                url: process.env.ROOT_URL,
+                token
+              }
+            })
+          })
+          
+        }
+      })
+    
+  }
+});
+
+router.get('/reset/:token', (req, res, next) => {
+  User.findOne({resetToken: req.params.token, resetExpires: { $gt: Date.now() }})
+    .exec()
+    .then(user => {
+      if (user) {
+        res.json(user)
+      } else res.json({message: 'Invalid or expired token.'})
+    })
+    .catch(err => next(err))
+});
+
+router.post('/reset/:token', (req, res, next) => {
+  User.findOne({resetToken: req.params.token, resetExpires: { $gt: Date.now() }})
+    .exec()
+    .then(user => {
+      if (user) {
+        user.password = req.body.password;
+        user.resetToken = null;
+        user.resetExpires = null;
+        user.save()
+          .then(user => res.json(user))
+      } else res.json({message: 'Invalid or expired token.'})
+    })
+    .catch(err => next(err))
 });
 
 module.exports = router;
