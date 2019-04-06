@@ -31,6 +31,43 @@
   right: 0;
   bottom: 0;
 }
+
+.game-venue-section {
+  height: 100vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.contact-section {
+  height: 100vh;
+  display:flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hi {
+  width: 100vw;
+  height: 100vh;
+  padding: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: no-repeat center center;
+  background-size: cover;
+}
+
+.host-game-landing {
+  height: 80vh;
+  width: 40vw;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: no-repeat center center;
+  background-size: cover;
+  border-radius: 5px;
+}
+
 @media screen and (min-width: 601px) {
   .hero-text {
     width: 600px;
