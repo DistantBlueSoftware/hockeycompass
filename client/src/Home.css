@@ -33,20 +33,13 @@
 }
 
 .game-venue-section {
-  height: 100vh;
   display:flex;
   align-items: center;
   justify-content: center;
+  flex-flow: row wrap;
 }
 
-.contact-section {
-  height: 100vh;
-  display:flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.hi {
+.contact-container {
   width: 100vw;
   height: 100vh;
   padding: 20px;
@@ -59,7 +52,8 @@
 
 .host-game-landing {
   height: 80vh;
-  width: 40vw;
+  width: 100vw;
+  margin: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,6 +79,10 @@
   }
   .Home-intro {
     font-size: 68px;
+  }
+  
+  .host-game-landing {
+    width: 40vw;
   }
 }
 
