@@ -18,6 +18,7 @@ class AdminDashboard extends Component {
   }
   
   componentDidMount() {
+    this.props.routeChange('/admin');
     const {games} = this.props;
     if (games && games.games.length === 0) this.props.listGames();
   }

@@ -35,6 +35,10 @@ class Profile extends Component {
       playerType: user.profile && user.profile.playerType,
     }
   }
+	
+	componentDidMount() {
+		this.props.routeChange('/profile');
+	}
   
   togglePayoutsEmail = () => {
     const payoutsEmailField = document.getElementById('payoutsEmail');

@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { RESET_PASSWORD, CHANGE_PASSWORD, GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { ROUTE_CHANGE, RESET_PASSWORD, CHANGE_PASSWORD, GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -261,4 +261,8 @@ export const changePassword = (token, password, cb) => async dispatch => {
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: 'Sorry, we couldn\'t change your password at this time. Please try again later.' })
   }
+}
+
+export const routeChange = (route) => {
+  return({ type: ROUTE_CHANGE, payload: route })
 }

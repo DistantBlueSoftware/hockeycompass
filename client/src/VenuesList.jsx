@@ -59,6 +59,7 @@ class VenuesList extends Component {
     }
   }
   componentDidMount() {
+    this.props.routeChange('/venues');
     this.props.listVenues();
   }
   

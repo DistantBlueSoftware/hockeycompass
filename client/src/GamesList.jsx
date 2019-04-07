@@ -38,6 +38,7 @@ class GamesList extends Component {
     }
   }
   componentDidMount() {
+    this.props.routeChange('/games');
     const { games, venues, match } = this.props;
     if (match && match.params.id) 
       this.props.getGameDetails(match.params.id, () => {

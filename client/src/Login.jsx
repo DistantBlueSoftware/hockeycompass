@@ -12,6 +12,10 @@ class Login extends Component {
       errorMessage: ''
     }
   }
+  
+  componentDidMount() {
+    this.props.routeChange('/login');
+  }
 
   handleChange = (e) => {
     this.setState({
