@@ -11,24 +11,133 @@ const Navbar = styled.nav`
   top: 0;
   width: 100vw;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 10px;
   border-bottom: 1px solid rgba(255,255,255,0.5);
   transition: all 0.3s;
+`
+
+const NavResponsive = styled.div`
+  width: 100vw;
+  height: 100vh;
+  -webkit-transition: all 0.5s ease-in-out;
+  -o-transition: all 0.5s ease-in-out;
+  transition: all 0.5s ease-in-out;
+  position: absolute;
+  top: -1000px;
+  left: 0;
+  &.active {
+    top: 0;
+    background: rgba(25, 81, 139, 0.75);
+  }
+  @media (min-width: 801px) {
+    top: 0;
+  }
+`
+
+const NavList = styled.ul`
+  list-style-type: none;
+  position: absolute;
+  top: -1000px;
+  left: 0;
+  display: flex;
+  &.active {
+    flex-flow: column;
+    align-items: center;
+    justify-content: center;
+    width: 100vw;
+    height: 100vh;
+    top: 0;
+  }
+  @media (min-width: 801px) {
+    top: 12px;
+    left: 36px;
+  }
+`
+
+const Hamburger = styled.div`
+  z-index: 1000;
+  cursor: pointer;
+  position: relative;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  &.active{
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    -o-transform: rotate(45deg);
+    transform: rotate(45deg);
+  }
+  &:before {
+    content: "";
+    position: absolute;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box;
+    width: 50px;
+    height: 50px;
+    border: 3px solid transparent;
+    top: calc(50% - 25px);
+    left: calc(50% - 25px);
+    border-radius: 100%;
+    -webkit-transition: all 0.3s ease-in-out;
+    -o-transition: all 0.3s ease-in-out;
+    transition: all 0.3s ease-in-out;
+  }
+  &.active:before{
+    border: 2px solid #ecf0f1;
+  }
+  
+  @media (min-width: 801px) {
+    display: none;
+  }
+`
+
+const HamburgerLine = styled.div`
+  width: 30px;
+  height: 3px;
+  background-color: #ecf0f1;
+  display: block;
+  margin: 8px auto;
+  -webkit-transition: all 0.3s ease-in-out;
+  -o-transition: all 0.3s ease-in-out;
+  transition: all 0.3s ease-in-out;
+  &.active:nth-child(2){
+    opacity: 0;
+  }
+  &.active:nth-child(1) {
+    -webkit-transform: translateY(11px);
+    -ms-transform: translateY(11px);
+    -o-transform: translateY(11px);
+    transform: translateY(11px);
+  }
+  &.active:nth-child(3){
+    -webkit-transform: translateY(-11px) rotate(90deg);
+    -ms-transform: translateY(-11px) rotate(90deg);
+    -o-transform: translateY(-11px) rotate(90deg);
+    transform: translateY(-11px) rotate(90deg);
+  }
+`
+
+const LoginSection = styled.div`
+  position: absolute;
+  right: 0;
+  margin: 10px;
+  z-index: 100;
 `
 
 const mapStateToProps = state => {
   return state;
 }
 
-const toggleNavColor = () => {
-  
-}
-
-
 class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navColor: this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)'
+      navColor: this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)',
+      navOpen: false
     }
   }
   
@@ -42,23 +151,33 @@ class Navigation extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.location.pathname !== this.props.location.pathname){
     this.setState({
-      navColor: this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)'
+      navColor: this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)',
+      navOpen: false
     })}
+  }
+  
+  toggleNav = () => {
+    this.setState({
+      navOpen: !this.state.navOpen
+    })
   }
   
   render() {
     const {user, doLogout, location} = this.props;
-    const { navColor } = this.state;
+    const { navColor, navOpen } = this.state;
+    const navActive = navOpen ? 'active' : '';
     return (
-      <Navbar style={{background: navColor}} className='navbar navbar-expand-lg navbar-dark'>
+      <Navbar style={{background: navColor}}>
+        <Hamburger className={navActive} onClick={this.toggleNav}>
+          <HamburgerLine className={navActive}/>
+          <HamburgerLine className={navActive}/>
+          <HamburgerLine className={navActive}/>
+        </Hamburger>
         <NavLink to='/' style={{paddingTop: '1rem'}}>
           <img src={logo} alt='Hockey Compass' />
         </NavLink>
-        <button className='navbar-toggler' style={{border: 'none'}} type='button' data-toggle='collapse' data-target='#navbarSupportedContent' aria-controls='navbarSupportedContent' aria-expanded='false' aria-label='Toggle navigation' onClick={e => toggleNavColor()}>
-        <span className='navbar-toggler-icon'></span>
-      </button>
-      <div className='collapse navbar-collapse' id='navbarSupportedContent'>
-        <ul className='navbar-nav mr-auto'>
+      <NavResponsive className={navActive}>
+        <NavList className={navActive}>
           <NavLink className='nav-link' to='/'><li className='nav-item'>Home</li></NavLink>
           <NavLink className='nav-link' to='/games'><li className='nav-item'>Games</li></NavLink>
           <NavLink className='nav-link' to='/venues'><li className='nav-item'>Venues</li></NavLink>
@@ -69,18 +188,18 @@ class Navigation extends React.Component {
             </React.Fragment>
           }
           
-        </ul>
+        </NavList>
         {user.authenticated ?
-          <React.Fragment>
-            <span className='navbar-text' style={{marginRight: '20px', color: 'white'}}>Welcome, {user.username}</span>
+          <LoginSection>
+            <span style={{marginRight: '20px', color: 'white'}}>Welcome, {user.username}</span>
             <button className='btn btn-primary' type='button' onClick={doLogout}>Logout</button>
-          </React.Fragment> :
-          <React.Fragment>
+          </LoginSection> :
+          <LoginSection>
             <NavLink className='nav-link' to='/login'><span>Login</span></NavLink>
             <NavLink className='nav-link' to='/register'><span>Register</span></NavLink>
-          </React.Fragment>
+          </LoginSection>
         }
-      </div>
+      </NavResponsive>
       </Navbar>
     )
   }

@@ -23,6 +23,14 @@ a, a:active, a:visited, a:hover {
 
 .nav-link, .nav-item {
   color: rgba(255,255,255,0.9);
+  font-size: 32px;
+  
+}
+
+@media (min-width: 801px) {
+  .nav-link, .nav-item {
+    font-size: 18px;
+  }
 }
 
 .nav-link:hover, .nav-item:hover {
