@@ -31,6 +31,7 @@ position: relative;
 
 const TitleWithSearch = styled.div`
   display: flex;
+  flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
 `
@@ -118,7 +119,7 @@ setCurrentVenue = (venue, needsAuth) => {
             </div>
           </TitleWithSearch>
           <div className='table-responsive'>
-            <table className='table table-striped table-bordered table-hover'>
+            <table className='table table-striped table-bordered table-hover' style={{marginTop: '10px'}}>
               <tbody>
                 <tr>
                   <th>Name</th>

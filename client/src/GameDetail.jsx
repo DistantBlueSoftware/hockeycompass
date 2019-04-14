@@ -32,7 +32,7 @@ class GameDetail extends Component {
     this.state = {
       date: moment().add(1, 'days'),
       type: 'public',
-      emailList: this.props.user.profile.emailList,
+      emailList: this.props.user.profile && this.props.user.profile.emailList,
       infoMessage: '',
       messageColor: 'green',
       errorMessage: '',

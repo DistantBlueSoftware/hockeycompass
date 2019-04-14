@@ -34,6 +34,7 @@ const NavResponsive = styled.div`
   }
   @media (min-width: 801px) {
     top: 0;
+    height:auto;
   }
 `
 
@@ -126,6 +127,9 @@ const LoginSection = styled.div`
   right: 0;
   margin: 10px;
   z-index: 100;
+  @media (min-width: 801px) {
+    display: flex;
+  }
 `
 
 const mapStateToProps = state => {
