@@ -43,7 +43,7 @@ class Home extends React.Component {
           <Link to='/venues'><button className='landing-button btn btn-large'><i className='fas fa-bullseye' style={{fontSize: '32px', marginRight: '10px'}} />Pick a Venue</button></Link>
           </div>
           <div className='contact-container' style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.5), rgba(25, 81, 139, 0.25)), url(${'contact.jpg'})`}}>
-            <Link to='/contact'><button className='landing-button btn btn-large'><i className='fas fa-envelope' style={{fontSize: '32px', marginRight: '10px'}} />Contact Us</button></Link>
+            <a href='mailto:info@hockeycompass.com'><button className='landing-button btn btn-large'><i className='fas fa-envelope' style={{fontSize: '32px', marginRight: '10px'}} />Contact Us</button></a>
           </div>
         </div>
         
