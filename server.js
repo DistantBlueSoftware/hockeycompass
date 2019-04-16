@@ -33,10 +33,10 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 
   app.get('*', (req, res) => {
-    const url = path.join(__dirname, '/client/build/index.html');
-    console.log('HERE IS THE URL')
-    console.log(url)
-    res.sendFile(url);
+    console.log('THIS IS THE BASE URL')
+    console.log(req.baseUrl)
+    if (req.baseUrl !== '/api')
+    res.sendFile(path.join(__dirname, '/client/build/index.html'));
   });
 }
 
