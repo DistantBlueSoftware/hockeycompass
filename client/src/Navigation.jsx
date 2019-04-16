@@ -129,6 +129,8 @@ const LoginSection = styled.div`
   z-index: 100;
   @media (min-width: 801px) {
     display: flex;
+    right: 10px;
+    align-items: center;
   }
 `
 
