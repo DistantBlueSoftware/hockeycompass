@@ -32,12 +32,7 @@ app.use(bodyParser.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 
-  app.get('*', (req, res) => {
-    console.log('THIS IS THE ORIGINAL URL')
-    console.log(req.originalUrl)
-    console.log('THIS IS THE BASE URL')
-    console.log(req.baseUrl)
-    if (req.originalUrl.split('/')[1] !== 'api')
+  app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '/client/build/index.html'));
   });
 }
