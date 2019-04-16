@@ -165,6 +165,7 @@ class GameDetail extends Component {
   }
   
   componentDidMount() {
+    this.props.routeChange('/newgame');
     const { venues, match, game } = this.props;
     if (venues && venues.all.length === 0) this.props.listVenues();
     if (!game && match && match.params.id) {

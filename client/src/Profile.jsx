@@ -110,7 +110,7 @@ class Profile extends Component {
   render() {
     const { user } = this.props;
     const { playerType, emailList, notify, errorMessage, payoutsEmail } = this.state;
-    const EmailList = user.profile && user.profile.emailList.length && user.profile.emailList.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
+    const EmailList = user.profile && user.profile.emailList && user.profile.emailList.length && user.profile.emailList.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
     let payoutsList, payoutsTotal, payoutGames;
     if (user.profile && user.profile.payments && user.profile.payments.length > 0) {      
       payoutGames = _.uniq(user.profile.payments, 'game').map(p => p.game);
