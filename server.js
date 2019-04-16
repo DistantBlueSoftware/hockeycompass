@@ -37,7 +37,7 @@ if (process.env.NODE_ENV === 'production') {
     console.log(req.originalUrl)
     console.log('THIS IS THE BASE URL')
     console.log(req.baseUrl)
-    if (req.originalUrl.split('/')[0] !== 'api')
+    if (req.originalUrl.split('/')[1] !== 'api')
     res.sendFile(path.join(__dirname, '/client/build/index.html'));
   });
 }
