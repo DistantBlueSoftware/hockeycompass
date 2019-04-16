@@ -29,6 +29,9 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 
+//Use our router configuration when we call /api
+app.use('/api', router);
+
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 }
@@ -45,8 +48,6 @@ app.use(function(req, res, next) {
   next();
 });
 
-//Use our router configuration when we call /api
-app.use('/api', router);
 
 //start cron jobs
 EmailCheck.start();
