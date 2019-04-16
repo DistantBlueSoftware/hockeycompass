@@ -32,8 +32,11 @@ app.use(bodyParser.urlencoded({ extended: true }));
 if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 
-  app.get('/', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build/index.html'));
+  app.get('*', (req, res) => {
+    const url = path.join(__dirname, '/client/build/index.html');
+    console.log('HERE IS THE URL')
+    console.log(url)
+    res.sendFile(url);
   });
 }
 
