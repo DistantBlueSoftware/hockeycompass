@@ -44,7 +44,7 @@ class GamesList extends Component {
       this.props.getGameDetails(match.params.id, () => {
       this.setCurrentGame(this.props.games.current, true);
       //TODO: logic check that the game can be joined (is not locked)
-      window.$("#payment-modal").modal();
+      setTimeout(() => window.$("#payment-modal").modal(), 1500);
     })
     if (games && games.games.length === 0) {
       this.props.listGames(() => {
