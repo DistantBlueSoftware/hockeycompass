@@ -3,14 +3,14 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import moment from 'moment';
 import * as actions from './actions';
-import { HCFEE } from './config';
+import { HCFEE, LOCKOUT_THRESHOLD } from './config';
 
 class JoinButton extends Component {
   constructor(props) {
     super(props);
     this.state = {
       hovering: false,
-      shouldDoAction: moment(props.game.date).diff(moment(), 'hours') > (this.props.lockoutThreshold || 24)
+      shouldDoAction: moment(props.game.date).diff(moment(), 'hours') > LOCKOUT_THRESHOLD
     }
   }
   showDropButton = () => {
