@@ -1,12 +1,14 @@
 head
-  //link(rel='stylesheet', href='/css/notify.css', data-inline)
-//img(src='logo.png')
-h1 A new player has joined your game!
-p Game Name: #{name}
-p Date: #{date}
-p Location: #{location}
-p Players: #{numOfPlayers}
-p Openings Remaining: #{openings}
-h2 New Player Info
-p Name: #{playerInfo.fullName}
-p Type: #{playerInfo.profile.playerType}
+  link(rel='stylesheet', href='email-templates.css', data-inline)
+  link(href="https://fonts.googleapis.com/css?family=Open+Sans", rel="stylesheet", data-inline)
+.container
+  //img(src='logo.png')
+  h1 A new player has joined your game!
+  p Game Name: #{name}
+  p Date: #{date}
+  p Location: #{location}
+  p Players: #{numOfPlayers}
+  p Openings Remaining: #{openings}
+  h2 New Player Info
+  p Name: #{playerInfo.fullName}
+  p Type: #{playerInfo.profile.playerType}

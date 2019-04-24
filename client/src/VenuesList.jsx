@@ -128,7 +128,6 @@ setCurrentVenue = (venue, needsAuth) => {
                   <th>State</th>
                   <th>Zip</th>
                   <th>Phone</th>
-                  <th>Website</th>
                 </tr>
                 {_.sortBy(venues.all, currentSort)
                   .filter(venue => this.filterVenues(venue))
@@ -140,7 +139,6 @@ setCurrentVenue = (venue, needsAuth) => {
                     <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
                     <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
                     <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
-                    <td><a href={venue.url} target='_blank' rel='noopener noreferrer'>Click Here</a></td>
                   </ClickableRow>
                 ))}
               </tbody>

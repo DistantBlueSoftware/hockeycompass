@@ -363,6 +363,7 @@ router.post('/games/:id/notification', (req, res, next) => {
             bcc: playerEmails
           },
           locals: {
+            host: req.body.host,
             name: req.body.name,
             date: moment(req.body.date).format('MM/DD/YYYY h:mmA'),
             location: req.body.location,

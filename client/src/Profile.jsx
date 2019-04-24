@@ -10,8 +10,6 @@ import requireAuth from './requireAuth';
 const ProfileContainer = styled.div`
 	display: flex;
   flex-flow: column;
-	align-items: center;
-	justify-content: center;
   margin: 110px auto 0 auto;
 	padding: 10px;
   border-radius: 5px;
@@ -130,17 +128,18 @@ class Profile extends Component {
             <h3>Email List:</h3>
             <div style={emailContainerStyle}>{EmailList}</div>
           </div>
-        }
+        }  
+				<div className='form-group'>
+					<label className='form-label' htmlFor='payoutsEmail'>Payouts Email: {payoutsEmail}</label>
+					<input style={{display: 'none'}} type='text' id='payoutsEmail' className='form-control' name='payoutsEmail' value={payoutsEmail} onChange={this.handleChange}></input>
+				</div>
+				<button className='btn btn-primary' id='payoutsEmailButton' style={{maxWidth: '300px'}} onClick={this.togglePayoutsEmail}>Update your Payouts Email here</button>
+				
         {user.profile && user.profile.payments && user.profile.payments.length > 0 &&
           <div style={{padding: '20px'}}>
             <h3>Pending Payouts: <span style={{color: '#218838'}}>${payoutsTotal}</span></h3>
             <p>You'll receive ${payoutsTotal} from your players the next time we send payouts, usually less than 48 hours.</p>
-            <div className='form-group'>
-              <label className='form-label' htmlFor='payoutsEmail'>Payouts Email: {payoutsEmail}</label>
-              <input style={{display: 'none'}} type='text' id='payoutsEmail' className='form-control' name='payoutsEmail' value={payoutsEmail} onChange={this.handleChange}></input>
-            </div>
-            <button className='btn btn-primary' id='payoutsEmailButton' onClick={this.togglePayoutsEmail}>Update your Payouts Email here</button>
-            {payoutGames && payoutGames.map(g => {
+          {payoutGames && payoutGames.map(g => {
               return (
               <div>
                 <h3>{g}</h3>

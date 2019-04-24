@@ -102,8 +102,8 @@ class GamesList extends Component {
     } else {
       if (!activeGames.length) return (
         <EmptyGamesState className='container-fluid'>
-          <h3>Nobody's skating right now. Make everyone's day, host a game!</h3>
-          <Link to={newGameLink}><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
+          <h3>What, nobody’s skating right now?!  Quick, start your own game before the hockey gods notice!</h3>
+          <Link to={newGameLink}><button className='btn btn-lg btn-primary'>Let's go!</button></Link>
         </EmptyGamesState>
         )
       else 

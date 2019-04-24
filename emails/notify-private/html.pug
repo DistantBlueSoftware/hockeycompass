@@ -1,10 +1,9 @@
 head
-  //link(rel='stylesheet', href='/css/notify.css', data-inline)
+  link(rel='stylesheet', href='email-templates.css', data-inline)
+  link(href="https://fonts.googleapis.com/css?family=Open+Sans", rel="stylesheet", data-inline)
 //img(src='logo.png')
-h1 You've been invited by #{host} to join their game!
-p Game Name: #{name}
-p Date: #{date}
-p Location: #{location}
-p Details and join here:
-  a(href=`https://${url}/game/join/${id}`)
-    button Join
+h1 It's Hockey Time!
+p Good news! #{host} invited you to play hockey and have fun on #{date} at #{location}!
+p Click the join button below to accept the invitation and make the hockey gods happy.
+a(href=`https://${url}/game/join/${id}`)
+  button.button.blue Join
