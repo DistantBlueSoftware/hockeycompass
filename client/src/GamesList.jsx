@@ -91,6 +91,7 @@ class GamesList extends Component {
     const { games, user, history } = this.props;
     const { loading, pageLoading, modalData, showModal } = this.state;
     const newGameLink = user && user.authenticated ? '/newgame' : '/login?route=newgame';
+    const activeGames = games.games.filter(game => game.active && moment(game.date) > moment());
     if (pageLoading) {
       return (
         <div style={{padding: '20px', marginTop: '70px'}}>
@@ -99,7 +100,7 @@ class GamesList extends Component {
         </div>
       )
     } else {
-      if (!games.games.length) return (
+      if (!activeGames.length) return (
         <EmptyGamesState className='container-fluid'>
           <h3>Nobody's skating right now. Make everyone's day, host a game!</h3>
           <Link to={newGameLink}><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
@@ -131,8 +132,7 @@ class GamesList extends Component {
                   <th>Openings</th>
                   <th>Type</th>
                 </tr>
-                {games.games.filter(game => game.active && moment(game.date) > moment())
-                  .sort((a,b) => moment(a.date) - moment(b.date))
+                {activeGames.sort((a,b) => moment(a.date) - moment(b.date))
                   .map((game, index) => (
                   <tr key={index} onClick={e => this.setCurrentGame(game)}>
                     <td style={{textAlign: 'center'}}>
