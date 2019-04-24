@@ -27,7 +27,6 @@ position: relative;
   padding: 15px;
   border-radius: 5px;
   margin-top: 70px;
-  opacity: 0.95;
 `
 
 const TitleWithSearch = styled.div`
