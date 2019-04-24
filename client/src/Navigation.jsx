@@ -30,7 +30,7 @@ const NavResponsive = styled.div`
   left: 0;
   &.active {
     top: 0;
-    background: rgba(25, 81, 139, 0.75);
+    background: rgba(25, 81, 139, 0.95);
   }
   @media (min-width: 801px) {
     top: 0;
