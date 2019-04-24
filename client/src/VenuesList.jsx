@@ -13,7 +13,7 @@ const mapStateToProps = state => {
 
 const VenueBackground = styled.div`
   background: center center;
-  background-image: url('rink.jpg');
+  background-image: linear-gradient(rgba(255,255,255,0.35), rgba(255,255,255,0.35)), url('rink.jpg');
   background-size: cover;
   background-attachment: fixed;
   width: 100vw;
@@ -22,11 +22,12 @@ const VenueBackground = styled.div`
 
 const VenueContainer = styled.div`
 position: relative;
-  background: rgba(255,255,255,0.9);
+  background: rgba(255,255,255,0.95);
   max-width: 1000px;
   padding: 15px;
   border-radius: 5px;
   margin-top: 70px;
+  opacity: 0.95;
 `
 
 const TitleWithSearch = styled.div`
