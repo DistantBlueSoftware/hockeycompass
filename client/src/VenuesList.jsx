@@ -112,17 +112,17 @@ setCurrentVenue = (venue, needsAuth) => {
           <link rel='canonical' href='https://hockeycompass.com/venues' />
           </Helmet>
           <TitleWithSearch>
-            <h1>Minnesota Ice Arenas</h1>
+            <h1>Ice Arenas</h1>
             <div>
               <label htmlFor='search'>Search: </label>
-              <StyledInput type='text' name='search' id='search' onChange={this.handleChange}></StyledInput>
+              <StyledInput type='text' name='search' id='search' placeholder='Venue name or city' onChange={this.handleChange}></StyledInput>
             </div>
           </TitleWithSearch>
           <div className='table-responsive'>
             <table className='table table-striped table-bordered table-hover' style={{marginTop: '10px'}}>
               <tbody>
                 <tr>
-                  <th>Name</th>
+                  <th>Venue</th>
                   <th>Address</th>
                   <th>City</th>
                   <th>State</th>
@@ -138,7 +138,7 @@ setCurrentVenue = (venue, needsAuth) => {
                     <td data-toggle='modal' data-target='#venue-modal'>{venue.city}</td>
                     <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
                     <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
-                    <td data-toggle='modal' data-target='#venue-modal'>{venue.phone}</td>
+                    <td data-toggle='modal' data-target='#venue-modal' style={{minWidth: '136px'}}>{venue.phone}</td>
                   </ClickableRow>
                 ))}
               </tbody>
