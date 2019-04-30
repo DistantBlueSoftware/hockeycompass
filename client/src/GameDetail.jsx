@@ -231,11 +231,11 @@ class GameDetail extends Component {
             </div>
             <div className='form-group col-md-3'>
               <label htmlFor='maxPlayers'>Player Cap: </label>
-              <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' min={1} value={game.maxPlayers} onChange={this.handleChange} />
+              <input className='form-control' type='number' name='maxPlayers' id='maxPlayers' min={1} value={game.maxPlayers} onChange={this.handleChange} required />
             </div>
             <div className='form-group col-md-3'>
               <label htmlFor='maxPlayers'>Goalie Cap: </label>
-              <input className='form-control' type='number' name='goalieCount' id='goalieCount' min={0} value={game.goalieCount} onChange={this.handleChange} />
+              <input className='form-control' type='number' name='goalieCount' id='goalieCount' min={0} value={game.goalieCount} onChange={this.handleChange} required  />
             </div>
           </div>
           <div className='row'>
@@ -243,7 +243,7 @@ class GameDetail extends Component {
               <label htmlFor='costPerPlayer'>Cost Per Player: </label>
               <div>
                 <Icon className='fas fa-dollar-sign'></Icon>
-                <input style={{maxWidth: '100px', paddingLeft: '20px'}} className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} value={game.costPerPlayer} onChange={this.handleChange} />
+                <input style={{maxWidth: '100px', paddingLeft: '20px'}} className='form-control' type='number' name='costPerPlayer' id='costPerPlayer' min={0} value={game.costPerPlayer} onChange={this.handleChange} required />
               </div>
               {costMessage}
             </div>
