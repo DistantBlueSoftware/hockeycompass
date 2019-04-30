@@ -123,7 +123,7 @@ class GamesList extends Component {
             <table className='table table-striped table-bordered table-hover'>
               <tbody>
                 <tr>
-                  <th>Join</th>
+                  <th></th>
                   <th>Date</th>
                   <th>Name</th>
                   <th>Location</th>
