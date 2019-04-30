@@ -53,8 +53,9 @@ const NavList = styled.ul`
     top: 0;
   }
   @media (min-width: 801px) {
+    padding: 0 !important;
     top: 12px;
-    left: 36px;
+    left: 56px;
   }
 `
 
