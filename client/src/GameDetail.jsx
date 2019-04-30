@@ -31,7 +31,7 @@ class GameDetail extends Component {
     super(props);
     this.state = {
       date: moment().add(1, 'days'),
-      type: 'public',
+      type: '',
       emailList: this.props.user.profile && this.props.user.profile.emailList,
       infoMessage: '',
       messageColor: 'green',
@@ -156,7 +156,7 @@ class GameDetail extends Component {
   
   cancelGame = e => {
     e.preventDefault();
-    if (window.confirm('are you sure you want to cancel this game?')) {
+    if (window.confirm('Are you sure you want to cancel this game?')) {
       this.setState({
         active: false
       })

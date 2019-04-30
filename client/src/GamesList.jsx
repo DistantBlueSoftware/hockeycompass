@@ -118,7 +118,7 @@ class GamesList extends Component {
           <div className='text-center'>
             <Link to={newGameLink}><button className='btn btn-lg btn-primary'>Host a Game</button></Link>
           </div>
-          <h1>Upcoming Games <span style={{fontSize: '16px'}}>(click a row to view roster)</span> </h1>
+          <h1>Upcoming Games <span style={{fontSize: '16px'}}>(click a game to view roster)</span> </h1>
           <div className='table-responsive'>
             <table className='table table-striped table-bordered table-hover'>
               <tbody>

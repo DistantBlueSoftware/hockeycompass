@@ -31,7 +31,7 @@ const userSchema = new Schema({
     joinDate: Date,
     amountSpent: Number,
     gamesJoined: Number,
-    timeOnIce: Number
+    gamesHosted: Number
   }
 }, {timestamps: true});
 

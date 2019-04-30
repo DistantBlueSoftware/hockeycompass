@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { NavLink, withRouter } from 'react-router-dom';
 import styled from 'styled-components';
-import logo from './logo-nav.png';
+import logo from './logo_white.png';
 import * as actions from './actions';
 
 const Navbar = styled.nav`
@@ -179,8 +179,8 @@ class Navigation extends React.Component {
           <HamburgerLine className={navActive}/>
           <HamburgerLine className={navActive}/>
         </Hamburger>
-        <NavLink to='/' style={{paddingTop: '1rem'}}>
-          <img src={logo} alt='Hockey Compass' />
+        <NavLink to='/' style={{paddingTop: '.5rem', paddingBottom: '.5rem'}}>
+          <img src={logo} style={{maxWidth: '50px'}} alt='Hockey Compass' />
         </NavLink>
       <NavResponsive className={navActive}>
         <NavList className={navActive}>
