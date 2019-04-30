@@ -197,7 +197,7 @@ class GameDetail extends Component {
         <form onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}>
           <div className='row'>
             <div className='form-group col-md-6'>
-              <label htmlFor='date'>Date: </label>
+              <label htmlFor='date'>Date & Time: </label>
                 <Datetime 
                   value={game.date} 
                   onChange={this.handleChange} 
@@ -249,7 +249,8 @@ class GameDetail extends Component {
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='type'>Type: <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='<h5 style="text-align:center;">What&apos;s the difference between public and private?</h5><p>Public games can be viewed and joined by the entire HC community; private games are invite-only.</p>'></i></label>
-              <select className='form-control' name='type' id='type' value={game.type} onChange={this.handleChange} >
+              <select className='form-control' name='type' id='type' value={game.type} onChange={this.handleChange} required >
+                <option value=''></option>
                 <option value='public'>Public</option>
                 <option value='private'>Private</option>
               </select>
