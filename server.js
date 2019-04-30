@@ -37,7 +37,8 @@ if (process.env.NODE_ENV === 'production') {
   app.use(express.static(path.join(__dirname, 'client/build')));
 
   app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '/client/build/index.html'));
+    if(req.headers['x-forwarded-proto']!='https') res.redirect('https://hockeycompass.com'+req.url) 
+    else res.sendFile(path.join(__dirname, '/client/build/index.html'));
   });
 }
 
