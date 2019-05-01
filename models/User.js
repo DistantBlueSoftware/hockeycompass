@@ -17,6 +17,7 @@ const userSchema = new Schema({
     notify: {type: Boolean, default: true},
     playerType: String,
     nickname: String,
+    skillLevel: Number,
     payments: [{
       game: String,
       from: String,

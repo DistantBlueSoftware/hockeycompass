@@ -6,6 +6,7 @@ import _ from 'underscore';
 import * as actions from './actions';
 import {emailRegexTest} from './lib';
 import requireAuth from './requireAuth';
+import { skillLevels } from './lib'
 
 const ProfileContainer = styled.div`
 	display: flex;
@@ -31,6 +32,7 @@ class Profile extends Component {
       emailList: '',
       notify: user.profile && user.profile.notify,
       playerType: user.profile && user.profile.playerType,
+			skillLevel: user.profile ? user.profile.skillLevel : -1
     }
   }
 	
@@ -75,7 +77,7 @@ class Profile extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { notify, playerType } = this.state;
+    const { notify, playerType, skillLevel } = this.state;
     let currentList = this.props.user.profile ? this.props.user.profile.emailList : [];
     let invalidEmails = [];
     const emailList = this.state.emailList.match(emailRegexTest);
@@ -97,7 +99,7 @@ class Profile extends Component {
         })
       }
     }
-    this.props.saveProfile(this.props.user.username, {emailList: currentList, notify, playerType}, () => {
+    this.props.saveProfile(this.props.user.username, {emailList: currentList, notify, playerType, skillLevel}, () => {
       this.setState({
         errorMessage: '',
         emailList: ''
@@ -107,7 +109,7 @@ class Profile extends Component {
 
   render() {
     const { user } = this.props;
-    const { playerType, emailList, notify, errorMessage, payoutsEmail } = this.state;
+    const { playerType, skillLevel, emailList, notify, errorMessage, payoutsEmail } = this.state;
     const EmailList = user.profile && user.profile.emailList && user.profile.emailList.length && user.profile.emailList.map(email => <EmailPill email={email} removeEmail={this.removeEmail}></EmailPill>)
     let payoutsList, payoutsTotal, payoutGames;
     if (user.profile && user.profile.payments && user.profile.payments.length > 0) {      
@@ -157,6 +159,13 @@ class Profile extends Component {
                   <option value='player'>Player</option>
                   <option value='goalie'>Goalie</option>
                 </select>
+            </div>
+						<div className='form-group'>
+              <label htmlFor='skillLevel'>Skill Level: </label>
+								<select className='form-control' name='skillLevel' id='skillLevel' value={skillLevel} onChange={this.handleChange} >
+	                <option value=''></option>
+	                {skillLevels.map((l,i) => <option value={i+1} title={l.description} data-tip={l.description}>{l.level}</option>)}
+	              </select>
             </div>
 						<h4>Notifications:</h4>
             <div className='form-check'>

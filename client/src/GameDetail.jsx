@@ -4,7 +4,7 @@ import moment from 'moment';
 import utils from '@distantbluesoftware/dbsutil';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
-import {emailRegexTest} from './lib';
+import { emailRegexTest, skillLevels } from './lib';
 // import DatePicker from "react-datepicker";
 import Datetime from "react-datetime";
 import styled from 'styled-components'
@@ -154,6 +154,10 @@ class GameDetail extends Component {
     }
   }
   
+  showSkillLevels = () => {
+    console.log('hi')
+  }
+  
   cancelGame = e => {
     e.preventDefault();
     if (window.confirm('Are you sure you want to cancel this game?')) {
@@ -175,14 +179,19 @@ class GameDetail extends Component {
     } else if (!localStorage.getItem('returningHost')) {
       this.setState({infoMessage: 'We will use the email address you have on file for payouts. If this is not a valid PayPal email, you won\'t be able to get paid! \n Check it in your profile.', messageType: 'orange'})
     } else if (localStorage.getItem('gameSettings')) {
-      this.setState(JSON.parse(localStorage.getItem('gameSettings')))
-      this.setState({infoMessage: 'We pre-filled this form using data from your last game. Change what you need and hit Create!'})
+      const storedGameSettings = JSON.parse(localStorage.getItem('gameSettings'));
+      console.log(storedGameSettings)
+      this.setState(storedGameSettings)
+      this.setState({
+        date: moment(storedGameSettings.date).add(1, 'days').format('MM/DD/YYYY hh:mm A'), 
+        infoMessage: 'We pre-filled this form using data from your last game. Change what you need and hit Create!'})
     }
   }
 
   render() {
     const { user, venues, match } = this.props;
     const game = this.state;
+    console.log(game)
     const { infoMessage, errorMessage, messageColor } = this.state;
     const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
@@ -257,7 +266,13 @@ class GameDetail extends Component {
             </div>
           </div>
           <div className='row'>
-            
+            <div className='form-group col-md-4'>
+              <label htmlFor='type'>Skill Level: <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='Hover over each option to see what it means.' onClick={this.showSkillLevels}></i></label>
+              <select className='form-control' name='skillLevel' id='skillLevel' value={game.skillLevel} onChange={this.handleChange} required >
+                <option value=''></option>
+                {skillLevels.map((l,i) => <option value={i+1} title={l.description} data-tip={l.description}>{l.level}</option>)}
+              </select>
+            </div>
             {this.state.type === 'private' &&
               <div className='form-group col-md-12'>
                 <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>

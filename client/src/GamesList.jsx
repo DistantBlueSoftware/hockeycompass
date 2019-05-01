@@ -12,6 +12,7 @@ import PaymentModal from './PaymentModal';
 import ContactModal from './ContactModal';
 import RosterModal from './RosterModal';
 import styled from 'styled-components';
+import { skillLevels } from './lib';
 
 const mapStateToProps = state => {
   return {...state};
@@ -131,6 +132,7 @@ class GamesList extends Component {
                   <th>Players</th>
                   <th>Openings</th>
                   <th>Type</th>
+                  <th>Skill Level</th>
                 </tr>
                 {activeGames.sort((a,b) => moment(a.date) - moment(b.date))
                   .map((game, index) => (
@@ -146,6 +148,7 @@ class GamesList extends Component {
                     <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.type}</td>
+                    <td data-toggle='modal' data-target='#roster-modal'>{game.skillLevel && skillLevels[game.skillLevel -1].level}</td>
                     {/*user.authenticated &&
                       game.host === user.username &&
                       <td>

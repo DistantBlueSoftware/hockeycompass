@@ -78,7 +78,7 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, type, location, host, hostID, currentPlayer, invited, maxPlayers, costPerPlayer, goalieCount, emailList } = req.body;
+  const { name, date, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, emailList } = req.body;
   const game = new Game({
     name,
     date,
@@ -88,6 +88,7 @@ router.post('/games', function (req, res, next) {
     maxPlayers,
     goalieCount,
     hostID,
+    skillLevel,
     invited: emailList && emailList.length ? emailList : [],
     costPerPlayer,
     players: [{name: currentPlayer.name, type: currentPlayer.type || 'player'}]
