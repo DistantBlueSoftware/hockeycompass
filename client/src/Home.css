@@ -12,7 +12,7 @@
 
 .hero-image {
   height: 100vh;
-  background: no-repeat center center fixed;
+  background: no-repeat fixed;
   background-size: cover;
 }
 
