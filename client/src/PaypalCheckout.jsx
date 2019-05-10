@@ -40,7 +40,7 @@ export const PaypalCheckout = ({costWithFee, handleAddPlayer}) => {
         tagline: 'false'
         
     }
-  let paypalEnv = process.env.REACT_APP_ENV === 'localhost' ? 'sandbox' : 'production';
+  let paypalEnv = process.env.REACT_APP_ENV === 'production' ? 'production' : 'sandbox';
   let PaypalButton = window.paypal.Button.driver('react', { React, ReactDOM });
   return (
       <PaypalButton env={paypalEnv} style={style} client={client} payment={payment} commit={true} onAuthorize={onAuthorize} />
