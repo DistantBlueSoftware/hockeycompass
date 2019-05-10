@@ -184,7 +184,7 @@ class GameDetail extends Component {
       this.setState(storedGameSettings)
       this.setState({
         date: moment(storedGameSettings.date).add(1, 'days').format('MM/DD/YYYY hh:mm A'), 
-        infoMessage: 'We pre-filled this form using data from your last game. Change what you need and hit Create!'})
+        infoMessage: 'We pre-filled this form using data from your last game. Change what you need, then it\'s Hockey Time!'})
     }
   }
 
@@ -223,7 +223,7 @@ class GameDetail extends Component {
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>
-              <select className='form-control' name='location' id='location' required value={game.location || match.params.venue} onChange={this.handleChange} >
+              <select className='form-control' name='location' id='location' required value={match.params.venue || game.location} onChange={this.handleChange} >
                 <option></option>
                 {arenaNames}
               </select>
