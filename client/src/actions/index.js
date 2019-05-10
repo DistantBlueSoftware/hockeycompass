@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { ROUTE_CHANGE, RESET_PASSWORD, CHANGE_PASSWORD, GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
+import { ADMIN_STATS, ROUTE_CHANGE, SEND_REFUND, RESET_PASSWORD, CHANGE_PASSWORD, GET_PAYMENTS_TOTAL, PAYMENTS_ERROR, LIST_VENUES, SAVE_VENUE, GET_PAYOUTS, SEND_PAYOUTS, PROCESS_PAYMENT, ERROR, SAVE_PROFILE, USER_AUTH, LOGOUT, AUTH_ERROR, ADD_PLAYER, REMOVE_PLAYER, NEW_GAME, SHOW_GAME, LIST_GAMES, UPDATE_GAME, CANCEL_GAME, UPDATE_ERROR, SEND_EMAILS } from '../constants/actionTypes';
 import moment from 'moment';
 
 export const listVenues = () => async dispatch => {
@@ -260,6 +260,29 @@ export const changePassword = (token, password, cb) => async dispatch => {
     if (cb) cb();
   } catch (e) {
     dispatch({ type: AUTH_ERROR, payload: 'Sorry, we couldn\'t change your password at this time. Please try again later.' })
+  }
+}
+
+export const getAdminStats = () => async dispatch => {
+  try {
+    const response = await axios.get(
+      `/api/admin/stats`
+    );
+    dispatch({ type: ADMIN_STATS, payload: response.data });
+  } catch (e) {
+    dispatch({ type: ERROR, payload: 'Could not get admin stats'})
+  }
+}
+
+export const sendRefund = (paymentID) => async dispatch => {
+  try {
+    const response = await axios.post(
+      `/api/send-refund`,
+      paymentID
+    );
+    dispatch({ type: SEND_REFUND, payload: response.data });
+  } catch (e) {
+    dispatch({ type: ERROR, payload: 'We couldn\'t send the refund at this time'})
   }
 }
 

@@ -22,9 +22,12 @@ class JoinButton extends Component {
 
   dropFromGame = (game, user) => {
     const isGoalie = user.profile && user.profile.playerType === 'goalie';
-    const needsConfirm = isGoalie ? true : window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer + HCFEE}.`);
+    const isHost = game.hostID === user.username;
+    const needsRefund = !isGoalie && !isHost;
+    const needsConfirm = (isGoalie || isHost) ? true : window.confirm(`Are you sure you want to drop from this game? You will receive a refund of $${game.costPerPlayer + HCFEE}.`);
     if (needsConfirm){
     this.props.removePlayer(game, user, () => {
+      if (needsRefund) this.props.sendRefund(game, user);
       console.log(`${user.fullName} removed`);
     })}
   }

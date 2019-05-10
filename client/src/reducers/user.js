@@ -1,7 +1,8 @@
-import { USER_AUTH, LOGOUT, SAVE_PROFILE, RESET_PASSWORD, CHANGE_PASSWORD, AUTH_ERROR } from '../constants/actionTypes';
+import { SEND_REFUND, USER_AUTH, LOGOUT, SAVE_PROFILE, RESET_PASSWORD, CHANGE_PASSWORD, AUTH_ERROR } from '../constants/actionTypes';
 
 const INITIAL_STATE = {
   authenticated: '',
+  refunded: false,
   errorMessage: ''
 };
 
@@ -12,6 +13,8 @@ export default function(state = INITIAL_STATE, action) {
       return { ...action.payload, fullName, authenticated: true, errorMessage: '' };
     case SAVE_PROFILE: 
       return { ...state, profile: {...action.payload}, errorMessage: '' };
+    case SEND_REFUND: 
+      return { ...state, refunded: true };
     case LOGOUT:
       return {};
     case RESET_PASSWORD:

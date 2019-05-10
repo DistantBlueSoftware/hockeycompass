@@ -1,0 +1,14 @@
+head
+  link(rel='stylesheet', href='email-templates.css', data-inline)
+  link(href="https://fonts.googleapis.com/css?family=Open+Sans", rel="stylesheet", data-inline)
+.container
+  //img(src='logo.png')
+  h1 C'mon out and play!
+  p #{host}'s hockey game is not quite full yet, and they're looking for people to come skate.
+  p You could be one of those people, IF you act now!
+  p Hurry and click the join button below to reserve your spot before the game is full.
+  h2 Game Details: 
+  p Date: #{date}
+  p Location: #{location}
+  a(href=`https://${url}/game/join/${id}`)
+    button.button.blue Join

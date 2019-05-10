@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import AdminPayouts from './AdminPayouts';
+import AdminStats from './AdminStats';
 import requireAuth from './requireAuth';
 import * as actions from './actions';
 
@@ -30,6 +31,7 @@ class AdminDashboard extends Component {
       <div className='container-fluid'>
         <h1>Admin Portal</h1>
         <AdminPayouts games={awaitingPayout} />
+        <AdminStats />
       </div>
     )
   }

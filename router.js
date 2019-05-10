@@ -104,6 +104,31 @@ router.post('/games', function (req, res, next) {
         });
       notification.save()
         .catch(err => next(err));
+      //send new public game email to everybody!
+      User.find({'profile.notify': true})
+        .exec()
+        .then(users => {
+          console.log(users)
+          const playerEmails = users.map(u => u.email);
+          emailService.send({
+            template: 'notify-all',
+            message: {
+              to: 'no-reply@hockeycompass.com',
+              bcc: playerEmails
+            },
+            locals: {
+              host: game.host,
+              name: game.name,
+              date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+              location: game.location,
+              url: process.env.ROOT_URL,
+              id: game._id
+            }
+          })
+          .then(console.log('Message sent'))
+          .catch(console.error);
+        })
+      
       } else {
         //send new game email to email list
         emailService.send({
@@ -358,7 +383,7 @@ router.post('/games/:id/notification', (req, res, next) => {
                               .map(user => user.email)
                               .toString();
         if (playerEmails) emailService.send({
-          template: 'notify-all',
+          template: 'find-players',
           message: {
             to: 'no-reply@hockeycompass.com',
             bcc: playerEmails
@@ -612,5 +637,41 @@ router.post('/reset/:token', (req, res, next) => {
     })
     .catch(err => next(err))
 });
+
+router.get('/admin/stats', (req, res, next) => {
+  User.countDocuments({})
+    .exec()
+    .then(count => res.json(count))
+    .catch(err => next(err))
+});
+
+router.post('/send-refund', (req, res, next) => {
+  const capture_id = 'be6c7cf4461eb'; //req.body
+  console.log(req.body)
+  const options = {
+    "strictSSL": false,
+    "url": `https://api.sandbox.paypal.com/v2/payments/captures/${capture_id}/refund`,
+    "method": "POST",
+    "headers": {
+      "Accept": "application/json",
+      "Authorization": `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
+      "Content-Type": "application/json"
+    },
+    "body": {},
+    "json": true,
+  };
+
+  request(options, (error, response, body) => {
+    /* Print the error if one occurred */
+    console.log('error:', error);
+  
+    /* Print the response status code if a response was received */
+    console.log('statusCode:', response && response.statusCode);
+  
+    /* Print the response body */
+    console.log('body:', body);
+    res.json(body)
+  })
+})
 
 module.exports = router;
