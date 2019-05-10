@@ -92,11 +92,7 @@ setCurrentVenue = (venue, needsAuth) => {
   }
   
   hostGame = venue => {
-    const modal = document.getElementById('venue-modal');
-    modal.style.display = 'none';
-    const bg = document.querySelector('.modal-backdrop')
-    bg.classList.remove('show');
-    bg.style.display = 'none';
+    window.$('#venue-modal').modal('hide');
     this.props.history.push(`/newgame/${venue.name}`)
   }
 
