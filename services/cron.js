@@ -18,14 +18,18 @@ const EmailCheck = new CronJob('* * * * *', function() {
             .exec()
             .then(game => {
               if (game) {
-                request.post({
-                  url: `http://${process.env.ROOT_URL}/api/games/${game._id}/notification`,
-                  json: true,
-                  body: game
-                }, (err, res, body) => {
-                  if (err) console.log(err);
+                if (moment(game.date).isBefore(moment())) {
                   queue[k].remove();
-                })
+                } else {
+                  request.post({
+                    url: `http://${process.env.ROOT_URL}/api/games/${game._id}/notification`,
+                    json: true,
+                    body: game
+                  }, (err, res, body) => {
+                    if (err) console.log(err);
+                    queue[k].remove();
+                  })
+                }
               } 
             })
             .catch(err => console.log(err))
