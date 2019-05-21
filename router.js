@@ -14,6 +14,9 @@ const _ = require('underscore');
 const Authentication = require('./controllers/authentication');
 const passportService = require('./services/passport');
 
+const paypal = require('@paypal/checkout-server-sdk');
+const paypalClient = require('./services/paypalClient');
+
 const Game = require('./models/Game');
 const User = require('./models/User');
 const Venue = require('./models/Venue');
@@ -78,10 +81,12 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, emailList } = req.body;
+  const { name, date, startTime, endTime, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, comment, emailList } = req.body;
   const game = new Game({
     name,
     date,
+    startTime, 
+    endTime, 
     type,
     location,
     host,
@@ -89,6 +94,7 @@ router.post('/games', function (req, res, next) {
     goalieCount,
     hostID,
     skillLevel,
+    comment,
     invited: emailList && emailList.length ? emailList : [],
     costPerPlayer,
     players: [{name: currentPlayer.name, type: currentPlayer.type || 'player'}]
@@ -247,6 +253,10 @@ router.put('/games/:id/add', (req, res, next) => {
     .exec()
     .then(game => {
       game.players.push({username, name: fullName, type: profile.playerType});
+      if (game.waitlist) {
+        const idx = game.waitlist.map(p => p.username).indexOf(username);
+        if (~idx) game.waitlist = game.waitlist.slice(0, idx).concat(game.waitlist.slide(idx+1)); 
+      }
       game.save()
         .then(game => {
           //if player is not game host, send join game email
@@ -325,10 +335,34 @@ router.put('/games/:id/drop', (req, res, next) => {
       game.players = [...game.players.slice(0, playerIndex), ...game.players.slice(playerIndex + 1)];
       game.save()
         .then(game => {
-          //TODO: send the refund
+          //TODO: send refund
           // refund flow: hit Paypal refund API using the paymentID of their payment, then remove the payment from the Payments table
           // I think this means we need to store the paymentID in the Payments table
           
+          // if there is a waitlist, send Open Spot email to waitlist
+          if (game.waitlist && game.waitlist.length) {
+            User.find({username: {$in: game.waitlist.map(u => u.username)}})
+              .exec()
+              .then(users => {
+                emailService.send({
+                  template: 'open-spot',
+                  message: {
+                    to: 'no-reply@hockeycompass.com',
+                    bcc: users.map(u => u.email),
+                  },
+                  locals: {
+                    host: game.host,
+                    name: game.name,
+                    date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                    location: game.location,
+                    wlCount: game.waitlist.length -1,
+                    url: process.env.ROOT_URL,
+                    id: game._id
+                  }
+                })
+              })
+              .catch(err => next(err))
+          }
           res.json(game)}
         )
         .catch(err => next(err));
@@ -646,32 +680,19 @@ router.get('/admin/stats', (req, res, next) => {
 });
 
 router.post('/send-refund', (req, res, next) => {
-  const capture_id = 'be6c7cf4461eb'; //req.body
-  console.log(req.body)
-  const options = {
-    "strictSSL": false,
-    "url": `https://api.sandbox.paypal.com/v2/payments/captures/${capture_id}/refund`,
-    "method": "POST",
-    "headers": {
-      "Accept": "application/json",
-      "Authorization": `Bearer ${process.env.PAYPAL_ACCESS_TOKEN}`,
-      "Content-Type": "application/json"
-    },
-    "body": {},
-    "json": true,
-  };
-
-  request(options, (error, response, body) => {
-    /* Print the error if one occurred */
-    console.log('error:', error);
-  
-    /* Print the response status code if a response was received */
-    console.log('statusCode:', response && response.statusCode);
-  
-    /* Print the response body */
-    console.log('body:', body);
-    res.json(body)
-  })
+  let tokenRequest = new paypal.core.AccessTokenRequest(paypalClient.environment);
+  paypalClient.client.execute(tokenRequest)
+   .then(res => {
+     console.log("ACCESS TOKEN")
+     console.log(res.result.access_token)
+     const capture_id = 'be6c7cf4461eb'; //req.body
+     let refundRequest = new paypal.payments.CapturesRefundRequest(capture_id);
+     refundRequest.requestBody({})
+     paypalClient.client.execute(refundRequest)
+      .then(res => console.log(res))
+      .catch(err => next(err));
+   })
+   .catch(err => next(err))
 })
 
 module.exports = router;

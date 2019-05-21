@@ -19,6 +19,28 @@ class JoinButton extends Component {
       hovering: !hovering
     })
   }
+  
+  addToWaitlist = (game, user) => {
+    const { username, firstName, lastName, profile } = user;
+    const name = `${firstName} ${lastName}`;
+    if (!game.waitlist) game.waitlist = [];
+    if (!game.waitlist.find(p => p.username === username)) {
+      game.waitlist.push({username, name, type: profile.playerType});
+      this.props.updateGame(game, () => {
+        console.log(`${user.fullName} is on the wait list`)
+      })
+    }
+  }
+  
+  dropFromWaitlist = (game, user) => {
+    const { username } = user;
+    const idx = game.waitlist.map(p => p.username).indexOf(username);
+    const waitlist = game.waitlist.slice(0,idx).concat(game.waitlist.slice(idx+1))
+    game.waitlist = waitlist;
+    this.props.updateGame(game, () => {
+      console.log(`${user.fullName} dropped from the wait list`)
+    })
+  }
 
   dropFromGame = (game, user) => {
     const isGoalie = user.profile && user.profile.playerType === 'goalie';
@@ -44,6 +66,7 @@ class JoinButton extends Component {
     const playerNames = game.players.map(p => p.name);
     
     const isJoined = ~playerNames.indexOf(user.username) || ~playerNames.indexOf(user.fullName);
+    const isOnWaitlist = game.waitlist.find(p => p.username === user.username)
     let button;
 
     if (moment(game.date) < moment()) {
@@ -65,8 +88,9 @@ class JoinButton extends Component {
           }
         }
       } else if (!isJoined) {
-        //game is full
-        button = <span style={{color: 'red'}}>Full</span>
+        //game is full, player not on waitlist
+        if (!isOnWaitlist) button = <button className='btn btn-warning' onClick={() => shouldDoAction ? this.addToWaitlist(game, user) : null}>Waitlist ({game.waitlist.length})</button>
+        else button = <button className='btn btn-warning' onClick={() => shouldDoAction ? this.dropFromWaitlist(game, user) : null}>On Waitlist ({game.waitlist.length})</button>
       } else {
         //player has joined
         if (isTouch) {

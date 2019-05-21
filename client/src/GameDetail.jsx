@@ -206,7 +206,7 @@ class GameDetail extends Component {
         <form onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}>
           <div className='row'>
             <div className='form-group col-md-6'>
-              <label htmlFor='date'>Date & Time: </label>
+              <label htmlFor='date'>Date:</label>
                 <Datetime 
                   value={game.date} 
                   onChange={this.handleChange} 
@@ -220,6 +220,14 @@ class GameDetail extends Component {
                   timeCaption="time"
                 />*/}
               {/*<input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />*/}
+            </div>
+            <div className='form-group col-md-3'>
+              <label htmlFor='startTime'>Start Time: </label>
+              <input className='form-control' type='time' name='startTime' id='startTime' required value={game.startTime} onChange={this.handleChange} />
+            </div>
+            <div className='form-group col-md-3'>
+              <label htmlFor='endTime'>End Time: </label>
+              <input className='form-control' type='time' name='endTime' id='endTime' required value={game.endTime} onChange={this.handleChange} />
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>
@@ -274,11 +282,21 @@ class GameDetail extends Component {
               </select>
             </div>
             {this.state.type === 'private' &&
-              <div className='form-group col-md-12'>
-                <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
-                <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emailList}></textarea>
-              </div>
+              <>
+                <div className='form-check'>
+                  <input type='checkbox' className='form-check-input' name='privateNotifyAll' id='privateNotifyAll' checked={game.privateNotifyAll} onChange={this.handleChange} />
+                  <label className='form-check-label' htmlFor='privateNotifyAll'>Convert to Public if Not Full <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster.'></i></label>
+                </div>
+                <div className='form-group col-md-12'>
+                  <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
+                  <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emailList}></textarea>
+                </div>
+              </>
             }
+            <div className='form-group col-md-12'>
+              <label htmlFor='comment'>Organizer Note: </label>
+              <textarea rows={6} className='form-control' name='comment' id='comment' onChange={this.handleChange} value={game.comment}></textarea>
+            </div>
           </div>
           <div className='buttons-section' style={{textAlign: 'center'}}>
             <button type='submit' className='btn btn-primary'>{buttonText}</button>
