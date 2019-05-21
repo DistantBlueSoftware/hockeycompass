@@ -1,8 +1,11 @@
 head
-  //link(rel='stylesheet', href='/css/notify.css', data-inline)
-//img(src='logo.png')
-h1 You've Navigated to Hockey!
-p Name: #{name}
-p Date: #{date}
-p Location: #{location}
-a(href=`https://www.google.com/maps/search/?api=1&query=${urlQuery}`) Find on maps
+  link(rel='stylesheet', href='email-templates.css', data-inline)
+  link(href="https://fonts.googleapis.com/css?family=Open+Sans", rel="stylesheet", data-inline)
+.container
+  .img-container(style='width:100%; text-align:center;')
+    img(src='https://hockeycompass.com/logo.png' width='300px')
+  h1 You've Navigated to Hockey!
+  p Name: #{name}
+  p Date: #{date}
+  p Location: #{location}
+  a(href=`https://www.google.com/maps/search/?api=1&query=${urlQuery}`) Find on maps
