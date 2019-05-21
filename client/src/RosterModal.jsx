@@ -1,17 +1,7 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import * as actions from './actions';
-import styled from 'styled-components'
-
-const RosterRink = styled.div`
-  min-width: 280px; 
-  min-height: 250px; 
-  margin: 0 auto; 
-  border: 3px solid #2A5489; 
-  border-radius: 20px; 
-  display: flex;
-  padding: 10px;
-`
+import { RosterRink } from './RosterRink';
 
 const mapStateToProps = state => {
   return {...state};
@@ -55,20 +45,7 @@ class RosterModal extends Component {
             </button>
           </div>
           <div className='modal-body'>
-            <RosterRink>
-              {game.players && game.players.length > 0 && 
-                <>
-                <div style={{flex: '0 1 45%'}}>
-                <h4>Home</h4>
-                {game.players.filter((p,i) => i % 2 === 0).map((player, index) => <p style={{margin: '10px'}} key={index}>{player.name} {player.type === 'goalie' && '[g]'}</p>)}
-                </div>
-                <div>
-                <h4>Away</h4>
-                {game.players.filter((p,i) => i % 2 > 0).map((player, index) => <p style={{margin: '10px'}} key={index}>{player.name} {player.type === 'goalie' && '[g]'}</p>)}
-                </div>
-                </>
-              }
-            </RosterRink>
+            <RosterRink game={game}/>
           </div>
           <div className='modal-footer'>
             {user.authenticated && isGameOwner && 

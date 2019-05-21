@@ -3,6 +3,8 @@ const mongoose = require('mongoose');
 const GameSchema = new mongoose.Schema({
   name: {type: String},
   date: {type: Date},
+  startTime: {type: String},
+  endTime: {type: String},
   dateCreated: {type: Date, default: new Date()},
   type: {type: String},
   invited: [String],
@@ -16,6 +18,8 @@ const GameSchema = new mongoose.Schema({
   costPerPlayer: {type: Number, default: 0},
   active: {type: Boolean, default: true},
   payoutDistributed: {type: Boolean, default: false},
+  privateNotifyAll: {type: Boolean, default: false},
+  comment: {type: String}
 });
 
 module.exports = mongoose.model('Game', GameSchema);

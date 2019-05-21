@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { PaypalCheckout } from './PaypalCheckout';
 // import StripePaymentForm from './StripePaymentForm'
 import * as actions from './actions';
+import { RosterRink } from './RosterRink';
 import { HCFEE } from './config';
 
 const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
@@ -23,6 +24,7 @@ const PaymentModal = ({game = {}, user, handleAddPlayer, setLoadingState}) => {
             </button>
           </div>
           <div className='modal-body'>
+            <RosterRink game={game} />
             <p>Location: {game.location}</p>
             <p>Date: {moment(game.date).format('MM/DD/YYYY h:mmA')}</p>
             {user.username !== game.host && costWithFee > 0 &&  
