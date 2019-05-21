@@ -26,6 +26,10 @@ const EmptyGamesState = styled.div`
   align-items: center;
   justify-content: center;
   text-align: center;
+  background: no-repeat center center;
+  background-image: linear-gradient(rgba(255,255,255,0.75),rgba(255,255,255,0.75)),url('hockeygods.jpeg');
+  background-size: cover;
+  border-radius: 5px;
 `
 
 class GamesList extends Component {
