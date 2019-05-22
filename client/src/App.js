@@ -14,6 +14,7 @@ import Upload from './Upload';
 import PasswordReset from './PasswordReset';
 import {PrivacyPolicy} from './PrivacyPolicy';
 import {TermsConditions} from './TermsConditions';
+import {CancellationPolicy} from './CancellationPolicy';
 import './animations.css';
 
 class App extends Component {
@@ -40,6 +41,7 @@ class App extends Component {
               <Route exact path='/reset/:token' component={PasswordReset} />
               <Route exact path='/privacy' component={PrivacyPolicy} />
               <Route exact path='/terms' component={TermsConditions} />
+              <Route exact path='/cancellation-policy' component={CancellationPolicy} />
               <Route path='*' component={NotFound} />
             </Switch>
             <Footer />

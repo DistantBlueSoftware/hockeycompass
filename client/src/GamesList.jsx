@@ -11,6 +11,7 @@ import JoinButton from './JoinButton';
 import PaymentModal from './PaymentModal';
 import ContactModal from './ContactModal';
 import RosterModal from './RosterModal';
+import { CancellationPolicyModal } from './CancellationPolicyModal';
 import styled from 'styled-components';
 import { skillLevels } from './lib';
 
@@ -174,6 +175,7 @@ class GamesList extends Component {
           <PaymentModal show={showModal} game={modalData} user={user} handleAddPlayer={this.handleAddPlayer} setLoadingState={this.setLoadingState} />
           <ContactModal show={showModal} game={modalData} user={user} />
           <RosterModal show={showModal} game={modalData} user={user} history={history} />
+          <CancellationPolicyModal />
         </div>
       )
     }
