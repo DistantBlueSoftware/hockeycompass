@@ -12,6 +12,8 @@ import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';
 import PasswordReset from './PasswordReset';
+import {PrivacyPolicy} from './PrivacyPolicy';
+import {TermsConditions} from './TermsConditions';
 import './animations.css';
 
 class App extends Component {
@@ -36,6 +38,8 @@ class App extends Component {
               <Route exact path='/admin' component={AdminDashboard} />
               <Route exact path='/admin/upload' component={Upload} />
               <Route exact path='/reset/:token' component={PasswordReset} />
+              <Route exact path='/privacy' component={PrivacyPolicy} />
+              <Route exact path='/terms' component={TermsConditions} />
               <Route path='*' component={NotFound} />
             </Switch>
             <Footer />
