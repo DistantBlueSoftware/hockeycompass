@@ -4,6 +4,7 @@ const express = require('express');
 const path = require('path');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
+const sslRedirect = require('heroku-ssl-redirect');
 const router = require('./router');
 const cors = require('cors');
 const {EmailCheck, PayoutSchedule} = require('./services/cron');
@@ -28,7 +29,7 @@ mongoose.connect(uristring, { useNewUrlParser: true }, (err, res) => {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(sslRedirect());
 
 //Use our router configuration when we call /api
 app.use('/api', router);
