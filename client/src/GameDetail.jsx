@@ -180,18 +180,17 @@ class GameDetail extends Component {
       this.setState({infoMessage: 'We will use the email address you have on file for payouts. If this is not a valid PayPal email, you won\'t be able to get paid! \n Check it in your profile.', messageType: 'orange'})
     } else if (localStorage.getItem('gameSettings')) {
       const storedGameSettings = JSON.parse(localStorage.getItem('gameSettings'));
-      console.log(storedGameSettings)
       this.setState(storedGameSettings)
       this.setState({
         date: moment(storedGameSettings.date).add(1, 'days').format('MM/DD/YYYY hh:mm A'), 
         infoMessage: 'We pre-filled this form using data from your last game. Change what you need, then it\'s Hockey Time!'})
     }
+    if (match.params.venue) this.setState({location: match.params.venue})
   }
 
   render() {
     const { user, venues, match } = this.props;
     const game = this.state;
-    console.log(game)
     const { infoMessage, errorMessage, messageColor } = this.state;
     const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
@@ -231,7 +230,7 @@ class GameDetail extends Component {
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>
-              <select className='form-control' name='location' id='location' required value={match.params.venue || game.location} onChange={this.handleChange} >
+              <select className='form-control' name='location' id='location' required value={game.location} onChange={this.handleChange} >
                 <option></option>
                 {arenaNames}
               </select>
@@ -283,9 +282,11 @@ class GameDetail extends Component {
             </div>
             {this.state.type === 'private' &&
               <>
-                <div className='form-check'>
-                  <input type='checkbox' className='form-check-input' name='privateNotifyAll' id='privateNotifyAll' checked={game.privateNotifyAll} onChange={this.handleChange} />
-                  <label className='form-check-label' htmlFor='privateNotifyAll'>Convert to Public if Not Full <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster.'></i></label>
+                <div className='form-group col-md-4'>
+                  <div className='form-check'>
+                    <input type='checkbox' className='form-check-input' name='privateNotifyAll' id='privateNotifyAll' checked={game.privateNotifyAll} onChange={this.handleChange} />
+                    <label className='form-check-label' htmlFor='privateNotifyAll'>Convert to Public if Not Full <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster.'></i></label>
+                  </div>
                 </div>
                 <div className='form-group col-md-12'>
                   <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
