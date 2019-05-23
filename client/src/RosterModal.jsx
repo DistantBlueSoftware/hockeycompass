@@ -25,7 +25,7 @@ class RosterModal extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    this.props.sendEmail(this.props.game, this.state, () => {
+    this.props.sendEmail(this.props.game, {...this.state, privateContact: true}, () => {
       console.log('Message Sent');
     });
   }

@@ -81,7 +81,7 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, startTime, endTime, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, comment, emailList } = req.body;
+  const { name, date, startTime, endTime, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, comment, emailList, privateNotifyAll } = req.body;
   const game = new Game({
     name,
     date,
@@ -95,14 +95,15 @@ router.post('/games', function (req, res, next) {
     hostID,
     skillLevel,
     comment,
+    privateNotifyAll,
     invited: emailList && emailList.length ? emailList : [],
     costPerPlayer,
-    players: [{name: currentPlayer.name, type: currentPlayer.type || 'player'}]
+    players: [{name: currentPlayer.name, type: currentPlayer.type || 'player', username: currentPlayer.username}]
   });
 
   game.save()
     .then(game => {
-      if (game.type === 'public') {
+      if (game.type === 'public' || game.privateNotifyAll) {
         //add game to email queue
         const notification = new EmailQueue({
           gameID: game._id,
@@ -110,30 +111,33 @@ router.post('/games', function (req, res, next) {
         });
       notification.save()
         .catch(err => next(err));
-      //send new public game email to everybody!
-      User.find({'profile.notify': true})
-        .exec()
-        .then(users => {
-          console.log(users)
-          const playerEmails = users.map(u => u.email);
-          emailService.send({
-            template: 'notify-all',
-            message: {
-              to: 'no-reply@hockeycompass.com',
-              bcc: playerEmails
-            },
-            locals: {
-              host: game.host,
-              name: game.name,
-              date: moment(game.date).format('MM/DD/YYYY h:mmA'),
-              location: game.location,
-              url: process.env.ROOT_URL,
-              id: game._id
-            }
+        
+      if (game.type === 'public') {
+        //send new public game email to everybody!
+        User.find({'profile.notify': true})
+          .exec()
+          .then(users => {
+            console.log(users)
+            const playerEmails = users.map(u => u.email);
+            emailService.send({
+              template: 'notify-all',
+              message: {
+                to: 'no-reply@hockeycompass.com',
+                bcc: playerEmails
+              },
+              locals: {
+                host: game.host,
+                name: game.name,
+                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                location: game.location,
+                url: process.env.ROOT_URL,
+                id: game._id
+              }
+            })
+            .then(console.log('Message sent'))
+            .catch(console.error);
           })
-          .then(console.log('Message sent'))
-          .catch(console.error);
-        })
+      }
       
       } else {
         //send new game email to email list
@@ -389,7 +393,7 @@ router.post('/games/:id/notification', (req, res, next) => {
   //email notifications
   const isPrivate = req.body.type && req.body.type.toLowerCase() === 'private';
 
-  if (isPrivate) {
+  if (isPrivate && req.body.privateContact) {
     User.findOne({username: req.body.hostID || req.body.host})
       .exec()
       .then(user => {
@@ -407,6 +411,7 @@ router.post('/games/:id/notification', (req, res, next) => {
         })
       })
   } else {
+    if (isPrivate && !req.body.privateNotifyAll) return;
     //get all users emails, then filter out those that are already in the game
     User.find()
       .exec()
@@ -414,6 +419,7 @@ router.post('/games/:id/notification', (req, res, next) => {
         const playerEmails = users
                               .filter(user => user.profile.notify)
                               .filter(user => req.body.players.map(p => p.username).indexOf(user.username) === -1)
+                              .filter(user => req.body.invited.indexOf(user.email) === -1)
                               .map(user => user.email)
                               .toString();
         if (playerEmails) emailService.send({
