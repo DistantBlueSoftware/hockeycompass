@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import Helmet from 'react-helmet';
 import * as actions from './actions';
 import {emailRegexTest} from './lib';
+import ResetModal from './ResetModal';
 
 class Login extends Component {
   constructor(props) {
@@ -49,13 +50,13 @@ class Login extends Component {
     }, () => this.setState({errorMessage: 'Hmm, we didn\'t recognize that info. Try again?'}));
   }
   
-  passwordReset = () => {
+  passwordReset = (email) => {
     let infoMessage;
-    if (this.state.usernameOrEmail && this.state.usernameOrEmail.match(emailRegexTest)) {
+    // if (email.match(emailRegexTest)) {
       this.props.resetPassword(this.state.usernameOrEmail);
       infoMessage = 'We\'ve sent a reset email to the address you entered. Check it and follow the instructions therein!'
-    }
-    else infoMessage = 'Enter your email and click reset'
+    // }
+    // else infoMessage = 'Enter your email and click reset'
     this.setState({infoMessage, errorMessage: ''})
   }
 
@@ -81,10 +82,10 @@ class Login extends Component {
           </div>
           <div style={{display: 'flex', alignItems: 'center'}}>
             <button type='submit' className='btn btn-primary'>Login</button>
-            <div onClick={this.passwordReset} style={{marginLeft: '20px', cursor: 'pointer', color: 'rgb(25, 81, 139)'}}>Forgot your password?</div>
+            <div data-toggle='modal' data-target='#reset-modal' style={{marginLeft: '20px', cursor: 'pointer', color: 'rgb(25, 81, 139)'}}>Forgot your password?</div>
           </div>
         </form>
-        
+      <ResetModal passwordReset={this.passwordReset} />
       </div>
     )
   }
