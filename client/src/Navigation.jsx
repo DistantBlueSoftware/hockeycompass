@@ -143,14 +143,14 @@ class Navigation extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      navColor: this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)',
+      navColor: window.innerWidth > 800 && this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)',
       navOpen: false
     }
   }
   
   componentDidMount() {
     document.addEventListener('scroll', () => {
-      const navColor = window.scrollY < window.innerHeight - 200 ? 'transparent' : 'rgb(25, 81, 139)';
+      const navColor = window.innerWidth > 800 && window.scrollY < window.innerHeight - 200 ? 'transparent' : 'rgb(25, 81, 139)';
       if (this.props.location.pathname === '/' && navColor !== this.state.navColor) this.setState({navColor}) 
     })
   }
@@ -158,7 +158,7 @@ class Navigation extends React.Component {
   componentDidUpdate(prevProps, prevState, snapshot) {
     if (prevProps.location.pathname !== this.props.location.pathname){
     this.setState({
-      navColor: this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)',
+      navColor: window.innerWidth > 800 && this.props.location.pathname === '/' ? 'transparent' : 'rgb(25, 81, 139)',
       navOpen: false
     })}
   }
