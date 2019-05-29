@@ -29,6 +29,11 @@ position: relative;
   margin-top: 70px;
 `
 
+const VenuesListContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+`
+
 const TitleWithSearch = styled.div`
   display: flex;
   flex-flow: row wrap;
@@ -46,6 +51,30 @@ const StyledInput = styled.input`
   border: 2px solid rgb(25, 81, 139);
   margin-left: 10px;
   margin-right: 10px;
+`
+
+const VenueCard = styled.div`
+  width: 90vw;
+  height: 250px;
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 5px;
+  background: rgba(25, 81, 139, 0.7);
+  color: white;
+  font-size: 24px;
+  transition: all 0.3s;
+  &:hover {
+    cursor: pointer;
+    color: black;
+    background: rgba(255,255,255,0.1);
+    border: 2px solid rgb(25, 81, 139);
+  }
+  @media (min-width: 801px) {
+    width: 31vw;
+  }
 `
 
 class VenuesList extends Component {
@@ -114,32 +143,11 @@ setCurrentVenue = (venue, needsAuth) => {
               <StyledInput type='text' name='search' id='search' placeholder='Venue name or city' onChange={this.handleChange}></StyledInput>
             </div>
           </TitleWithSearch>
-          <div className='table-responsive'>
-            <table className='table table-striped table-bordered table-hover' style={{marginTop: '10px'}}>
-              <tbody>
-                <tr>
-                  <th>Venue</th>
-                  <th>Address</th>
-                  <th>City</th>
-                  <th>State</th>
-                  <th>Zip</th>
-                  <th>Phone</th>
-                </tr>
-                {_.sortBy(venues.all, currentSort)
-                  .filter(venue => this.filterVenues(venue))
-                  .map((venue, index) => (
-                  <ClickableRow key={index} onClick={e => this.setCurrentVenue(venue)}>
-                    <td data-toggle='modal' data-target='#venue-modal'>{venue.name}</td>
-                    <td data-toggle='modal' data-target='#venue-modal'>{venue.address}</td>
-                    <td data-toggle='modal' data-target='#venue-modal'>{venue.city}</td>
-                    <td data-toggle='modal' data-target='#venue-modal'>{venue.state}</td>
-                    <td data-toggle='modal' data-target='#venue-modal'>{venue.zip}</td>
-                    <td data-toggle='modal' data-target='#venue-modal' style={{minWidth: '136px'}}>{venue.phone}</td>
-                  </ClickableRow>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          <VenuesListContainer>
+            {_.sortBy(venues.all, currentSort)
+              .filter(venue => this.filterVenues(venue))
+              .map((venue, index) => <VenueCard onClick={e => this.setCurrentVenue(venue)} data-toggle='modal' data-target='#venue-modal'>{venue.name}</VenueCard>)}
+          </VenuesListContainer>
           <VenueModal show={showModal} venue={modalData} user={user} hostGame={this.hostGame} />
         </VenueContainer>
       </VenueBackground>
