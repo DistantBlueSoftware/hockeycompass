@@ -12,9 +12,10 @@ import GamesList from './GamesList';
 import VenuesList from './VenuesList';
 import Upload from './Upload';
 import PasswordReset from './PasswordReset';
-import {PrivacyPolicy} from './PrivacyPolicy';
-import {TermsConditions} from './TermsConditions';
+import PrivacyPolicy from './PrivacyPolicy';
+import TermsConditions from './TermsConditions';
 import {CancellationPolicy} from './CancellationPolicy';
+import ScrollToTop from './ScrollToTop';
 import './animations.css';
 
 class App extends Component {
@@ -22,7 +23,7 @@ class App extends Component {
     return (
       <div>
         <Router>
-          <React.Fragment>
+          <ScrollToTop>
             <Navigation />
             <Switch>
               <Route exact path='/' component={Home} />
@@ -45,7 +46,7 @@ class App extends Component {
               <Route path='*' component={NotFound} />
             </Switch>
             <Footer />
-          </React.Fragment>
+          </ScrollToTop>
         </Router>
       </div>
     );

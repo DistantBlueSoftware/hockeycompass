@@ -14,9 +14,11 @@ const ProfileContainer = styled.div`
   margin: 110px auto 0 auto;
 	padding: 10px;
   border-radius: 5px;
-  border: 2px solid #154b8b;
   transition: all 0.3s;
 	max-width: 800px;
+	@media (min-width: 801px) {
+	  border: 2px solid #154b8b;
+	}
 `
 
 const mapStateToProps = state => {

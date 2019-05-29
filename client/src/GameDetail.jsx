@@ -285,13 +285,14 @@ class GameDetail extends Component {
                 <div className='form-group col-md-4'>
                   <div className='form-check'>
                     <input type='checkbox' className='form-check-input' name='privateNotifyAll' id='privateNotifyAll' checked={game.privateNotifyAll} onChange={this.handleChange} />
-                    <label className='form-check-label' htmlFor='privateNotifyAll'>Convert to Public if Not Full <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster.'></i></label>
+                    <label className='form-check-label' htmlFor='privateNotifyAll' >Convert to Public if Not Full <i className='fas fa-info-circle' style={{color: '#c0c0c0', marginLeft: '10px'}} data-tip='If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster.'></i></label>
                   </div>
                 </div>
                 <div className='form-group col-md-12'>
                   <label htmlFor='emailList'>Paste your friends' emails here. Don't worry if there are duplicates or extra stuff in there; we'll figure it out for you.</label>
                   <textarea rows={6} className='form-control' name='emailList' id='emailList' onChange={this.handleChange} defaultValue={this.props.user.profile.emailList}></textarea>
                 </div>
+                <ReactTooltip html={true} />
               </>
             }
             <div className='form-group col-md-12'>

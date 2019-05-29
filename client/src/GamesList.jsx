@@ -20,17 +20,23 @@ const mapStateToProps = state => {
 }
 
 const EmptyGamesState = styled.div`
-  height: 60vh;
-  max-width: 500px;
   display:flex;
   flex-flow: column;
   align-items: center;
   justify-content: center;
   text-align: center;
+  position: absolute;
   background: no-repeat center center;
   background-image: linear-gradient(rgba(255,255,255,0.75),rgba(255,255,255,0.75)),url('hockeygods.jpeg');
   background-size: cover;
   border-radius: 5px;
+  @media (min-width: 801px) {
+    background-image: linear-gradient(rgba(255,255,255,0.75),rgba(255,255,255,0.75)),url('hockey-gods.jpg');
+  }
+  
+  h3 {
+    max-width: 500px;
+  }
 `
 
 class GamesList extends Component {
