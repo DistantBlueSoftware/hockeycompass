@@ -32,6 +32,7 @@ position: relative;
 const VenuesListContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
+  margin-top: 100px;
 `
 
 const TitleWithSearch = styled.div`
@@ -39,10 +40,16 @@ const TitleWithSearch = styled.div`
   flex-flow: row wrap;
   align-items: center;
   justify-content: space-between;
-`
-
-const ClickableRow = styled.tr`
-  cursor: pointer;
+  position: fixed;
+  width: 100%;
+  background: rgba(255,255,255,0.95);
+  padding: 5px;
+  input {
+    min-width: 250px;
+  }
+  @media (min-width: 801px) {
+    width: 90%;
+  }
 `
 
 const StyledInput = styled.input`
@@ -58,13 +65,12 @@ const VenueCard = styled.div`
   height: 250px;
   border-radius: 5px;
   display: flex;
-  align-items: center;
+  flex-flow: column;
   justify-content: center;
   padding: 20px;
   margin: 5px;
   background: rgba(25, 81, 139, 0.7);
   color: white;
-  font-size: 24px;
   transition: all 0.3s;
   &:hover {
     cursor: pointer;
@@ -73,8 +79,17 @@ const VenueCard = styled.div`
     border: 2px solid rgb(25, 81, 139);
   }
   @media (min-width: 801px) {
-    width: 31vw;
+    width: 29vw;
   }
+`
+
+const EmptyVenueState = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  height: 50vh;
+  width: 100vw;
 `
 
 class VenuesList extends Component {
@@ -100,6 +115,7 @@ class VenuesList extends Component {
       this.setState({
         [name]: value
       });
+      window.scrollTo(0,0);
   }
   
   setLoadingState = bool => {
@@ -145,8 +161,17 @@ setCurrentVenue = (venue, needsAuth) => {
           </TitleWithSearch>
           <VenuesListContainer>
             {_.sortBy(venues.all, currentSort)
-              .filter(venue => this.filterVenues(venue))
-              .map((venue, index) => <VenueCard onClick={e => this.setCurrentVenue(venue)} data-toggle='modal' data-target='#venue-modal'>{venue.name}</VenueCard>)}
+              .filter(venue => this.filterVenues(venue)).length ? 
+              _.sortBy(venues.all, currentSort)
+                .filter(venue => this.filterVenues(venue))
+                .map((venue, index) => 
+                <VenueCard 
+                  onClick={e => this.setCurrentVenue(venue)} 
+                  data-toggle='modal' 
+                  data-target='#venue-modal'>
+                    <h3>{venue.name} </h3>
+                    <p>{venue.city}</p>
+                </VenueCard>) : <EmptyVenueState>No Venues Found</EmptyVenueState>}
           </VenuesListContainer>
           <VenueModal show={showModal} venue={modalData} user={user} hostGame={this.hostGame} />
         </VenueContainer>

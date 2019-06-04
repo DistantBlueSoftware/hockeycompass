@@ -21,6 +21,8 @@ const mapStateToProps = state => {
 
 const EmptyGamesState = styled.div`
   display:flex;
+  margin-top: 56px !important;
+  min-height: 100vh;
   flex-flow: column;
   align-items: center;
   justify-content: center;
