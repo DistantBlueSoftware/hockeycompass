@@ -79,7 +79,7 @@ const VenueCard = styled.div`
     border: 2px solid rgb(25, 81, 139);
   }
   @media (min-width: 801px) {
-    width: 29vw;
+    width: 29%;
   }
 `
 
