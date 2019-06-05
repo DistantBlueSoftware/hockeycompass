@@ -105,7 +105,7 @@ class GamesList extends Component {
     const { games, user, history } = this.props;
     const { loading, pageLoading, modalData, showModal } = this.state;
     const newGameLink = user && user.authenticated ? '/newgame' : '/login?route=newgame';
-    const activeGames = games.games.filter(game => game.active && moment(game.date) > moment());
+    const activeGames = games.games.filter(game => game.active && moment(game.startDate) > moment());
     if (pageLoading) {
       return (
         <div style={{padding: '20px', marginTop: '70px'}}>
@@ -141,22 +141,24 @@ class GamesList extends Component {
                   <th>Date</th>
                   <th>Name</th>
                   <th>Location</th>
+                  <th>Duration</th>
                   <th>Host</th>
                   <th>Players</th>
                   <th>Openings</th>
                   <th>Type</th>
                   <th>Skill Level</th>
                 </tr>
-                {activeGames.sort((a,b) => moment(a.date) - moment(b.date))
+                {activeGames.sort((a,b) => moment(a.startDate) - moment(b.startDate))
                   .map((game, index) => (
                   <tr key={index} onClick={e => this.setCurrentGame(game)}>
                     <td style={{textAlign: 'center'}}>
                     {/* loading is set to the game id in PaymentModal when payment is in process */}
                       <JoinButton loading={game._id === loading} user={user} game={game} setCurrentGame={this.setCurrentGame} />
                     </td>
-                    <td data-toggle='modal' data-target='#roster-modal'>{moment(game.date).format('MM/DD/YYYY h:mmA')}</td>
+                    <td data-toggle='modal' data-target='#roster-modal'>{`${moment(game.startDate).format('MM/DD/YYYY hh:mmA')}`}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.name}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
+                    <td data-toggle='modal' data-target='#roster-modal'>{`${moment(game.endDate).diff(moment(game.startDate), 'hours')}h`}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.host}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>

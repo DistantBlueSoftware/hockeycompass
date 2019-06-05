@@ -5,13 +5,11 @@ import utils from '@distantbluesoftware/dbsutil';
 import * as actions from './actions';
 import requireAuth from './requireAuth';
 import { emailRegexTest, skillLevels } from './lib';
-// import DatePicker from "react-datepicker";
 import Datetime from "react-datetime";
 import styled from 'styled-components'
 import { HCFEE } from './config';
 import ReactTooltip from 'react-tooltip';
  
-// import "react-datepicker/dist/react-datepicker.css";
 import "./react-datetime.css";
 import './GameDetail.css';
 
@@ -30,7 +28,8 @@ class GameDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      date: moment().add(1, 'days'),
+      startDate: moment().add(1, 'days'),
+      endDate: moment().add(1, 'days').add(2, 'hours'),
       type: '',
       emailList: this.props.user.profile && this.props.user.profile.emailList,
       infoMessage: '',
@@ -39,14 +38,22 @@ class GameDetail extends Component {
     }
   }
 
-  handleChange = (e) => {
+  handleChange = (e, field) => {
     if (moment.isMoment(e)) {
-      this.setState({
-        date: e
+      if (field === 'startDate' && !this.state.endDateHasBeenChanged) {
+        const endDate = e.clone().add(2, 'hours');
+        this.setState({
+          [field]: e,
+          endDate 
+        })
+      } else this.setState({
+        [field]: e,
+        endDateHasBeenChanged: true
       })
     } else if (!e.target) {
       this.setState({
-        date: moment(e)
+        startDate: moment(e),
+        endDate: moment(e).add(2, 'hours')
       })
     } else {
       const target = e.target;
@@ -78,6 +85,7 @@ class GameDetail extends Component {
       this.setState({errorMessage: `There are already ${game.players.length} players in the game!`})
       return;
     }
+    this.checkForValidDates();
     this.props.updateGame(game, () => {
       this.props.history.push('/games');
     })
@@ -92,6 +100,13 @@ class GameDetail extends Component {
     game.host = user.fullName || user.username;
     game.hostID = user.username;
     game.currentPlayer = {name: user.fullName, type: user.profile && user.profile.playerType}
+    if (!this.checkForValidDates()) {
+      const hour = game.endDate.get('hour')
+      const minute = game.endDate.get('minute')
+        game.endDate = game.startDate.clone();
+        game.endDate.set('hour', hour).set('minute', minute);
+        console.log(game.endDate.format('MM/DD/YYYY hh:mmA'))
+    }
     // game.date = moment(game.date + ' ' + game.time);
     // if (moment(game.date).diff(moment()) < 0) {
     //   this.setState({
@@ -168,6 +183,11 @@ class GameDetail extends Component {
     }
   }
   
+  checkForValidDates = () => {
+    const { startDate, endDate } = this.state;
+    return startDate.isBefore(endDate);
+  }
+  
   componentDidMount() {
     this.props.routeChange('/newgame');
     const { venues, match, game } = this.props;
@@ -180,10 +200,12 @@ class GameDetail extends Component {
       this.setState({infoMessage: 'We will use the email address you have on file for payouts. If this is not a valid PayPal email, you won\'t be able to get paid! \n Check it in your profile.', messageType: 'orange'})
     } else if (localStorage.getItem('gameSettings')) {
       const storedGameSettings = JSON.parse(localStorage.getItem('gameSettings'));
-      this.setState(storedGameSettings)
       this.setState({
-        date: moment(storedGameSettings.date).add(1, 'days').format('MM/DD/YYYY hh:mm A'), 
-        infoMessage: 'We pre-filled this form using data from your last game. Change what you need, then it\'s Hockey Time!'})
+        ...storedGameSettings,
+        startDate: moment(storedGameSettings.startDate).add(1, 'days'), 
+        endDate: moment(storedGameSettings.endDate).add(1, 'days'), 
+        infoMessage: 'We pre-filled this form using data from your last game. Change what you need, then it\'s Hockey Time!'
+      });
     }
     if (match.params.venue) this.setState({location: match.params.venue})
   }
@@ -191,6 +213,7 @@ class GameDetail extends Component {
   render() {
     const { user, venues, match } = this.props;
     const game = this.state;
+    console.log(game)
     const { infoMessage, errorMessage, messageColor } = this.state;
     const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
@@ -207,26 +230,27 @@ class GameDetail extends Component {
             <div className='form-group col-md-6'>
               <label htmlFor='date'>Date:</label>
                 <Datetime 
-                  value={game.date} 
-                  onChange={this.handleChange} 
+                  value={game.startDate} 
+                  onChange={(e) => this.handleChange(e,'startDate')} 
+                  timeFormat={false}
                 />
-              {/*<DatePicker className='form-control date-picker' selected={game.date}
-                  onChange={this.handleChange}
-                  showTimeSelect
-                  timeFormat="h:mm aa"
-                  timeIntervals={15}
-                  dateFormat="MM/DD/YYYY h:mm aa"
-                  timeCaption="time"
-                />*/}
               {/*<input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />*/}
             </div>
             <div className='form-group col-md-3'>
               <label htmlFor='startTime'>Start Time: </label>
-              <input className='form-control' type='time' name='startTime' id='startTime' required value={game.startTime} onChange={this.handleChange} />
+                <Datetime 
+                  value={game.startDate} 
+                  onChange={(e) => this.handleChange(e,'startDate')} 
+                  dateFormat={false}
+                />
             </div>
             <div className='form-group col-md-3'>
               <label htmlFor='endTime'>End Time: </label>
-              <input className='form-control' type='time' name='endTime' id='endTime' required value={game.endTime} onChange={this.handleChange} />
+                <Datetime 
+                  value={game.endDate} 
+                  onChange={(e) => this.handleChange(e,'endDate')} 
+                  dateFormat={false}
+                />            
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>

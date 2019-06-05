@@ -81,12 +81,12 @@ router.get('/games', (req, res, next) => {
 });
 
 router.post('/games', function (req, res, next) {
-  const { name, date, startTime, endTime, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, comment, emailList, privateNotifyAll } = req.body;
+  const { name, date, startDate, endDate, type, location, host, hostID, currentPlayer, skillLevel, invited, maxPlayers, costPerPlayer, goalieCount, comment, emailList, privateNotifyAll } = req.body;
   const game = new Game({
     name,
     date,
-    startTime, 
-    endTime, 
+    startDate, 
+    endDate, 
     type,
     location,
     host,
@@ -107,7 +107,7 @@ router.post('/games', function (req, res, next) {
         //add game to email queue
         const notification = new EmailQueue({
           gameID: game._id,
-          sendDate: moment(game.date).subtract(1, 'days')
+          sendDate: moment(game.startDate).subtract(1, 'days')
         });
       notification.save()
         .catch(err => next(err));
@@ -128,7 +128,7 @@ router.post('/games', function (req, res, next) {
               locals: {
                 host: game.host,
                 name: game.name,
-                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                date: moment(game.startDate).format('MM/DD/YYYY h:mmA'),
                 location: game.location,
                 url: process.env.ROOT_URL,
                 id: game._id
@@ -150,7 +150,7 @@ router.post('/games', function (req, res, next) {
           locals: {
             name: req.body.name,
             host: host,
-            date: moment(req.body.date).tz('America/Chicago').format('MM/DD/YYYY h:mmA'),
+            date: moment(req.body.startDate).tz('America/Chicago').format('MM/DD/YYYY h:mmA'),
             location: req.body.location,
             url: process.env.ROOT_URL,
             id: game._id
@@ -201,7 +201,7 @@ router.put('/games/:id', (req, res, next) => {
               },
               locals: {
                 name: game.name,
-                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                date: moment(game.startDate).format('MM/DD/YYYY h:mmA'),
                 location: game.location,
                 url: process.env.ROOT_URL,
                 id: req.params.id
@@ -227,7 +227,7 @@ router.put('/games/:id', (req, res, next) => {
               },
               locals: {
                 name: game.name,
-                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                date: moment(game.startDate).format('MM/DD/YYYY h:mmA'),
                 location: game.location,
                 url: process.env.ROOT_URL,
                 id: req.params.id
@@ -272,7 +272,7 @@ router.put('/games/:id/add', (req, res, next) => {
               },
               locals: {
                 name: game.name,
-                date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                date: moment(game.startDate).format('MM/DD/YYYY h:mmA'),
                 location: game.location,
                 urlQuery: `${game.location.split(' ').join('+')}+MN`,
                 url: process.env.ROOT_URL,
@@ -292,7 +292,7 @@ router.put('/games/:id/add', (req, res, next) => {
                 },
                 locals: {
                   name: game.name,
-                  date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                  date: moment(game.startDate).format('MM/DD/YYYY h:mmA'),
                   location: game.location,
                   numOfPlayers: game.players.length,
                   openings: game.maxPlayers - game.players.length,
@@ -318,7 +318,7 @@ router.put('/games/:id/add', (req, res, next) => {
               gameHost: game.host,
               payer: req.body.username,
               paymentID: req.body.paymentID,
-              payoutDate: game.date,
+              payoutDate: game.endDate,
               amount: game.costPerPlayer,
             });
             paymentDetail.save()
@@ -357,7 +357,7 @@ router.put('/games/:id/drop', (req, res, next) => {
                   locals: {
                     host: game.host,
                     name: game.name,
-                    date: moment(game.date).format('MM/DD/YYYY h:mmA'),
+                    date: moment(game.startDate).format('MM/DD/YYYY h:mmA'),
                     location: game.location,
                     wlCount: game.waitlist.length -1,
                     url: process.env.ROOT_URL,
@@ -431,7 +431,7 @@ router.post('/games/:id/notification', (req, res, next) => {
           locals: {
             host: req.body.host,
             name: req.body.name,
-            date: moment(req.body.date).format('MM/DD/YYYY h:mmA'),
+            date: moment(req.body.startDate).format('MM/DD/YYYY h:mmA'),
             location: req.body.location,
             url: process.env.ROOT_URL,
             id: req.params.id
@@ -448,7 +448,7 @@ router.post('/games/:id/notification', (req, res, next) => {
         // nexmo.message.sendSms(
         //   process.env.NEXMO_VIRTUAL_NUMBER, '17737327335', `🏒 Message from Hockey Compass 🏒:
         // A Game near you is looking for players!
-        // Date: ${req.body.date}
+        // Date: ${req.body.startDate}
         // Location: ${req.body.location}
         // Details and join here: http://${process.env.ROOT_URL}/game/join/${req.params.id}` ,
         //     (err, responseData) => {
