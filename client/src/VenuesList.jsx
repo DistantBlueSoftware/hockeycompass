@@ -35,17 +35,18 @@ const VenuesListContainer = styled.div`
   margin-top: 100px;
 `
 
-const TitleWithSearch = styled.div`
+const SearchBarContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
   position: fixed;
   width: 100%;
   background: rgba(255,255,255,0.95);
   padding: 5px;
   input {
     min-width: 250px;
+    width: 100%;
   }
   @media (min-width: 801px) {
     width: 90%;
@@ -70,6 +71,7 @@ const VenueCard = styled.div`
   padding: 20px;
   margin: 5px;
   background: rgba(25, 81, 139, 0.7);
+  border: 2px solid rgba(25, 81, 139, 0.7);
   color: white;
   transition: all 0.3s;
   &:hover {
@@ -152,13 +154,11 @@ setCurrentVenue = (venue, needsAuth) => {
           <title>Hockey Arenas - Hockey Compass - Navigate to Hockey</title>
           <link rel='canonical' href='https://hockeycompass.com/venues' />
           </Helmet>
-          <TitleWithSearch>
-            <h1>Ice Arenas</h1>
+          <SearchBarContainer>
             <div>
-              <label htmlFor='search'>Search: </label>
               <StyledInput type='text' name='search' id='search' placeholder='Venue name or city' onChange={this.handleChange}></StyledInput>
             </div>
-          </TitleWithSearch>
+          </SearchBarContainer>
           <VenuesListContainer>
             {_.sortBy(venues.all, currentSort)
               .filter(venue => this.filterVenues(venue)).length ? 
@@ -166,6 +166,7 @@ setCurrentVenue = (venue, needsAuth) => {
                 .filter(venue => this.filterVenues(venue))
                 .map((venue, index) => 
                 <VenueCard 
+                  key={index}
                   onClick={e => this.setCurrentVenue(venue)} 
                   data-toggle='modal' 
                   data-target='#venue-modal'>

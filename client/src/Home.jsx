@@ -6,12 +6,12 @@ import { Link } from 'react-router-dom';
 import { AdBanner } from './AdBanner';
 import * as actions from './actions'
 import styled from 'styled-components'
+import { Colors } from './framework'
 
 const HeroImage = styled.div`
   min-height: 100vh;
   background: no-repeat fixed;
   background-size: cover;
-  /* background-position-x: -315px; */
 `
 
 const HomepageSection = styled.div`
@@ -87,7 +87,7 @@ class Home extends React.Component {
         <title>Hockey Compass - Navigate to Hockey</title>
         <link rel='canonical' href='https://hockeycompass.com/' />
         </Helmet>
-        <HeroImage style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.7), rgba(25, 81, 139, 0.25)), url(${'hchero.jpg'})`}}>
+        <HeroImage style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.7), rgba(25, 81, 139, 0.25)), url(${'hcherorink.jpg'})`}}>
           <div className='hero-text'>
             <h1 className='Home-intro'>
              Navigate to hockey.
@@ -104,7 +104,7 @@ class Home extends React.Component {
             <p>Hockey Compass is a community of like-minded hockey lovers from around your area.</p>
             <p>Browse public games near you and meet new skaters with a click!</p>
           </SectionTextElement>
-          <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.7), rgba(25, 81, 139, 0.45)), url(${'host_game.jpg'})`}}>
+          <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.7), rgba(125, 81, 139, 0.45)), url(${'skatestick.jpg'})`}}>
             <p style={{color:'white'}}>Can't find a game you like! Start your own!</p>
             <Link to='/newgame'><button className='landing-button btn btn-large'><i className='fas fa-hockey-puck' style={{fontSize: '32px', marginRight: '10px'}} />Host a Game</button></Link>
           </SectionImageElement>
