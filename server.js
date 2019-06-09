@@ -29,7 +29,10 @@ mongoose.connect(uristring, { useNewUrlParser: true }, (err, res) => {
 app.use(cors());
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-if (process.env.NODE_ENV === 'production') app.use(sslRedirect());
+console.log(process.env.NODE_ENV)
+if (process.env.NODE_ENV === 'production') {
+  console.log('heyyyy we on a production app you')
+  app.use(sslRedirect());}
 
 //Use our router configuration when we call /api
 app.use('/api', router);
