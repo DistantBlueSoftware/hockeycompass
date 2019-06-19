@@ -52,6 +52,15 @@ const SectionImageElement = styled.div`
   color: rgba(255,255,255,0.8);
 `
 
+const AgeCalcButton = styled.button`
+  background: ${Colors.blue};
+  color: rgba(255,255,255,0.9);
+  margin-top: 10px;
+  transition: background 0.3s;
+  &:hover {
+    background: #123d69;
+  }
+`
 
 
 const mapStateToProps = state => {
@@ -59,21 +68,41 @@ const mapStateToProps = state => {
 }
 
 
-const HockeyAgeSlider = () => (
+const HockeyAgeSlider = ({buttonText, doAgeCalculation}) => (
   <SectionImageElement>
     <h4 style={{color: 'rgba(0,0,0,0.8)'}}>Should I be playing hockey at my age?</h4>
+    <p style={{color: 'rgba(0,0,0,0.8)'}}>Use our handy calculator to find out!</p>
     <div style={{width: '100%'}}>
       <RangeSlider />
     </div>
+    <AgeCalcButton className='btn btn-large' onClick={doAgeCalculation}>{buttonText}</AgeCalcButton>
   </SectionImageElement>
 )
 
 class Home extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      buttonSpinner: false
+    }
+  }
   componentDidMount() {
     this.props.routeChange('/');
   }
+  
+  doAgeCalculation = () => {
+    this.setState({
+      buttonSpinner: true
+    })
+    setTimeout(() => {
+      alert('Yes!');
+      this.setState({buttonSpinner:false})
+    }, 1000)
+  }
+  
   render() {
     const isMobile = window.innerWidth < 600;
+    const buttonText = this.state.buttonSpinner ? <i className="fas fa-circle-notch fa-spin"></i> : 'Calculate';
     return (
       <div className='container-fluid Home'>
         <Helmet>
@@ -112,7 +141,7 @@ class Home extends React.Component {
           </SectionImageElement>
         </HomepageSection>
         <HomepageSection>
-          <HockeyAgeSlider />
+          <HockeyAgeSlider buttonText={buttonText} doAgeCalculation={this.doAgeCalculation} />
         </HomepageSection>
         {isMobile && <HomepageSection>
           <SectionTextElement>

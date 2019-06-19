@@ -9,9 +9,16 @@ const FooterContainer = styled.div`
   align-items: center; 
   padding: 10px; 
   width: 100vw;
-  background: #c9c9c9;
+  background: #bab7b7;
   border-top: 1px solid white;
   height: 120px;
+  a {
+    color: inherit;
+    transition: color 0.3s;
+  }
+  a:hover {
+    color: rgba(255,255,255,0.8);
+  }
 `
 
 const FooterLinks = styled.ul`

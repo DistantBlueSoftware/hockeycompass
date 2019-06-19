@@ -5,7 +5,7 @@ import { Colors } from './'
 const RangeSliderInput = styled.input`
   -webkit-appearance: none;
   width: 100%;
-  height: 15px;
+  height: 10px;
   border-radius: 5px;   
   background: ${Colors.blue};
   outline: none;
@@ -16,30 +16,54 @@ const RangeSliderInput = styled.input`
     cursor: pointer;
     opacity: 1;
   }
+  &::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    border: none;
+    height: 20px;
+    width: 20px;
+    border: 1px solid ${Colors.blue};
+    border-radius: 50%;
+    background: ${Colors.yellow};
+  }
+  &::-moz-range-thumb {
+    border: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 1px solid ${Colors.blue};
+    background: ${Colors.yellow};
+  }
+  &::-ms-thumb {
+    border: none;
+    height: 20px;
+    width: 20px;
+    border-radius: 50%;
+    border: 1px solid ${Colors.blue};
+    background: ${Colors.yellow};
+  }
 `
 
 export default class RangeSlider extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: this.props.value || 0
+      value: 30
     }
   }
   
   handleChange = (e) => {
-    const target = e.target;
-      const value = target.type === 'checkbox' ? target.checked : target.value;
-      const name = target.name;
+      const value = e.target.value;
       this.setState({
-        [name]: value
+        value
       });
   }
   
   render() {
-    const { min = 0, max = 50, value = (max - min) / 2, id = 'myslider' } = this.props;
+    const { min = 0, max = 50, name = 'value', id = 'myslider' } = this.props;
+    const { value } = this.state;
 
     return (
-      <RangeSliderInput type="range" min="3" max="100" value={value} id={id} onChange={this.handleChange} />
+      <RangeSliderInput type="range" min="3" max="100" value={value} name={name} id={id} onChange={this.handleChange} />
     )
   }
 }

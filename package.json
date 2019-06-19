@@ -34,7 +34,7 @@
   },
   "scripts": {
     "start": "node server",
-    "dev": "concurrently \"node --inspect server\" \"cd ./client && react-scripts start\"",
+    "dev": "concurrently \"nodemon server\" \"cd ./client && react-scripts start\"",
     "build": "react-scripts build",
     "heroku-postbuild": "yarn && cd client && yarn && yarn run build",
     "test": "react-scripts test --env=jsdom",
