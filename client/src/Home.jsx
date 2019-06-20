@@ -68,13 +68,20 @@ const mapStateToProps = state => {
 }
 
 
-const HockeyAgeSlider = ({buttonText, doAgeCalculation}) => (
+const HockeyAgeSlider = ({buttonText, doAgeCalculation, sliderValue, handleChange}) => (
   <SectionImageElement>
     <h4 style={{color: 'rgba(0,0,0,0.8)'}}>Should I be playing hockey at my age?</h4>
     <p style={{color: 'rgba(0,0,0,0.8)'}}>Use our handy calculator to find out!</p>
     <div style={{width: '100%'}}>
-      <RangeSlider />
+      <RangeSlider 
+        name='age' 
+        min={3} 
+        max={100} 
+        sliderValue={sliderValue}
+        handleChange={handleChange} 
+        />
     </div>
+    <p style={{color: 'rgba(0,0,0,0.8)', marginTop: '20px'}}>My Age: <span>{sliderValue}</span></p>
     <AgeCalcButton className='btn btn-large' onClick={doAgeCalculation}>{buttonText}</AgeCalcButton>
   </SectionImageElement>
 )
@@ -83,11 +90,21 @@ class Home extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      buttonSpinner: false
+      buttonSpinner: false,
+      age: 30
     }
   }
   componentDidMount() {
     this.props.routeChange('/');
+  }
+  
+  handleChange = (e) => {
+    const target = e.target;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
+      const name = target.name;
+      this.setState({
+        [name]: value
+      });
   }
   
   doAgeCalculation = () => {
@@ -101,7 +118,6 @@ class Home extends React.Component {
   }
   
   render() {
-    const isMobile = window.innerWidth < 600;
     const buttonText = this.state.buttonSpinner ? <i className="fas fa-circle-notch fa-spin"></i> : 'Calculate';
     return (
       <div className='container-fluid Home'>
@@ -141,14 +157,8 @@ class Home extends React.Component {
           </SectionImageElement>
         </HomepageSection>
         <HomepageSection>
-          <HockeyAgeSlider buttonText={buttonText} doAgeCalculation={this.doAgeCalculation} />
+          <HockeyAgeSlider buttonText={buttonText} doAgeCalculation={this.doAgeCalculation} sliderValue={this.state.age} handleChange={this.handleChange} />
         </HomepageSection>
-        {isMobile && <HomepageSection>
-          <SectionTextElement>
-            <p>Sign up today! It takes just a second, and you'll be navigating your way to hockey!</p>
-            <Link to='/register'><button className='btn btn-large btn-primary'>Register</button></Link>
-          </SectionTextElement>
-        </HomepageSection>}
         <HomepageSection style={{background: Colors.orange}}>
           <SectionImageElement>
             <h4>Drop a Line</h4>

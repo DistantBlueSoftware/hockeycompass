@@ -59,11 +59,11 @@ export default class RangeSlider extends Component {
   }
   
   render() {
-    const { min = 0, max = 50, name = 'value', id = 'myslider' } = this.props;
+    const { min = 0, max = 50, sliderValue, name = 'value', id = 'myslider', handleChange } = this.props;
     const { value } = this.state;
 
     return (
-      <RangeSliderInput type="range" min="3" max="100" value={value} name={name} id={id} onChange={this.handleChange} />
+      <RangeSliderInput type="range" min={min} max={max} value={sliderValue || value} name={name} id={id} onChange={handleChange || this.handleChange} />
     )
   }
 }
