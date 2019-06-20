@@ -8,6 +8,7 @@ import * as actions from './actions'
 import styled from 'styled-components'
 import { Colors } from './framework'
 import RangeSlider from './framework/RangeSlider'
+import AgeModal from './AgeModal';
 
 const HeroImage = styled.div`
   min-height: 100vh;
@@ -112,7 +113,7 @@ class Home extends React.Component {
       buttonSpinner: true
     })
     setTimeout(() => {
-      alert('Yes!');
+      window.$("#age-modal").modal();
       this.setState({buttonSpinner:false})
     }, 1000)
   }
@@ -166,7 +167,7 @@ class Home extends React.Component {
             <a href='mailto:info@hockeycompass.com'><button className='landing-button btn btn-large'><i className='fas fa-envelope' style={{fontSize: '32px', marginRight: '10px'}} />Contact Us</button></a>
           </SectionImageElement>
         </HomepageSection>
-        
+        <AgeModal />
       </div>
     )
   }
