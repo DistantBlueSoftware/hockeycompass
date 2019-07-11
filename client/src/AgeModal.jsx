@@ -3,6 +3,7 @@ import styled from 'styled-components'
 
 const ModalImage = styled.img`
   max-width: 200px;
+  margin: 20px;
 `
 
 class AgeModal extends Component {
@@ -33,18 +34,13 @@ class AgeModal extends Component {
       <div className='modal fade' id='age-modal' tabIndex='-1' role='dialog'>
       <div className='modal-dialog' role='document'>
         <div className='modal-content'>
-          <div className='modal-header'>
-            <button type='button' className='close' data-dismiss='modal' aria-label='Close'>
-              <span aria-hidden='true'>&times;</span>
-            </button>
-          </div>
           <div className='modal-body'>
-            <h2>Yes!</h2>
+            <h2>Heck Yes!</h2>
             <ModalImage src='skatestick.jpg' />
             <p>Any age is a good age for hockey!</p>
           </div>
           <div className='modal-footer' style={{justifyContent: 'center'}}>
-            <button className='btn btn-primary' data-dismiss='modal'>Close</button>
+            <button className='btn btn-primary' data-dismiss='modal'>Awesome!</button>
           </div>
         </div>
       </div>

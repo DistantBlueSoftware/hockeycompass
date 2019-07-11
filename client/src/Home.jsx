@@ -9,11 +9,32 @@ import styled from 'styled-components'
 import { Colors } from './framework'
 import RangeSlider from './framework/RangeSlider'
 import AgeModal from './AgeModal';
+import {ImageCircle} from './ImageCircle';
 
 const HeroImage = styled.div`
   min-height: 100vh;
   background: no-repeat fixed;
   background-size: cover;
+`
+
+const StartOwnImage = styled.div`
+  position: absolute;
+  z-index: -1;
+  background: no-repeat center center url('cavehockey.jpg');
+  background-size: cover;
+  height: 350px;
+  width: 350px;
+  border-radius: 100%;
+`
+
+const RinksImage = styled.div`
+position: absolute;
+z-index: -1;
+background: no-repeat center center url('overheadrinks.jpg');
+background-size: cover;
+height: 70vh;
+width: 100%;
+
 `
 
 const HeroSubheader = styled.p`
@@ -97,6 +118,9 @@ class Home extends React.Component {
   }
   componentDidMount() {
     this.props.routeChange('/');
+    window.ScrollReveal().reveal('.scrollreveal', {
+      delay: 500
+    });
   }
   
   handleChange = (e) => {
@@ -132,8 +156,8 @@ class Home extends React.Component {
             <h1 className='Home-intro'>
              Fitness. Fun. Hockey. 
             </h1>
-            <HeroSubheader>We'll help you navigate to the right game or start your own.</HeroSubheader>
-            <div style={{display: 'flex', flexFlow: 'row wrap', justifyContent: 'center'}}>
+            <HeroSubheader className='scrollreveal'>We'll help you navigate to the right game or start your own.</HeroSubheader>
+            <div className='scrollreveal' style={{display: 'flex', flexFlow: 'row wrap', justifyContent: 'center'}}>
               <Link to='/games' style={{margin:'10px'}}><button className='landing-button btn btn-large'><i className='far fa-compass' style={{fontSize: '32px', marginRight: '10px'}}/>View Games</button></Link>
               <Link to='/newgame' style={{margin:'10px'}}><button className='landing-button btn btn-large'><i className='fas fa-hockey-puck' style={{fontSize: '32px', marginRight: '10px'}} />Host a Game</button></Link>
             </div>
@@ -142,11 +166,13 @@ class Home extends React.Component {
         <HomepageSection>
           <SectionTextElement>
             <p>Hockey Compass is a community of like-minded hockey lovers from around your area.</p>
+            <ImageCircle className='slideRight scrollreveal' image='oldskates.jpg' />
             <p>Browse public games near you and meet new skaters with a click!</p>
           </SectionTextElement>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.75), rgba(125, 81, 139, 0.95))`}}>
             <h4>Take Control</h4>
             <p>Can't find a game you like! Start your own!</p>
+            <StartOwnImage className='scrollreveal' />
             <Link to='/newgame' style={{marginTop:'20px'}}><button className='landing-button btn btn-large'><i className='fas fa-hockey-puck' style={{fontSize: '32px', marginRight: '10px'}} />Host a Game</button></Link>
           </SectionImageElement>
         </HomepageSection>
@@ -154,6 +180,7 @@ class Home extends React.Component {
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.95), rgba(25, 81, 139, 0.75))`}}>
             <h4>Find a Rink</h4>
             <p>Start here to find the perfect location for your next pickup skate.</p>
+            <RinksImage className='scrollreveal' />
           <Link to='/venues' style={{marginTop: '20px'}}><button className='landing-button btn btn-large'><i className='fas fa-bullseye' style={{fontSize: '32px', marginRight: '10px'}} />Pick a Venue</button></Link>
           </SectionImageElement>
         </HomepageSection>
