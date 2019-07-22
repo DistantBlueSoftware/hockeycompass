@@ -37,6 +37,19 @@ width: 100%;
 
 `
 
+const DidYouKnowImage = styled.img`
+  width: 300px;
+  max-width: 100vw;
+  padding: 10px;
+`
+
+const DYKImageContainer = styled.div`
+  display: flex;
+  flex-flow: row wrap;
+  align-items: center;
+  justify-content: center;
+`
+
 const HeroSubheader = styled.p`
   color: rgba(255,255,255,0.8);
 `
@@ -165,8 +178,8 @@ class Home extends React.Component {
         </HeroImage>
         <HomepageSection>
           <SectionTextElement>
-            <p>Hockey Compass is a community of like-minded hockey lovers from around your area.</p>
-            <ImageCircle className='slideRight scrollreveal' image='oldskates.jpg' />
+            <img className='slideRight scrollreveal' src='logo.png' width='300px' />
+            <p>Our goal at Hockeycompass.com is to provide our members with a fun and easy way to organize and be physically active.  We want to help bring the community together in the name of fitness and sports.</p>
             <p>Browse public games near you and meet new skaters with a click!</p>
           </SectionTextElement>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.75), rgba(125, 81, 139, 0.95))`}}>
@@ -177,6 +190,9 @@ class Home extends React.Component {
           </SectionImageElement>
         </HomepageSection>
         <HomepageSection>
+          <HockeyAgeSlider buttonText={buttonText} doAgeCalculation={this.doAgeCalculation} sliderValue={this.state.age} handleChange={this.handleChange} />
+        </HomepageSection>
+        <HomepageSection>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.95), rgba(25, 81, 139, 0.75))`}}>
             <h4>Find a Rink</h4>
             <p>Start here to find the perfect location for your next pickup skate.</p>
@@ -184,8 +200,14 @@ class Home extends React.Component {
           <Link to='/venues' style={{marginTop: '20px'}}><button className='landing-button btn btn-large'><i className='fas fa-bullseye' style={{fontSize: '32px', marginRight: '10px'}} />Pick a Venue</button></Link>
           </SectionImageElement>
         </HomepageSection>
-        <HomepageSection>
-          <HockeyAgeSlider buttonText={buttonText} doAgeCalculation={this.doAgeCalculation} sliderValue={this.state.age} handleChange={this.handleChange} />
+        <HomepageSection style={{padding: '15px'}}>
+          <h3>Did you know?</h3>
+          <p style={{maxWidth: '100vw'}}>Ice hockey has its roots in Ball-and-stick games.  Ball-and-stick games are almost as old as civilization itself. Its earliest origins may be from Persia, Egypt or China, while archaeological evidence shows an early ball-and-stick game played in Greece in the 400s BCE. As civilization spread, so did the games. And eventually, as the civilized world went north, ball-and-stick moved onto the ice. Paintings in the Netherlands in the 1500s and 1600s showed the Dutch playing a version of golf on the ice; Scotland's Edinburgh Skating Club, formed in 1642, is considered the oldest in the world, and records from Ireland's Dublin Evening Post have a report of men playing hurling on ice. When the Europeans made their way across the Atlantic to North America, they discovered Native Americans had their own games, the forerunners of lacrosse, and some Native Americans in South Dakota essentially played lacrosse on ice. The modern idea of field hockey sprouted out of these traditions, and the modern sport of ice hockey was relegated primarily to small towns, and in no organized setting, until the late 1800s. </p>
+          <p style={{fontSize: '12px'}}>Source: <a href='http://www.thepeoplehistory.com/icehockeyhistory.html'>http://www.thepeoplehistory.com/icehockeyhistory.html</a></p>
+          <DYKImageContainer>
+            <DidYouKnowImage src='goyen.jpg' />
+            <DidYouKnowImage src='avercamp.jpg' />
+          </DYKImageContainer>
         </HomepageSection>
         <HomepageSection style={{background: Colors.orange}}>
           <SectionImageElement>
@@ -194,7 +216,7 @@ class Home extends React.Component {
             <a href='mailto:info@hockeycompass.com'><button className='landing-button btn btn-large'><i className='fas fa-envelope' style={{fontSize: '32px', marginRight: '10px'}} />Contact Us</button></a>
           </SectionImageElement>
         </HomepageSection>
-        <AgeModal />
+        <AgeModal selectedAge={this.state.age}/>
       </div>
     )
   }
