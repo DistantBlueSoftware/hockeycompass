@@ -9,6 +9,7 @@ import styled from 'styled-components'
 import { Colors } from './framework'
 import RangeSlider from './framework/RangeSlider'
 import AgeModal from './AgeModal';
+import ContactModal from './ContactModal';
 import {ImageCircle} from './ImageCircle';
 
 const HeroImage = styled.div`
@@ -37,13 +38,20 @@ width: 100%;
 
 `
 
-const DidYouKnowImage = styled.img`
+const DidYouKnowImage = styled.div`
   width: 300px;
   max-width: 100vw;
   padding: 10px;
+  height: auto;
+  min-height: 200px;
+  background: no-repeat center center;
+  background-size: cover;
+  margin: 10px;
+  background-image: ${({ image }) => `url(${image})`};
 `
 
 const DYKImageContainer = styled.div`
+  width: 100vw;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
@@ -87,6 +95,18 @@ const SectionImageElement = styled.div`
   color: rgba(255,255,255,0.8);
 `
 
+const SliderContainer = styled.div`
+  flex: 1;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  background: no-repeat center center;
+  background-size: cover;
+  padding: 20px;
+  color: rgba(255,255,255,0.8);
+`
+
 const AgeCalcButton = styled.button`
   background: ${Colors.blue};
   color: rgba(255,255,255,0.9);
@@ -104,7 +124,7 @@ const mapStateToProps = state => {
 
 
 const HockeyAgeSlider = ({buttonText, doAgeCalculation, sliderValue, handleChange}) => (
-  <SectionImageElement>
+  <SliderContainer>
     <h4 style={{color: 'rgba(0,0,0,0.8)'}}>Should I be playing hockey at my age?</h4>
     <p style={{color: 'rgba(0,0,0,0.8)'}}>Use our handy calculator to find out!</p>
     <div style={{width: '100%'}}>
@@ -118,7 +138,7 @@ const HockeyAgeSlider = ({buttonText, doAgeCalculation, sliderValue, handleChang
     </div>
     <p style={{color: 'rgba(0,0,0,0.8)', marginTop: '20px'}}>My Age: <span>{sliderValue}</span></p>
     <AgeCalcButton className='btn btn-large' onClick={doAgeCalculation}>{buttonText}</AgeCalcButton>
-  </SectionImageElement>
+  </SliderContainer>
 )
 
 class Home extends React.Component {
@@ -158,6 +178,7 @@ class Home extends React.Component {
   render() {
     const buttonText = this.state.buttonSpinner ? <i className="fas fa-circle-notch fa-spin"></i> : 'Calculate';
     return (
+      <>
       <div className='container-fluid Home'>
         <Helmet>
         <meta charSet='utf-8' />
@@ -177,10 +198,9 @@ class Home extends React.Component {
           </div>
         </HeroImage>
         <HomepageSection>
-          <SectionTextElement>
-            <img className='slideRight scrollreveal' src='logo.png' width='300px' />
+          <SectionTextElement style={{ height: '70vh', borderBottom: `1px solid ${Colors.orange}`, borderRadius: '0px'}}>
+            <img className='slideRight scrollreveal' src='logo_white_square.jpeg' width='300px' />
             <p>Our goal at Hockeycompass.com is to provide our members with a fun and easy way to organize and be physically active.  We want to help bring the community together in the name of fitness and sports.</p>
-            <p>Browse public games near you and meet new skaters with a click!</p>
           </SectionTextElement>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.75), rgba(125, 81, 139, 0.95))`}}>
             <h4>Take Control</h4>
@@ -203,21 +223,23 @@ class Home extends React.Component {
         <HomepageSection style={{padding: '15px'}}>
           <h3>Did you know?</h3>
           <p style={{maxWidth: '100vw'}}>Ice hockey has its roots in Ball-and-stick games.  Ball-and-stick games are almost as old as civilization itself. Its earliest origins may be from Persia, Egypt or China, while archaeological evidence shows an early ball-and-stick game played in Greece in the 400s BCE. As civilization spread, so did the games. And eventually, as the civilized world went north, ball-and-stick moved onto the ice. Paintings in the Netherlands in the 1500s and 1600s showed the Dutch playing a version of golf on the ice; Scotland's Edinburgh Skating Club, formed in 1642, is considered the oldest in the world, and records from Ireland's Dublin Evening Post have a report of men playing hurling on ice. When the Europeans made their way across the Atlantic to North America, they discovered Native Americans had their own games, the forerunners of lacrosse, and some Native Americans in South Dakota essentially played lacrosse on ice. The modern idea of field hockey sprouted out of these traditions, and the modern sport of ice hockey was relegated primarily to small towns, and in no organized setting, until the late 1800s. </p>
-          <p style={{fontSize: '12px'}}>Source: <a href='http://www.thepeoplehistory.com/icehockeyhistory.html'>http://www.thepeoplehistory.com/icehockeyhistory.html</a></p>
           <DYKImageContainer>
-            <DidYouKnowImage src='goyen.jpg' />
-            <DidYouKnowImage src='avercamp.jpg' />
+            <DidYouKnowImage image='goyen.jpg' />
+            <DidYouKnowImage image='avercamp.jpg' />
           </DYKImageContainer>
+          <p style={{fontSize: '12px'}}>Source: <a href='http://www.thepeoplehistory.com/icehockeyhistory.html'>http://www.thepeoplehistory.com/icehockeyhistory.html</a></p>
         </HomepageSection>
         <HomepageSection style={{background: Colors.orange}}>
           <SectionImageElement>
             <h4>Drop a Line</h4>
             <p>We'd love to hear from you!</p>
-            <a href='mailto:info@hockeycompass.com'><button className='landing-button btn btn-large'><i className='fas fa-envelope' style={{fontSize: '32px', marginRight: '10px'}} />Contact Us</button></a>
+            <button data-toggle='modal' data-target='#contact-modal' className='landing-button btn btn-large'><i className='fas fa-envelope' style={{fontSize: '32px', marginRight: '10px'}} />Contact Us</button>
           </SectionImageElement>
         </HomepageSection>
         <AgeModal selectedAge={this.state.age}/>
       </div>
+      <ContactModal />
+      </>
     )
   }
 }

@@ -119,6 +119,19 @@ export const sendEmail = (game, messageDetails) => async dispatch => {
   }
 }
 
+export const sendContactEmail = (messageDetails, callback) => async dispatch => {
+  try {
+    const response = await axios.post(
+      `/api/admin-contact`,
+      {...messageDetails}
+    );
+    dispatch ({ type: SEND_EMAILS, payload: response.data });
+    callback()
+  } catch (e) {
+    dispatch({ type: UPDATE_ERROR, payload: 'Sorry, an error occurred; emails were not sent.'})
+  }
+}
+
 export const newGame = (game, callback) => async dispatch => {
     try {
       const response = await axios.post(

@@ -84,7 +84,7 @@ class JoinButton extends Component {
           else if (game.invited && game.invited.length > 0 && game.invited.find(email => email === user.email)) {
             button = <button className='btn btn-success' data-toggle='modal' data-target='#payment-modal' onClick={e => setCurrentGame(game)}>{isLoading || 'Join'}</button> 
           } else {
-            button = <button className='btn btn-warning' data-toggle='modal' data-target='#contact-modal' onClick={e => setCurrentGame(game)}>Private</button> 
+            button = <button className='btn btn-warning' data-toggle='modal' data-target='#game-request-modal' onClick={e => setCurrentGame(game)}>Private</button> 
           }
         }
       } else if (!isJoined) {

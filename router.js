@@ -701,4 +701,25 @@ router.post('/send-refund', (req, res, next) => {
    .catch(err => next(err))
 })
 
+router.post('/admin-contact', (req, res, next) => {
+  const { name, email, message } = req.body;
+  emailService.send({
+    template: 'admin-contact',
+    message: {
+      to: 'maksim-ardashnikov@hockeycompass.com',
+    },
+    locals: {
+      url: process.env.ROOT_URL,
+      name, 
+      email,
+      message
+    }
+  })
+  .then(() => {
+    console.log('Message sent');
+    res.json({success:1})
+  })
+  .catch(console.error);
+})
+
 module.exports = router;

@@ -37,7 +37,7 @@ class AgeModal extends Component {
           <div className='modal-body'>
             <h2>Heck Yes!</h2>
             <ModalImage src='skatestick.jpg' />
-            <p>{this.props.selectedAge} is a good age for hockey!</p>
+            <p>{this.props.selectedAge} is a great age for hockey!</p>
           </div>
           <div className='modal-footer' style={{justifyContent: 'center'}}>
             <button className='btn btn-primary' data-dismiss='modal'>Awesome!</button>
