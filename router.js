@@ -706,7 +706,7 @@ router.post('/admin-contact', (req, res, next) => {
   emailService.send({
     template: 'admin-contact',
     message: {
-      to: 'maksim-ardashnikov@hockeycompass.com',
+      to: 'maksim.ardashnikov@hockeycompass.com',
     },
     locals: {
       url: process.env.ROOT_URL,
