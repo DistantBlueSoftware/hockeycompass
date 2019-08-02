@@ -1,8 +1,10 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import './Home.css';
+import {Spring} from 'react-spring/renderprops'
 import { Helmet } from 'react-helmet';
 import { Link } from 'react-router-dom';
+
+import './Home.css';
 import { AdBanner } from './AdBanner';
 import * as actions from './actions'
 import styled from 'styled-components'
@@ -60,6 +62,14 @@ const DYKImageContainer = styled.div`
 
 const HeroSubheader = styled.p`
   color: rgba(255,255,255,0.8);
+`
+
+const HeroLogo = styled.img`
+  position: absolute;
+  top: 16%;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
 `
 
 const HomepageSection = styled.div`
@@ -146,12 +156,19 @@ class Home extends React.Component {
     super(props);
     this.state = {
       buttonSpinner: false,
-      age: 30
+      age: 30,
+      heroImage: 'hcherorink.jpg'
     }
   }
   componentDidMount() {
+    const isMobile = window.outerWidth < 600;
+    if (isMobile) {
+      this.setState({
+        heroImage: 'hcherorink_mobile.jpg'
+      });
+    }
     this.props.routeChange('/');
-    window.ScrollReveal().reveal('.scrollreveal', {
+    window.ScrollReveal && window.ScrollReveal().reveal('.scrollreveal', {
       delay: 500
     });
   }
@@ -176,7 +193,9 @@ class Home extends React.Component {
   }
   
   render() {
+    const { heroImage } = this.state;
     const buttonText = this.state.buttonSpinner ? <i className="fas fa-circle-notch fa-spin"></i> : 'Calculate';
+    
     return (
       <>
       <div className='container-fluid Home'>
@@ -185,10 +204,21 @@ class Home extends React.Component {
         <title>Hockey Compass - Navigate to Hockey</title>
         <link rel='canonical' href='https://hockeycompass.com/' />
         </Helmet>
-        <HeroImage style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.7), rgba(25, 81, 139, 0.25)), url(${'hcherorink.jpg'})`}}>
+        <HeroImage style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.7), rgba(25, 81, 139, 0.25)), url(${heroImage})`}}>
+          <Spring config={{duration: 2000}} from={{ opacity: 0 }} to={{ opacity: 0.7 }}>
+            {props => <HeroLogo id='logo' src='logo.png' width='300px' style={props} />}</Spring>
           <div className='hero-text'>
+          
             <h1 className='Home-intro'>
-             Fitness. Fun. Hockey. 
+              <Spring config={{delay: 500}} from={{ opacity: 0 }} to={{ opacity: 1 }}>
+                {props => <span style={{...props, color: 'rgba(255,255,255,0.8)'}}>Fitness. </span>}
+              </Spring> 
+              <Spring config={{delay: 1000}} from={{ opacity: 0 }} to={{ opacity: 1 }}>
+                {props => <span style={{...props, color: 'rgba(255,255,255,0.8)'}}>Fun. </span>}
+              </Spring>
+              <Spring config={{delay: 1500}} from={{ opacity: 0 }} to={{ opacity: 1 }}>
+                {props => <span style={{...props, color: 'rgba(255,255,255,0.8)'}}>Hockey.</span>}
+              </Spring>
             </h1>
             <HeroSubheader className='scrollreveal'>We'll help you navigate to the right game or start your own.</HeroSubheader>
             <div className='scrollreveal' style={{display: 'flex', flexFlow: 'row wrap', justifyContent: 'center'}}>
@@ -197,9 +227,9 @@ class Home extends React.Component {
             </div>
           </div>
         </HeroImage>
-        <HomepageSection>
-          <SectionTextElement style={{ height: '70vh', borderBottom: `1px solid ${Colors.orange}`, borderRadius: '0px'}}>
-            <img className='slideRight scrollreveal' src='logo_white_square.jpeg' width='300px' />
+        <HomepageSection style={{backgroundImage: `url(${'ice.jpg'})`}}>
+          <SectionTextElement style={{ height: '70vh', borderRadius: '0px'}}>
+            <img className='slideRight scrollreveal' src='logo.png' width='300px' />
             <p>Our goal at Hockeycompass.com is to provide our members with a fun and easy way to organize and be physically active.  We want to help bring the community together in the name of fitness and sports.</p>
           </SectionTextElement>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.75), rgba(125, 81, 139, 0.95))`}}>
