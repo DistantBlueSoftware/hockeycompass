@@ -61,7 +61,7 @@ const DYKImageContainer = styled.div`
 `
 
 const HeroSubheader = styled.p`
-  color: rgba(255,255,255,0.8);
+  color: rgba(255,255,255,0.9);
 `
 
 const HeroLogo = styled.img`
@@ -205,19 +205,19 @@ class Home extends React.Component {
         <link rel='canonical' href='https://hockeycompass.com/' />
         </Helmet>
         <HeroImage style={{backgroundImage: `linear-gradient(rgba(25, 81, 139,0.7), rgba(25, 81, 139, 0.25)), url(${heroImage})`}}>
-          <Spring config={{duration: 2000}} from={{ opacity: 0 }} to={{ opacity: 0.7 }}>
-            {props => <HeroLogo id='logo' src='logo.png' width='300px' style={props} />}</Spring>
+          {/*<Spring config={{duration: 2000}} from={{ opacity: 0 }} to={{ opacity: 0.7 }}>
+            {props => <HeroLogo id='logo' src='logo.png' width='300px' style={props} />}</Spring>*/}
           <div className='hero-text'>
           
             <h1 className='Home-intro'>
               <Spring config={{delay: 500}} from={{ opacity: 0 }} to={{ opacity: 1 }}>
-                {props => <span style={{...props, color: 'rgba(255,255,255,0.8)'}}>Fitness. </span>}
+                {props => <span style={{...props, color: 'rgba(255,255,255,0.95)'}}>Fitness. </span>}
               </Spring> 
               <Spring config={{delay: 1000}} from={{ opacity: 0 }} to={{ opacity: 1 }}>
-                {props => <span style={{...props, color: 'rgba(255,255,255,0.8)'}}>Fun. </span>}
+                {props => <span style={{...props, color: 'rgba(255,255,255,0.95)'}}>Fun. </span>}
               </Spring>
               <Spring config={{delay: 1500}} from={{ opacity: 0 }} to={{ opacity: 1 }}>
-                {props => <span style={{...props, color: 'rgba(255,255,255,0.8)'}}>Hockey.</span>}
+                {props => <span style={{...props, color: 'rgba(255,255,255,0.95)'}}>Hockey.</span>}
               </Spring>
             </h1>
             <HeroSubheader className='scrollreveal'>We'll help you navigate to the right game or start your own.</HeroSubheader>
@@ -227,14 +227,14 @@ class Home extends React.Component {
             </div>
           </div>
         </HeroImage>
-        <HomepageSection style={{backgroundImage: `url(${'ice.jpg'})`}}>
-          <SectionTextElement style={{ height: '70vh', borderRadius: '0px'}}>
-            <img className='slideRight scrollreveal' src='logo.png' width='300px' />
-            <p>Our goal at Hockeycompass.com is to provide our members with a fun and easy way to organize and be physically active.  We want to help bring the community together in the name of fitness and sports.</p>
+        <HomepageSection>
+          <SectionTextElement style={{ height: '70vh', borderRadius: '0px', backgroundImage: `url(${'ice.jpg'})`}}>
+            <img className='slideRight scrollreveal' src='logo.png' width='300px' style={{marginBottom: '20px'}} />
+            <p>The goal of Hockeycompass.com is to provide you with a fun and easy way to organize and be physically active.  We want to bring the community together through fitness and sports.</p>
           </SectionTextElement>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.75), rgba(125, 81, 139, 0.95))`}}>
             <h4>Take Control</h4>
-            <p>Can't find a game you like! Start your own!</p>
+            <p>Can't find a game you like? Start your own!</p>
             <StartOwnImage className='scrollreveal' />
             <Link to='/newgame' style={{marginTop:'20px'}}><button className='landing-button btn btn-large'><i className='fas fa-hockey-puck' style={{fontSize: '32px', marginRight: '10px'}} />Host a Game</button></Link>
           </SectionImageElement>
