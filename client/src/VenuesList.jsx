@@ -110,7 +110,7 @@ class VenuesList extends Component {
       console.log(window.pageYOffset)
       if (window.pageYOffset > 94) {
         this.searchBar.style.position = 'fixed';
-        this.searchBar.style.top = '10px';
+        this.searchBar.style.top = '-14px';
         this.searchBar.style.left = '-20px';
         this.searchBar.style.zIndex = '5000';
       } else {
