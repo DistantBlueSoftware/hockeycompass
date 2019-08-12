@@ -47,6 +47,7 @@ const SearchBarContainer = styled.div`
   padding: 5px;
   input {
     min-width: 250px;
+    width: 100%;
   }
 `
 
@@ -68,6 +69,7 @@ const VenueCard = styled.div`
   padding: 20px;
   margin: 5px;
   background: rgba(25, 81, 139, 0.7);
+  border: 2px solid rgba(25, 81, 139, 0.7);
   color: white;
   transition: all 0.3s;
   &:hover {
@@ -180,6 +182,7 @@ setCurrentVenue = (venue, needsAuth) => {
                 .filter(venue => this.filterVenues(venue))
                 .map((venue, index) => 
                 <VenueCard 
+                  key={index}
                   onClick={e => this.setCurrentVenue(venue)} 
                   data-toggle='modal' 
                   data-target='#venue-modal'>

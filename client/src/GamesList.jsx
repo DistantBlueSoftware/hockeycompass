@@ -9,7 +9,7 @@ import * as actions from './actions';
 import { AdBanner } from './AdBanner';
 import JoinButton from './JoinButton';
 import PaymentModal from './PaymentModal';
-import ContactModal from './ContactModal';
+import GameRequestModal from './GameRequestModal';
 import RosterModal from './RosterModal';
 import { CancellationPolicyModal } from './CancellationPolicyModal';
 import styled from 'styled-components';
@@ -183,7 +183,7 @@ class GamesList extends Component {
             </table>
           </div>
           <PaymentModal show={showModal} game={modalData} user={user} handleAddPlayer={this.handleAddPlayer} setLoadingState={this.setLoadingState} />
-          <ContactModal show={showModal} game={modalData} user={user} />
+          <GameRequestModal show={showModal} game={modalData} user={user} />
           <RosterModal show={showModal} game={modalData} user={user} history={history} />
           <CancellationPolicyModal />
         </div>
