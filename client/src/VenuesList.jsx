@@ -106,23 +106,24 @@ class VenuesList extends Component {
   componentDidMount() {
     this.props.routeChange('/venues');
     this.props.listVenues();
-    window.addEventListener('scroll', e => {
-      console.log(window.pageYOffset)
-      if (window.pageYOffset > 94) {
-        this.searchBar.style.position = 'fixed';
-        this.searchBar.style.top = '-14px';
-        this.searchBar.style.left = '-20px';
-        this.searchBar.style.zIndex = '5000';
-      } else {
-        this.searchBar.style.position = 'relative';
-        this.searchBar.style.top = 'inherit';
-        this.searchBar.style.zIndex = 'inherit';
-      }
-    })
+    window.addEventListener('scroll', e => this.handleScroll)
   }
   
   componentWillUnmount() {
-    window.removeEventListener('scroll');
+    window.removeEventListener('scroll', this.handleScroll);
+  }
+  
+  handleScroll = () => {
+    if (window.pageYOffset > 94) {
+      this.searchBar.style.position = 'fixed';
+      this.searchBar.style.top = '-14px';
+      this.searchBar.style.left = '-20px';
+      this.searchBar.style.zIndex = '5000';
+    } else {
+      this.searchBar.style.position = 'relative';
+      this.searchBar.style.top = 'inherit';
+      this.searchBar.style.zIndex = 'inherit';
+    }
   }
   
   handleChange = (e) => {
