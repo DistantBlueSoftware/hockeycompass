@@ -230,7 +230,7 @@ class Home extends React.Component {
         <HomepageSection>
           <SectionTextElement style={{ height: '70vh', borderRadius: '0px', backgroundImage: `url(${'ice.jpg'})`}}>
             <img className='slideRight scrollreveal' src='logo.png' width='300px' style={{marginBottom: '20px'}} />
-            <p>Hockeycompass.com is a fun and easy way to organize and be physically active. We want to bring communities together through fitness and sports.</p>
+            <p>Hockeycompass.com provides a fast and simple way for you to stay physically active by playing hockey. We bring communities together through fitness and sports.</p>
           </SectionTextElement>
           <SectionImageElement className='host-game-landing' style={{backgroundImage: `linear-gradient(rgba(125, 81, 139,0.75), rgba(125, 81, 139, 0.95))`}}>
             <h4>Take Control</h4>
