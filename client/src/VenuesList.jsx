@@ -33,23 +33,21 @@ const VenuesListContainer = styled.div`
   display: flex;
   flex-flow: row wrap;
   margin-top: 100px;
+  align-items: center;
+  justify-content: center;
 `
 
 const SearchBarContainer = styled.div`
+  position: relative;
   display: flex;
   flex-flow: row wrap;
   align-items: center;
   justify-content: center;
-  position: fixed;
   width: 100%;
-  background: rgba(255,255,255,0.95);
   padding: 5px;
   input {
     min-width: 250px;
     width: 100%;
-  }
-  @media (min-width: 801px) {
-    width: 90%;
   }
 `
 
@@ -108,6 +106,23 @@ class VenuesList extends Component {
   componentDidMount() {
     this.props.routeChange('/venues');
     this.props.listVenues();
+    window.addEventListener('scroll', e => {
+      console.log(window.pageYOffset)
+      if (window.pageYOffset > 94) {
+        this.searchBar.style.position = 'fixed';
+        this.searchBar.style.top = '10px';
+        this.searchBar.style.left = '-20px';
+        this.searchBar.style.zIndex = '5000';
+      } else {
+        this.searchBar.style.position = 'relative';
+        this.searchBar.style.top = 'inherit';
+        this.searchBar.style.zIndex = 'inherit';
+      }
+    })
+  }
+  
+  componentWillUnmount() {
+    window.removeEventListener('scroll');
   }
   
   handleChange = (e) => {
@@ -154,8 +169,9 @@ setCurrentVenue = (venue, needsAuth) => {
           <title>Hockey Arenas - Hockey Compass - Navigate to Hockey</title>
           <link rel='canonical' href='https://hockeycompass.com/venues' />
           </Helmet>
-          <SearchBarContainer>
+          <SearchBarContainer ref={node => this.searchBar = node}>
             <div>
+              <label htmlFor='search'></label>
               <StyledInput type='text' name='search' id='search' placeholder='Venue name or city' onChange={this.handleChange}></StyledInput>
             </div>
           </SearchBarContainer>
