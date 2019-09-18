@@ -110,19 +110,12 @@ class GameDetail extends Component {
       name: user.fullName,
       type: user.profile && user.profile.playerType
     };
-    if (!this.checkForValidDates()) {
-      // const hour = game.endDate.get('hour')
-      // const minute = game.endDate.get('minute')
-      //   game.endDate = game.startDate.clone();
-      //   game.endDate.set('hour', hour).set('minute', minute);
-      //   console.log(game.endDate.format('MM/DD/YYYY hh:mmA'))
-    }
-    // game.date = moment(game.date + ' ' + game.time);
-    // if (moment(game.date).diff(moment()) < 0) {
-    //   this.setState({
-    //     errorMessage: 'This game is scheduled in the past. Please check the start time.'
-    //   });
-    //   return;
+    // if (!this.checkForValidDates()) {
+    // const hour = game.endDate.get('hour')
+    // const minute = game.endDate.get('minute')
+    //   game.endDate = game.startDate.clone();
+    //   game.endDate.set('hour', hour).set('minute', minute);
+    //   console.log(game.endDate.format('MM/DD/YYYY hh:mmA'))
     // }
     if (game.costPerPlayer > 30) {
       needsConfirmation = true;
@@ -278,7 +271,6 @@ class GameDetail extends Component {
                 onChange={e => this.handleChange(e, "startDate")}
                 timeFormat={false}
               />
-              {/*<input className='form-control' type='date' name='date' id='date' required value={game.date} onChange={this.handleChange} />*/}
             </div>
             <div className="form-group col-md-3">
               <label htmlFor="startTime">Start Time: </label>
@@ -328,10 +320,6 @@ class GameDetail extends Component {
                 {arenaNames}
               </select>
             </div>
-            {/*<div className='form-group col-md-6'>
-              <label htmlFor='time'>Time: </label>
-              <input className='form-control' type='time' name='time' id='time' required value={game.time} onChange={this.handleChange} />
-            </div>*/}
           </div>
           <div className="row">
             <div className="form-group col-md-6">
