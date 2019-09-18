@@ -97,15 +97,16 @@ class GameDetail extends Component {
     let game = this.state;
     let needsConfirmation = false;
     let confirmText = '';
+    game.duration = +game.duration;
     game.host = user.fullName || user.username;
     game.hostID = user.username;
     game.currentPlayer = {name: user.fullName, type: user.profile && user.profile.playerType}
     if (!this.checkForValidDates()) {
-      const hour = game.endDate.get('hour')
-      const minute = game.endDate.get('minute')
-        game.endDate = game.startDate.clone();
-        game.endDate.set('hour', hour).set('minute', minute);
-        console.log(game.endDate.format('MM/DD/YYYY hh:mmA'))
+      // const hour = game.endDate.get('hour')
+      // const minute = game.endDate.get('minute')
+      //   game.endDate = game.startDate.clone();
+      //   game.endDate.set('hour', hour).set('minute', minute);
+      //   console.log(game.endDate.format('MM/DD/YYYY hh:mmA'))
     }
     // game.date = moment(game.date + ' ' + game.time);
     // if (moment(game.date).diff(moment()) < 0) {
@@ -245,12 +246,23 @@ class GameDetail extends Component {
                 />
             </div>
             <div className='form-group col-md-3'>
-              <label htmlFor='endTime'>End Time: </label>
+              <label htmlFor='duration'>Duration: </label>
+              <select className='form-control' name='duration' id='duration' required value={game.duration} onChange={this.handleChange} >
+                <option value={0.5}>30 Minutes</option>
+                <option value={1}>1 Hour</option>
+                <option value={1.5}>1.5 Hours</option>
+                <option value={2}>2 Hours</option>
+                <option value={2.5}>2.5 Hours</option>
+                <option value={3}>3 Hours</option>
+                <option value={3.5}>3.5 Hours</option>
+                <option value={4}>4 Hours</option>
+              </select>
+              {/* <label htmlFor='endTime'>End Time: </label>
                 <Datetime 
                   value={game.endDate} 
                   onChange={(e) => this.handleChange(e,'endDate')} 
                   dateFormat={false}
-                />            
+                />             */}
             </div>
             <div className='form-group col-md-6'>
               <label htmlFor='location'>Location: </label>

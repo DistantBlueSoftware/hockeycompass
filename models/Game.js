@@ -5,6 +5,7 @@ const GameSchema = new mongoose.Schema({
   date: {type: Date},
   startDate: {type: Date},
   endDate: {type: Date},
+  duration: {type: Number},
   dateCreated: {type: Date, default: new Date()},
   type: {type: String},
   invited: [String],

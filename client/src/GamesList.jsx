@@ -158,7 +158,7 @@ class GamesList extends Component {
                     <td data-toggle='modal' data-target='#roster-modal'>{`${moment(game.startDate).format('MM/DD/YYYY hh:mmA')}`}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.name}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.location}</td>
-                    <td data-toggle='modal' data-target='#roster-modal'>{`${moment(game.endDate).diff(moment(game.startDate), 'hours')}h`}</td>
+                    <td data-toggle='modal' data-target='#roster-modal'>{game.duration ? `${game.duration}h` : `${moment(game.endDate).diff(moment(game.startDate), 'hours')}h`}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.host}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.players.length}</td>
                     <td data-toggle='modal' data-target='#roster-modal'>{game.maxPlayers - game.players.length || 0}</td>
