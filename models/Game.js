@@ -20,6 +20,7 @@ const GameSchema = new mongoose.Schema({
   active: {type: Boolean, default: true},
   payoutDistributed: {type: Boolean, default: false},
   privateNotifyAll: {type: Boolean, default: false},
+  payAtDoor: {type: Boolean, default: false},
   comment: {type: String},
   waitlist: [{username: {type: String}, name: {type: String}, type: {type: String}}],
 });
