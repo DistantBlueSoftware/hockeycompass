@@ -88,9 +88,13 @@ const PaymentModal = ({
             {showPaymentButton && (
               <PaypalCheckout
                 costWithFee={costWithFee}
-                handleAddPlayer={() =>
-                  handleAddPlayer({ joiningAsPlayer: isGoalie && !goalieSlots })
-                }
+                handleAddPlayer={args => {
+                  console.log(args);
+                  handleAddPlayer({
+                    ...args,
+                    joiningAsPlayer: isGoalie && !goalieSlots
+                  });
+                }}
               />
             )}
             {showJoinButton && (

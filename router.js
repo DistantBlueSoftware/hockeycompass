@@ -262,14 +262,36 @@ router.put("/games/:id/add", (req, res, next) => {
   Game.findById(req.params.id)
     .exec()
     .then(game => {
+      // logic to boot an unpaid for a paid player
+      if (game.players.length === game.maxPlayers) {
+        if (paid) {
+          const playerToBoot = game.players
+            .filter(p => !p.paid)
+            .sort((a, b) => a.joinDate - b.joinDate)[0];
+          const playerIndex = game.players.findIndex(
+            p => p.joinDate === playerToBoot.joinDate
+          );
+          game.players = [
+            ...game.players.slice(0, playerIndex),
+            ...game.players.slice(playerIndex + 1)
+          ];
+          //TODO: email to tell booted player they got booted!
+        }
+      }
       game.players.push({ username, name: fullName, type: profile.playerType });
       if (game.waitlist) {
         const idx = game.waitlist.map(p => p.username).indexOf(username);
         if (~idx)
           game.waitlist = game.waitlist
             .slice(0, idx)
-            .concat(game.waitlist.slide(idx + 1));
+            .concat(game.waitlist.slice(idx + 1));
       }
+      game.waitlist.push({
+        username: playerToBoot.username,
+        name: playerToBoot.fullName,
+        type: playerToBoot.type,
+        booted: true
+      });
       game
         .save()
         .then(game => {

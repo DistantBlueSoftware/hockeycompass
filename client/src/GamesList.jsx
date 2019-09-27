@@ -94,6 +94,7 @@ class GamesList extends Component {
         currentUser.paymentID = args.paymentID;
         currentUser.paid = true;
       }
+      if (args.paid) currentUser.paid = true;
     }
 
     this.props.addPlayer(this.state.modalData, currentUser, () => {

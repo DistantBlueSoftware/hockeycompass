@@ -21,7 +21,7 @@ const GameSchema = new mongoose.Schema({
       name: { type: String },
       type: { type: String },
       paid: { type: Boolean, default: false },
-      joinDate: { type: date, default: new Date() }
+      joinDate: { type: Date, default: new Date() }
     }
   ],
   costPerPlayer: { type: Number, default: 0 },
@@ -34,7 +34,9 @@ const GameSchema = new mongoose.Schema({
     {
       username: { type: String },
       name: { type: String },
-      type: { type: String }
+      type: { type: String },
+      joinDate: { type: Date, default: new Date() },
+      booted: { type: Boolean }
     }
   ]
 });
