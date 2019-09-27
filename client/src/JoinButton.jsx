@@ -10,7 +10,7 @@ class JoinButton extends Component {
     super(props);
     this.state = {
       hovering: false,
-      shouldDoAction: moment(props.game.date).diff(moment(), 'hours') > LOCKOUT_THRESHOLD
+      shouldDoAction: moment(props.game.startDate).diff(moment(), 'hours') > LOCKOUT_THRESHOLD
     }
   }
   showDropButton = () => {
@@ -69,7 +69,7 @@ class JoinButton extends Component {
     const isOnWaitlist = game.waitlist.find(p => p.username === user.username)
     let button;
 
-    if (moment(game.date) < moment()) {
+    if (moment(game.startDate).isBefore(moment())) {
       button = <button className='btn btn-disabled' style={{...buttonStyle, width: '74px'}}>Past</button>
     }
     else if (user.authenticated) {
