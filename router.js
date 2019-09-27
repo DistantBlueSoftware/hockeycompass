@@ -275,10 +275,21 @@ router.put("/games/:id/add", (req, res, next) => {
             ...game.players.slice(0, playerIndex),
             ...game.players.slice(playerIndex + 1)
           ];
+          game.waitlist.push({
+            username: playerToBoot.username,
+            name: playerToBoot.fullName,
+            type: playerToBoot.type,
+            booted: true
+          });
           //TODO: email to tell booted player they got booted!
         }
       }
-      game.players.push({ username, name: fullName, type: profile.playerType });
+      game.players.push({
+        username,
+        name: fullName,
+        type: profile.playerType,
+        paid
+      });
       if (game.waitlist) {
         const idx = game.waitlist.map(p => p.username).indexOf(username);
         if (~idx)
@@ -286,12 +297,6 @@ router.put("/games/:id/add", (req, res, next) => {
             .slice(0, idx)
             .concat(game.waitlist.slice(idx + 1));
       }
-      game.waitlist.push({
-        username: playerToBoot.username,
-        name: playerToBoot.fullName,
-        type: playerToBoot.type,
-        booted: true
-      });
       game
         .save()
         .then(game => {
