@@ -236,7 +236,6 @@ class GameDetail extends Component {
   render() {
     const { user, venues, match } = this.props;
     const game = this.state;
-    console.log(game);
     const { infoMessage, errorMessage, messageColor } = this.state;
     const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
@@ -433,6 +432,29 @@ class GameDetail extends Component {
                   </option>
                 ))}
               </select>
+            </div>
+            <div className="form-group col-md-4">
+              <div className="form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  name="payAtDoor"
+                  id="payAtDoor"
+                  checked={game.payAtDoor}
+                  onChange={this.handleChange}
+                />
+                <label
+                  className="form-check-label"
+                  htmlFor="payAtDoor"
+                >
+                  Allow Pay at the Door{" "}
+                  <i
+                    className="fas fa-info-circle"
+                    style={{ color: "#c0c0c0", marginLeft: "10px" }}
+                    data-tip="Allow players to pay when they show up."
+                  />
+                </label>
+              </div>
             </div>
             {this.state.type === "private" && (
               <>
