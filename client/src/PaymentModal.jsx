@@ -14,6 +14,10 @@ const PaymentModal = ({
   handleAddPlayer,
   setLoadingState
 }) => {
+  const unpaidSlots =
+    game.payAtDoor &&
+    (game.players.length === game.maxPlayers &&
+      game.players.filter(p => !p.paid).length);
   const isGoalie = user.profile && user.profile.playerType === "goalie";
   const goalieSlots = game.players
     ? game.goalieCount - game.players.filter(p => p.type === "goalie").length
@@ -22,7 +26,8 @@ const PaymentModal = ({
   const showJoinButton =
     game.hostID === user.username ||
     (isGoalie && goalieSlots) ||
-    game.payAtDoor;
+    (game.payAtDoor && game.players.length !== game.maxPlayers) ||
+    !unpaidSlots;
   const costWithFee = isGoalie && goalieSlots ? 0 : game.costPerPlayer + HCFEE;
   return (
     <div className="modal fade" id="payment-modal" tabIndex="-1" role="dialog">
@@ -61,6 +66,13 @@ const PaymentModal = ({
                   >
                     Cancellation Policy
                   </div>
+                  {unpaidSlots && (
+                    <p>
+                      This game's full, but there are {unpaidSlots} people who
+                      haven't paid yet; if you pay now, you can still secure a
+                      spot!
+                    </p>
+                  )}
                 </>
               )}
             {isGoalie &&
