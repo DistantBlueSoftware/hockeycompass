@@ -90,7 +90,10 @@ class GamesList extends Component {
     let currentUser = JSON.parse(JSON.stringify(this.props.user));
     if (args) {
       if (args.joiningAsPlayer) currentUser.profile.playerType = "player";
-      if (args.paymentID) currentUser.paymentID = args.paymentID;
+      if (args.paymentID) {
+        currentUser.paymentID = args.paymentID;
+        currentUser.paid = true;
+      }
     }
 
     this.props.addPlayer(this.state.modalData, currentUser, () => {
@@ -113,7 +116,7 @@ class GamesList extends Component {
     const newGameLink =
       user && user.authenticated ? "/newgame" : "/login?route=newgame";
     const activeGames = games.games.filter(
-      game => game.active && moment(game.startDate) > moment()
+      game => game.active && moment(game.startDate).isAfter(moment())
     );
     if (pageLoading) {
       return (

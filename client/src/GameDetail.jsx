@@ -108,7 +108,8 @@ class GameDetail extends Component {
     game.hostID = user.username;
     game.currentPlayer = {
       name: user.fullName,
-      type: user.profile && user.profile.playerType
+      type: user.profile && user.profile.playerType,
+      username: user.username
     };
     // if (!this.checkForValidDates()) {
     // const hour = game.endDate.get('hour')
