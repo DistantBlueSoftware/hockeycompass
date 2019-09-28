@@ -6,6 +6,11 @@ const StyledPrintPage = styled.div`
   display: none;
 `;
 
+const PrintTable = styled.table`
+  width: 100%;
+  text-align: center;
+`;
+
 const doPrint = () => {
   var content = document.getElementById("printable");
   var pri = document.getElementById("ifmcontentstoprint").contentWindow;
@@ -18,11 +23,22 @@ const doPrint = () => {
 };
 
 const PrintPage = ({ data }) => {
-  useEffect(() => data.body && data.body.length && doPrint(), [data]);
+  useEffect(
+    () => {
+      if (data.body && data.body.length) doPrint();
+    },
+    [data]
+  );
   return (
     <StyledPrintPage id="printable">
-      <table>
-        {data.headers && data.headers.map(h => <th>{h}</th>)}
+      <PrintTable>
+        {data.headers && (
+          <tr>
+            {data.headers.map(h => (
+              <th>{h}</th>
+            ))}
+          </tr>
+        )}
         <tbody>
           {data.body &&
             data.body.map(p => (
@@ -33,7 +49,7 @@ const PrintPage = ({ data }) => {
               </tr>
             ))}
         </tbody>
-      </table>
+      </PrintTable>
       <iframe
         id="ifmcontentstoprint"
         style={{ height: "0px", width: "0px", position: "absolute" }}
