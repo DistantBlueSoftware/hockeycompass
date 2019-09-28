@@ -444,10 +444,7 @@ class GameDetail extends Component {
                   checked={game.payAtDoor}
                   onChange={this.handleChange}
                 />
-                <label
-                  className="form-check-label"
-                  htmlFor="payAtDoor"
-                >
+                <label className="form-check-label" htmlFor="payAtDoor">
                   Allow Pay at the Door{" "}
                   <i
                     className="fas fa-info-circle"
@@ -457,49 +454,69 @@ class GameDetail extends Component {
                 </label>
               </div>
             </div>
-            {this.state.type === "private" && (
-              <>
-                <div className="form-group col-md-4">
-                  <div className="form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      name="privateNotifyAll"
-                      id="privateNotifyAll"
-                      checked={game.privateNotifyAll}
-                      onChange={this.handleChange}
-                    />
-                    <label
-                      className="form-check-label"
-                      htmlFor="privateNotifyAll"
-                    >
-                      Convert to Public if Not Full{" "}
-                      <i
-                        className="fas fa-info-circle"
-                        style={{ color: "#c0c0c0", marginLeft: "10px" }}
-                        data-tip="If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster."
-                      />
-                    </label>
-                  </div>
-                </div>
-                <div className="form-group col-md-12">
-                  <label htmlFor="emailList">
-                    Paste your friends' emails here. Don't worry if there are
-                    duplicates or extra stuff in there; we'll figure it out for
-                    you.
-                  </label>
-                  <textarea
-                    rows={6}
-                    className="form-control"
-                    name="emailList"
-                    id="emailList"
+            {this.state.type === "public" && (
+              <div className="form-group col-md-4">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    name="inviteFriends"
+                    id="inviteFriends"
+                    checked={game.inviteFriends}
                     onChange={this.handleChange}
-                    defaultValue={this.props.user.profile.emailList}
                   />
+                  <label className="form-check-label" htmlFor="inviteFriends">
+                    Invite Friends?{" "}
+                  </label>
                 </div>
-                <ReactTooltip html={true} />
-              </>
+              </div>
             )}
+            {this.state.type === "private" && (
+              <div className="form-group col-md-4">
+                <div className="form-check">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    name="privateNotifyAll"
+                    id="privateNotifyAll"
+                    checked={game.privateNotifyAll}
+                    onChange={this.handleChange}
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="privateNotifyAll"
+                  >
+                    Convert to Public if Not Full{" "}
+                    <i
+                      className="fas fa-info-circle"
+                      style={{ color: "#c0c0c0", marginLeft: "10px" }}
+                      data-tip="If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster."
+                    />
+                  </label>
+                </div>
+              </div>
+            )}
+            {this.state.type === "private" ||
+              (this.state.inviteFriends && (
+                <>
+                  <div className="form-group col-md-12">
+                    <label htmlFor="emailList">
+                      Paste your friends' emails here. Don't worry if there are
+                      duplicates or extra stuff in there; we'll figure it out
+                      for you.
+                    </label>
+                    <textarea
+                      rows={6}
+                      className="form-control"
+                      name="emailList"
+                      id="emailList"
+                      onChange={this.handleChange}
+                      defaultValue={this.props.user.profile.emailList}
+                    />
+                  </div>
+                  <ReactTooltip html={true} />
+                </>
+              ))}
             <div className="form-group col-md-12">
               <label htmlFor="comment">Organizer Note: </label>
               <textarea
