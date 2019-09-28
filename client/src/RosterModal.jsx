@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { connect } from "react-redux";
 import * as actions from "./actions";
 import { RosterRink } from "./RosterRink";
+import PrintPage from "./PrintPage";
 
 const mapStateToProps = state => {
   return { ...state };
@@ -10,7 +11,9 @@ const mapStateToProps = state => {
 class RosterModal extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      printableRoster: {}
+    };
   }
 
   handleChange = e => {
@@ -31,6 +34,17 @@ class RosterModal extends Component {
         console.log("Message Sent");
       }
     );
+  };
+
+  printRoster = () => {
+    const headers = ["Username", "Name", "Paid"];
+    const body = this.props.game.players.sort((a, b) => a.paid).map(p => {
+      const { username, name, paid } = p;
+      return { username, name, paid };
+    });
+    this.setState({
+      printableRoster: { headers, body }
+    });
   };
 
   render() {
@@ -60,7 +74,12 @@ class RosterModal extends Component {
               {user.authenticated &&
                 isGameOwner && (
                   <>
-                    {/* <button className="btn btn-success">Print Roster</button> */}
+                    <button
+                      className="btn btn-success"
+                      onClick={this.printRoster}
+                    >
+                      Print Roster
+                    </button>
                     <button
                       className="btn btn-primary"
                       data-dismiss="modal"
@@ -74,6 +93,7 @@ class RosterModal extends Component {
                 Close
               </button>
             </div>
+            <PrintPage data={this.state.printableRoster} />
           </div>
         </div>
       </div>

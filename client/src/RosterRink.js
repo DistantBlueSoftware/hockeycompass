@@ -31,7 +31,7 @@ const HostSymbol = styled.i`
   background: blue;
   color: white;
   position: absolute;
-  left: -20px;
+  left: -15px;
 `;
 
 const PaidSymbol = styled.i`
@@ -40,7 +40,7 @@ const PaidSymbol = styled.i`
   background: green;
   color: white;
   position: absolute;
-  left: -20px;
+  left: -15px;
 `;
 
 export const RosterRink = ({ game, isGameOwner }) => {

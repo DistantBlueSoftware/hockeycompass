@@ -12,7 +12,7 @@ const userSchema = new Schema({
   referralType: String,
   password: String,
   profile: {
-    payoutsEmail: {type: String, unique: true, lowercase: true, match: [/\S+@\S+\.\S+/, 'is invalid']},
+    payoutsEmail: {type: String, default: this.email, unique: true, lowercase: true, match: [/\S+@\S+\.\S+/, 'is invalid']},
     emailList: [String],
     notify: {type: Boolean, default: true},
     playerType: String,
