@@ -19,7 +19,6 @@ const doPrint = () => {
   pri.document.close();
   pri.focus();
   pri.print();
-  window.print();
 };
 
 const PrintPage = ({ data }) => {
@@ -52,6 +51,7 @@ const PrintPage = ({ data }) => {
       </PrintTable>
       <iframe
         id="ifmcontentstoprint"
+        title="ifmcontentstoprint"
         style={{ height: "0px", width: "0px", position: "absolute" }}
       />
     </StyledPrintPage>
