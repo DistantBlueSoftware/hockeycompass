@@ -241,18 +241,19 @@ class GameDetail extends Component {
     const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
     const buttonText = isNew ? "Hockey Time!" : "Update Game";
-    const costMessage = game.costPerPlayer ? (
-      <div>
-        cost per player will be{" "}
-        <span style={{ fontSize: "16px", color: "green" }}>
-          ${+game.costPerPlayer + HCFEE}
-        </span>{" "}
-        <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; ${HCFEE}{" "}
-        HC fee
-      </div>
-    ) : (
-      ""
-    );
+    const costMessage = ''
+    // const costMessage = game.costPerPlayer ? (
+    //   <div>
+    //     cost per player will be{" "}
+    //     <span style={{ fontSize: "16px", color: "green" }}>
+    //       ${+game.costPerPlayer + HCFEE}
+    //     </span>{" "}
+    //     <br /> &emsp; ${game.costPerPlayer} game cost + <br /> &emsp; ${HCFEE}{" "}
+    //     HC fee
+    //   </div>
+    // ) : (
+    //   ""
+    // );
     const arenaNames =
       venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
     return (
