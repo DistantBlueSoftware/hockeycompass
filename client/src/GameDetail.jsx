@@ -1,21 +1,45 @@
-import React, { Component } from "react";
-import { connect } from "react-redux";
-import moment from "moment";
-import utils from "@distantbluesoftware/dbsutil";
-import * as actions from "./actions";
-import requireAuth from "./requireAuth";
-import { emailRegexTest, skillLevels } from "./lib";
-import Datetime from "react-datetime";
-import styled from "styled-components";
-import { HCFEE } from "./config";
-import ReactTooltip from "react-tooltip";
+import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { Tab, Tabs, TabList, TabPanel } from 'react-tabs';
+import moment from 'moment';
+import utils from '@distantbluesoftware/dbsutil';
+import * as actions from './actions';
+import requireAuth from './requireAuth';
+import { emailRegexTest, skillLevels } from './lib';
+import Datetime from 'react-datetime';
+import styled from 'styled-components';
+import { HCFEE } from './config';
+import ReactTooltip from 'react-tooltip';
+import { Colors } from './framework';
 
-import "./react-datetime.css";
-import "./GameDetail.css";
+import './react-datetime.css';
+import './GameDetail.css';
 
 const mapStateToProps = state => {
   return { ...state };
 };
+
+const requiredFields = {
+  startDate: 'Start Date',
+  location: 'Location',
+  name: 'Game Name',
+  maxPlayers: 'Player Cap',
+  goalieCount: 'Goalie Cap',
+  skillLevel: 'Skill Level',
+  costPerPlayer: 'Cost Per Player',
+  duration: 'Duration',
+};
+
+const CheckboxContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const FlexRow = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+`;
 
 const Icon = styled.i`
   position: absolute;
@@ -24,47 +48,82 @@ const Icon = styled.i`
   color: rgba(25, 81, 139, 0.7);
 `;
 
+const StyledTabs = styled(Tabs)`
+  min-height: 350px;
+  position: relative;
+  padding-bottom: 50px;
+`;
+
+const StyledTabList = styled(TabList)`
+  list-style-type: none;
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  margin-left: -64px;
+`;
+
+const StyledTab = styled(Tab)`
+  cursor: pointer;
+  font-size: 20px;
+  padding: 0 10px;
+  color: ${Colors.blue};
+  &.react-tabs__tab--selected {
+    font-size: 24px;
+    color: ${Colors.green};
+  }
+`;
+
 class GameDetail extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      startDate: moment().add(1, "days"),
+      startDate: moment().add(1, 'days'),
       endDate: moment()
-        .add(1, "days")
-        .add(2, "hours"),
-      type: "",
+        .add(1, 'days')
+        .add(2, 'hours'),
+      type: '',
+      duration: '0.5',
       emailList: this.props.user.profile && this.props.user.profile.emailList,
-      infoMessage: "",
-      messageColor: "green",
-      errorMessage: ""
+      infoMessage: '',
+      messageColor: 'green',
+      errorMessage: '',
+      currentTab: 0,
     };
   }
 
   handleChange = (e, field) => {
+    this.setState({
+      errorMessage: '',
+    });
     if (moment.isMoment(e)) {
-      if (field === "startDate" && !this.state.endDateHasBeenChanged) {
-        const endDate = e.clone().add(2, "hours");
+      if (field === 'startDate' && !this.state.endDateHasBeenChanged) {
+        const endDate = e.clone().add(2, 'hours');
         this.setState({
           [field]: e,
-          endDate
+          endDate,
         });
       } else
         this.setState({
           [field]: e,
-          endDateHasBeenChanged: true
+          endDateHasBeenChanged: true,
         });
     } else if (!e.target) {
       this.setState({
         startDate: moment(e),
-        endDate: moment(e).add(2, "hours")
+        endDate: moment(e).add(2, 'hours'),
       });
     } else {
       const target = e.target;
-      const value = target.type === "checkbox" ? target.checked : target.value;
+      const value = target.type === 'checkbox' ? target.checked : target.value;
       const name = target.name;
       this.setState({
-        infoMessage: "",
-        [name]: value
+        infoMessage: '',
+        [name]: value,
       });
     }
   };
@@ -79,7 +138,7 @@ class GameDetail extends Component {
     }
     if (!moment(game.date).isValid()) {
       this.setState({
-        errorMessage: "Error: You must specify a date"
+        errorMessage: 'Error: You must specify a date',
       });
       return;
     }
@@ -87,13 +146,13 @@ class GameDetail extends Component {
       this.setState({
         errorMessage: `There are already ${
           game.players.length
-        } players in the game!`
+        } players in the game!`,
       });
       return;
     }
     this.checkForValidDates();
     this.props.updateGame(game, () => {
-      this.props.history.push("/games");
+      this.props.history.push('/games');
     });
   };
 
@@ -101,15 +160,28 @@ class GameDetail extends Component {
     e.preventDefault();
     const { user } = this.props;
     let game = this.state;
+    const validationErrors = [];
+    for (const [k, v] of Object.entries(requiredFields)) {
+      if (!game[k]) validationErrors.push(v);
+    }
+    if (validationErrors.length) {
+      this.setState({
+        errorMessage: `You haven't filled out the whole form! Missing fields:${validationErrors
+          .map(err => `❗️${err}`)
+          .join('\n')} `,
+      });
+      return;
+    }
     let needsConfirmation = false;
-    let confirmText = "";
+    let confirmText = '';
+    game.currentTab = null;
     game.duration = +game.duration;
     game.host = user.fullName || user.username;
     game.hostID = user.username;
     game.currentPlayer = {
       name: user.fullName,
       type: user.profile && user.profile.playerType,
-      username: user.username
+      username: user.username,
     };
     // if (!this.checkForValidDates()) {
     // const hour = game.endDate.get('hour')
@@ -121,34 +193,34 @@ class GameDetail extends Component {
     if (game.costPerPlayer > 30) {
       needsConfirmation = true;
       confirmText =
-        "Cost per player is higher than average ($" +
+        'Cost per player is higher than average ($' +
         game.costPerPlayer +
-        "). Continue?";
+        '). Continue?';
     }
     if (game.maxPlayers > 30) {
       needsConfirmation = true;
       confirmText =
-        "Maximum capacity of " +
+        'Maximum capacity of ' +
         game.maxPlayers +
-        " players is higher than average. Continue?";
+        ' players is higher than average. Continue?';
     }
-    if (game.type === "private") {
+    if (game.type === 'private') {
       let currentList = [];
       let emails,
         invalidEmails = [];
-      if (typeof this.state.emailList === "string")
+      if (typeof this.state.emailList === 'string')
         emails = this.state.emailList.match(emailRegexTest);
       else emails = this.state.emailList;
       emails.filter(email => email.length > 0).forEach(email => {
-        if (!utils.validateEmail(email) || email === "") {
+        if (!utils.validateEmail(email) || email === '') {
           invalidEmails.push(email);
         }
       });
       if (invalidEmails.length) {
         this.setState({
           errorMessage: `The following emails are invalid: ${invalidEmails.join(
-            "\n "
-          )} \nPlease correct and retry.`
+            '\n '
+          )} \nPlease correct and retry.`,
         });
         return;
       } else {
@@ -162,36 +234,37 @@ class GameDetail extends Component {
         //save email list to user profile
         this.props.saveProfile(user.username, { emailList: emails }, () => {
           this.setState({
-            errorMessage: "",
-            emailList: user.profile.emailList
+            errorMessage: '',
+            emailList: user.profile.emailList,
           });
         });
       }
     }
     // store game settings locally for next time
-    localStorage.setItem("gameSettings", JSON.stringify(game));
-    localStorage.setItem("returningHost", true);
+    localStorage.setItem('gameSettings', JSON.stringify(game));
+    localStorage.setItem('returningHost', true);
     //create the game
-    if (needsConfirmation && window.confirm(confirmText)) {
-      this.props.newGame(game, () => {
-        this.props.history.push("/games");
-      });
+    if (needsConfirmation) {
+      window.confirm(confirmText) &&
+        this.props.newGame(game, () => {
+          this.props.history.push('/games');
+        });
     } else {
       this.props.newGame(game, () => {
-        this.props.history.push("/games");
+        this.props.history.push('/games');
       });
     }
   };
 
   showSkillLevels = () => {
-    console.log("hi");
+    console.log('hi');
   };
 
   cancelGame = e => {
     e.preventDefault();
-    if (window.confirm("Are you sure you want to cancel this game?")) {
+    if (window.confirm('Are you sure you want to cancel this game?')) {
       this.setState({
-        active: false
+        active: false,
       });
       this.handleGameUpdate(e, { active: false });
     }
@@ -202,33 +275,38 @@ class GameDetail extends Component {
     return startDate.isBefore(endDate);
   };
 
+  nextTab = e => {
+    e.preventDefault();
+    this.setState({ currentTab: this.state.currentTab + 1 });
+  };
+
   componentDidMount() {
-    this.props.routeChange("/newgame");
+    this.props.routeChange('/newgame');
     const { venues, match, game } = this.props;
     if (venues && venues.all.length === 0) this.props.listVenues();
     if (!game && match && match.params.id) {
       this.props.getGameDetails(match.params.id, () => {
         this.setState({
           ...this.props.games.current,
-          date: moment(this.props.games.current.date)
+          date: moment(this.props.games.current.date),
         });
       });
-    } else if (!localStorage.getItem("returningHost")) {
+    } else if (!localStorage.getItem('returningHost')) {
       this.setState({
         infoMessage:
           "We will use the email address you have on file for payouts. If this is not a valid PayPal email, you won't be able to get paid! \n Check it in your profile.",
-        messageType: "orange"
+        messageType: 'orange',
       });
-    } else if (localStorage.getItem("gameSettings")) {
+    } else if (localStorage.getItem('gameSettings')) {
       const storedGameSettings = JSON.parse(
-        localStorage.getItem("gameSettings")
+        localStorage.getItem('gameSettings')
       );
       this.setState({
         ...storedGameSettings,
-        startDate: moment(storedGameSettings.startDate).add(1, "days"),
-        endDate: moment(storedGameSettings.endDate).add(1, "days"),
+        startDate: moment(storedGameSettings.startDate).add(1, 'days'),
+        endDate: moment(storedGameSettings.endDate).add(1, 'days'),
         infoMessage:
-          "We pre-filled this form using data from your last game. Change what you need, then it's Hockey Time!"
+          "We pre-filled this form using data from your last game. Change what you need, then it's Hockey Time!",
       });
     }
     if (match.params.venue) this.setState({ location: match.params.venue });
@@ -237,11 +315,11 @@ class GameDetail extends Component {
   render() {
     const { user, venues, match } = this.props;
     const game = this.state;
-    const { infoMessage, errorMessage, messageColor } = this.state;
+    const { infoMessage, errorMessage, messageColor, currentTab } = this.state;
     const messageClass = `message ${messageColor}`;
     const isNew = match && !match.params.id;
-    const buttonText = isNew ? "Hockey Time!" : "Update Game";
-    const costMessage = ''
+    const buttonText = isNew ? 'Hockey Time!' : 'Update Game';
+    const costMessage = '';
     // const costMessage = game.costPerPlayer ? (
     //   <div>
     //     cost per player will be{" "}
@@ -257,283 +335,323 @@ class GameDetail extends Component {
     const arenaNames =
       venues.all && venues.all.map((v, i) => <option key={i}>{v.name}</option>);
     return (
-      <div className="game-detail container-fluid">
-        <h1>{isNew ? "My New Game" : this.state.name}</h1>
-        {infoMessage && <div className={messageClass}>{infoMessage}</div>}
-        {errorMessage && <div className="message red">{errorMessage}</div>}
+      <div className="container-fluid">
+        <FlexRow>
+          {/* <h1>{isNew ? 'My New Game' : this.state.name}</h1> */}
+          {infoMessage && <div className={messageClass}>{infoMessage}</div>}
+          {errorMessage && <div className="message red">{errorMessage}</div>}
+        </FlexRow>
         <form
+          className="game-detail"
           onSubmit={isNew ? this.handleNewGameSubmit : this.handleGameUpdate}
         >
-          <div className="row">
-            <div className="form-group col-md-6">
-              <label htmlFor="date">Date:</label>
-              <Datetime
-                value={game.startDate}
-                onChange={e => this.handleChange(e, "startDate")}
-                timeFormat={false}
-              />
-            </div>
-            <div className="form-group col-md-3">
-              <label htmlFor="startTime">Start Time: </label>
-              <Datetime
-                value={game.startDate}
-                onChange={e => this.handleChange(e, "startDate")}
-                dateFormat={false}
-              />
-            </div>
-            <div className="form-group col-md-3">
-              <label htmlFor="duration">Duration: </label>
-              <select
-                className="form-control"
-                name="duration"
-                id="duration"
-                required
-                value={game.duration}
-                onChange={this.handleChange}
-              >
-                <option value={0.5}>30 Minutes</option>
-                <option value={1}>1 Hour</option>
-                <option value={1.5}>1.5 Hours</option>
-                <option value={2}>2 Hours</option>
-                <option value={2.5}>2.5 Hours</option>
-                <option value={3}>3 Hours</option>
-                <option value={3.5}>3.5 Hours</option>
-                <option value={4}>4 Hours</option>
-              </select>
-              {/* <label htmlFor='endTime'>End Time: </label>
-                <Datetime 
-                  value={game.endDate} 
-                  onChange={(e) => this.handleChange(e,'endDate')} 
-                  dateFormat={false}
-                />             */}
-            </div>
-            <div className="form-group col-md-6">
-              <label htmlFor="location">Location: </label>
-              <select
-                className="form-control"
-                name="location"
-                id="location"
-                required
-                value={game.location}
-                onChange={this.handleChange}
-              >
-                <option />
-                {arenaNames}
-              </select>
-            </div>
-          </div>
-          <div className="row">
-            <div className="form-group col-md-6">
-              <label htmlFor="name">Game Name: </label>
-              <input
-                className="form-control"
-                type="text"
-                name="name"
-                id="name"
-                required
-                value={game.name}
-                onChange={this.handleChange}
-              />
-            </div>
-            <div className="form-group col-md-3">
-              <label htmlFor="maxPlayers">Player Cap: </label>
-              <input
-                className="form-control"
-                type="number"
-                name="maxPlayers"
-                id="maxPlayers"
-                min={1}
-                value={game.maxPlayers}
-                onChange={this.handleChange}
-                required
-              />
-            </div>
-            <div className="form-group col-md-3">
-              <label htmlFor="maxPlayers">Goalie Cap: </label>
-              <input
-                className="form-control"
-                type="number"
-                name="goalieCount"
-                id="goalieCount"
-                min={0}
-                value={game.goalieCount}
-                onChange={this.handleChange}
-                required
-              />
-            </div>
-          </div>
-          <div className="row">
-            <div className="form-group col-md-6">
-              <label htmlFor="costPerPlayer">Cost Per Player: </label>
-              <div>
-                <Icon className="fas fa-dollar-sign" />
-                <input
-                  style={{ maxWidth: "100px", paddingLeft: "20px" }}
-                  className="form-control"
-                  type="number"
-                  name="costPerPlayer"
-                  id="costPerPlayer"
-                  min={0}
-                  value={game.costPerPlayer}
-                  onChange={this.handleChange}
-                  required
-                />
-              </div>
-              {costMessage}
-            </div>
-            <div className="form-group col-md-6">
-              <label htmlFor="type">
-                Type:{" "}
-                <i
-                  className="fas fa-info-circle"
-                  style={{ color: "#c0c0c0", marginLeft: "10px" }}
-                  data-tip="<h5 style=&quot;text-align:center;&quot;>What&apos;s the difference between public and private?</h5><p>Public games can be viewed and joined by the entire HC community; private games are invite-only.</p>"
-                />
-              </label>
-              <select
-                className="form-control"
-                name="type"
-                id="type"
-                value={game.type}
-                onChange={this.handleChange}
-                required
-              >
-                <option value="" />
-                <option value="public">Public</option>
-                <option value="private">Private</option>
-              </select>
-            </div>
-          </div>
-          <div className="row">
-            <div className="form-group col-md-4">
-              <label htmlFor="type">
-                Skill Level:{" "}
-                <i
-                  className="fas fa-info-circle"
-                  style={{ color: "#c0c0c0", marginLeft: "10px" }}
-                  data-tip="Hover over each option to see what it means."
-                  onClick={this.showSkillLevels}
-                />
-              </label>
-              <select
-                className="form-control"
-                name="skillLevel"
-                id="skillLevel"
-                value={game.skillLevel}
-                onChange={this.handleChange}
-                required
-              >
-                <option value="" />
-                {skillLevels.map((l, i) => (
-                  <option
-                    value={i + 1}
-                    title={l.description}
-                    data-tip={l.description}
-                  >
-                    {l.level}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group col-md-4">
-              <div className="form-check">
-                <input
-                  type="checkbox"
-                  className="form-check-input"
-                  name="payAtDoor"
-                  id="payAtDoor"
-                  checked={game.payAtDoor}
-                  onChange={this.handleChange}
-                />
-                <label className="form-check-label" htmlFor="payAtDoor">
-                  Allow Pay at the Door{" "}
-                  <i
-                    className="fas fa-info-circle"
-                    style={{ color: "#c0c0c0", marginLeft: "10px" }}
-                    data-tip="Allow players to pay when they show up."
+          <StyledTabs
+            selectedIndex={this.state.currentTab}
+            onSelect={currentTab => this.setState({ currentTab })}
+          >
+            <TabPanel>
+              <div className="row">
+                <div className="form-group col-md-6">
+                  <label htmlFor="date">Date:</label>
+                  <Datetime
+                    value={game.startDate}
+                    onChange={e => this.handleChange(e, 'startDate')}
+                    timeFormat={false}
                   />
-                </label>
-              </div>
-            </div>
-            {this.state.type === "public" && (
-              <div className="form-group col-md-4">
-                <div className="form-check">
-                  <input
-                    type="checkbox"
-                    className="form-check-input"
-                    name="inviteFriends"
-                    id="inviteFriends"
-                    checked={game.inviteFriends}
+                </div>
+                <div className="form-group col-md-3">
+                  <label htmlFor="startTime">Start Time: </label>
+                  <Datetime
+                    value={game.startDate}
+                    onChange={e => this.handleChange(e, 'startDate')}
+                    dateFormat={false}
+                  />
+                </div>
+                <div className="form-group col-md-3">
+                  <label htmlFor="duration">Duration: </label>
+                  <select
+                    className="form-control"
+                    name="duration"
+                    id="duration"
+                    required
+                    value={game.duration}
                     onChange={this.handleChange}
-                  />
-                  <label className="form-check-label" htmlFor="inviteFriends">
-                    Invite Friends?{" "}
-                  </label>
+                  >
+                    <option value={0.5}>30 Minutes</option>
+                    <option value={1}>1 Hour</option>
+                    <option value={1.5}>1.5 Hours</option>
+                    <option value={2}>2 Hours</option>
+                    <option value={2.5}>2.5 Hours</option>
+                    <option value={3}>3 Hours</option>
+                    <option value={3.5}>3.5 Hours</option>
+                    <option value={4}>4 Hours</option>
+                  </select>
+                  {/* <label htmlFor='endTime'>End Time: </label>
+                    <Datetime 
+                      value={game.endDate} 
+                      onChange={(e) => this.handleChange(e,'endDate')} 
+                      dateFormat={false}
+                    />             */}
+                </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="location">Location: </label>
+                  <select
+                    className="form-control"
+                    name="location"
+                    id="location"
+                    required
+                    value={game.location}
+                    onChange={this.handleChange}
+                  >
+                    <option />
+                    {arenaNames}
+                  </select>
                 </div>
               </div>
-            )}
-            {this.state.type === "private" && (
-              <div className="form-group col-md-4">
-                <div className="form-check">
+              <div className="row">
+                <div className="form-group col-md-6">
+                  <label htmlFor="name">Game Name: </label>
                   <input
-                    type="checkbox"
-                    className="form-check-input"
-                    name="privateNotifyAll"
-                    id="privateNotifyAll"
-                    checked={game.privateNotifyAll}
+                    className="form-control"
+                    type="text"
+                    name="name"
+                    id="name"
+                    required
+                    value={game.name}
                     onChange={this.handleChange}
                   />
-                  <label
-                    className="form-check-label"
-                    htmlFor="privateNotifyAll"
-                  >
-                    Convert to Public if Not Full{" "}
+                </div>
+                <div className="form-group col-md-3">
+                  <label htmlFor="maxPlayers">Player Cap: </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="maxPlayers"
+                    id="maxPlayers"
+                    min={1}
+                    value={game.maxPlayers}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </div>
+                <div className="form-group col-md-3">
+                  <label htmlFor="goalieCount">Goalie Cap: </label>
+                  <input
+                    className="form-control"
+                    type="number"
+                    name="goalieCount"
+                    id="goalieCount"
+                    min={0}
+                    value={game.goalieCount}
+                    onChange={this.handleChange}
+                    required
+                  />
+                </div>
+              </div>
+            </TabPanel>
+            <TabPanel>
+              <div className="row">
+                <div className="form-group col-md-4">
+                  <label htmlFor="type">
+                    Skill Level:{' '}
                     <i
                       className="fas fa-info-circle"
-                      style={{ color: "#c0c0c0", marginLeft: "10px" }}
-                      data-tip="If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster."
+                      style={{ color: '#c0c0c0', marginLeft: '10px' }}
+                      data-tip="Hover over each option to see what it means."
+                      onClick={this.showSkillLevels}
                     />
                   </label>
+                  <select
+                    className="form-control"
+                    name="skillLevel"
+                    id="skillLevel"
+                    value={game.skillLevel}
+                    onChange={this.handleChange}
+                    required
+                  >
+                    <option value="" />
+                    {skillLevels.map((l, i) => (
+                      <option
+                        value={i + 1}
+                        title={l.description}
+                        data-tip={l.description}
+                      >
+                        {l.level}
+                      </option>
+                    ))}
+                  </select>
                 </div>
+                <div className="form-group col-md-6">
+                  <label htmlFor="type">
+                    Type:{' '}
+                    <i
+                      className="fas fa-info-circle"
+                      style={{ color: '#c0c0c0', marginLeft: '10px' }}
+                      data-tip="<h5 style=&quot;text-align:center;&quot;>What&apos;s the difference between public and private?</h5><p>Public games can be viewed and joined by the entire HC community; private games are invite-only.</p>"
+                    />
+                  </label>
+                  <select
+                    className="form-control"
+                    name="type"
+                    id="type"
+                    value={game.type}
+                    onChange={this.handleChange}
+                    required
+                  >
+                    <option value="" />
+                    <option value="public">Public</option>
+                    <option value="private">Private</option>
+                  </select>
+                </div>
+                {this.state.type === 'public' && (
+                  <div className="form-group col-md-4">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        name="inviteFriends"
+                        id="inviteFriends"
+                        checked={game.inviteFriends}
+                        onChange={this.handleChange}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="inviteFriends"
+                      >
+                        Invite Friends?{' '}
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {this.state.type === 'private' && (
+                  <div className="form-group col-md-4">
+                    <div className="form-check">
+                      <input
+                        type="checkbox"
+                        className="form-check-input"
+                        name="privateNotifyAll"
+                        id="privateNotifyAll"
+                        checked={game.privateNotifyAll}
+                        onChange={this.handleChange}
+                      />
+                      <label
+                        className="form-check-label"
+                        htmlFor="privateNotifyAll"
+                      >
+                        Convert to Public if Not Full{' '}
+                        <i
+                          className="fas fa-info-circle"
+                          style={{ color: '#c0c0c0', marginLeft: '10px' }}
+                          data-tip="If this is checked and the game is not full 24 hours before skate time, we will send an invite to local skaters to come fill out your roster."
+                        />
+                      </label>
+                    </div>
+                  </div>
+                )}
+                {this.state.type === 'private' ||
+                  (this.state.inviteFriends && (
+                    <>
+                      <div className="form-group col-md-12">
+                        <label htmlFor="emailList">
+                          Paste your friends' emails here. Don't worry if there
+                          are duplicates or extra stuff in there; we'll figure
+                          it out for you.
+                        </label>
+                        <textarea
+                          rows={6}
+                          className="form-control"
+                          name="emailList"
+                          id="emailList"
+                          onChange={this.handleChange}
+                          defaultValue={this.props.user.profile.emailList}
+                        />
+                      </div>
+                      <ReactTooltip html={true} />
+                    </>
+                  ))}
               </div>
-            )}
-            {this.state.type === "private" ||
-              (this.state.inviteFriends && (
-                <>
-                  <div className="form-group col-md-12">
-                    <label htmlFor="emailList">
-                      Paste your friends' emails here. Don't worry if there are
-                      duplicates or extra stuff in there; we'll figure it out
-                      for you.
-                    </label>
-                    <textarea
-                      rows={6}
+            </TabPanel>
+            <TabPanel>
+              <div className="row">
+                <div className="form-group col-md-6">
+                  <label htmlFor="costPerPlayer">Cost Per Player: </label>
+                  <div>
+                    <Icon className="fas fa-dollar-sign" />
+                    <input
+                      style={{ maxWidth: '100px', paddingLeft: '20px' }}
                       className="form-control"
-                      name="emailList"
-                      id="emailList"
+                      type="number"
+                      name="costPerPlayer"
+                      id="costPerPlayer"
+                      min={0}
+                      value={game.costPerPlayer}
                       onChange={this.handleChange}
-                      defaultValue={this.props.user.profile.emailList}
+                      required
                     />
                   </div>
-                  <ReactTooltip html={true} />
-                </>
-              ))}
-            <div className="form-group col-md-12">
-              <label htmlFor="comment">Organizer Note: </label>
-              <textarea
-                rows={6}
-                className="form-control"
-                name="comment"
-                id="comment"
-                onChange={this.handleChange}
-                value={game.comment}
-              />
-            </div>
-          </div>
-          <div className="buttons-section" style={{ textAlign: "center" }}>
-            <button type="submit" className="btn btn-primary">
-              {buttonText}
-            </button>
+                  {costMessage}
+                </div>
+                <CheckboxContainer className="form-group col-md-6">
+                  <div className="form-check">
+                    <input
+                      type="checkbox"
+                      className="form-check-input"
+                      name="payAtDoor"
+                      id="payAtDoor"
+                      checked={game.payAtDoor}
+                      onChange={this.handleChange}
+                    />
+                    <label className="form-check-label" htmlFor="payAtDoor">
+                      Allow Pay at the Door{' '}
+                      <i
+                        className="fas fa-info-circle"
+                        style={{ color: '#c0c0c0', marginLeft: '10px' }}
+                        data-tip="Allow players to pay when they show up."
+                      />
+                    </label>
+                  </div>
+                </CheckboxContainer>
+              </div>
+              <div className="row">
+                <div className="form-group col-md-12">
+                  <label htmlFor="comment">Organizer Note: </label>
+                  <textarea
+                    rows={6}
+                    className="form-control"
+                    name="comment"
+                    id="comment"
+                    onChange={this.handleChange}
+                    value={game.comment}
+                  />
+                </div>
+              </div>
+            </TabPanel>
+            <StyledTabList>
+              <StyledTab>
+                <i className="fas fa-circle" />
+              </StyledTab>
+              <StyledTab>
+                <i className="fas fa-circle" />
+              </StyledTab>
+              <StyledTab>
+                <i className="fas fa-circle" />
+              </StyledTab>
+            </StyledTabList>
+          </StyledTabs>
+          <div className="buttons-section" style={{ textAlign: 'center' }}>
+            {currentTab === 2 ? (
+              <button type="submit" className="btn btn-primary">
+                {buttonText}
+              </button>
+            ) : (
+              <button className="btn btn-success" onClick={this.nextTab}>
+                <span>Next</span>
+                <i
+                  className="fas fa-arrow-right"
+                  style={{ marginLeft: '10px' }}
+                />
+              </button>
+            )}
             {!isNew && (
               <button className="btn btn-danger" onClick={this.cancelGame}>
                 Cancel Game

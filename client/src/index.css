@@ -4,16 +4,24 @@ body {
   font-family: 'Open Sans', sans-serif;
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: 'Poppins', sans-serif;
 }
 
-a, a:active, a:visited, a:hover {
+a,
+a:active,
+a:visited,
+a:hover {
   text-decoration: none;
 }
 
 .container-fluid {
-  animation: hcFadeIn .6s ease-in-out;
+  animation: hcFadeIn 0.6s ease-in-out;
   min-height: 75vh;
 }
 
@@ -25,20 +33,22 @@ a, a:active, a:visited, a:hover {
   border: none;
 }
 
-.nav-link, .nav-item {
-  color: rgba(255,255,255,0.9);
+.nav-link,
+.nav-item {
+  color: rgba(255, 255, 255, 0.9);
   font-size: 32px;
-  
 }
 
 @media (min-width: 801px) {
-  .nav-link, .nav-item {
+  .nav-link,
+  .nav-item {
     font-size: 18px;
   }
 }
 
-.nav-link:hover, .nav-item:hover {
-  color: rgba(255,255,255,0.7);
+.nav-link:hover,
+.nav-item:hover {
+  color: rgba(255, 255, 255, 0.7);
 }
 
 .btn {
@@ -52,14 +62,14 @@ a, a:active, a:visited, a:hover {
 }
 
 .btn-danger {
-  background: #C4252D;
+  background: #c4252d;
 }
 
 .message {
-  margin: 10px; 
-  max-width: 400px; 
-  padding: 10px; 
-  border-radius: 5px; 
+  margin: 10px;
+  max-width: 600px;
+  padding: 10px;
+  border-radius: 5px;
   color: white;
 }
 
@@ -79,15 +89,19 @@ a, a:active, a:visited, a:hover {
   background: rgba(255, 159, 97, 0.8);
 }
 
-table.table-hover td:hover{
+table.table-hover td:hover {
   cursor: pointer;
 }
 
 .ReactModal__Overlay {
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0, 0, 0, 0.7);
 }
 
 @keyframes hcFadeIn {
-from {opacity: 0;}
-to {opacity: 1;}
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
