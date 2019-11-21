@@ -14,7 +14,7 @@ import Upload from './Upload';
 import PasswordReset from './PasswordReset';
 import PrivacyPolicy from './PrivacyPolicy';
 import TermsConditions from './TermsConditions';
-import {CancellationPolicy} from './CancellationPolicy';
+import { CancellationPolicy } from './CancellationPolicy';
 import ScrollToTop from './ScrollToTop';
 import './animations.css';
 
@@ -26,24 +26,32 @@ class App extends Component {
           <ScrollToTop>
             <Navigation />
             <Switch>
-              <Route exact path='/' component={Home} />
-              <Route exact path='/login' component={LoginRegister} />
-              <Route exact path='/login/:id' component={LoginRegister} />
-              <Route exact path='/register' component={LoginRegister} />
-              <Route exact path='/profile' component={Profile} />
-              <Route exact path='/games' component={GamesList} />
-              <Route exact path='/venues' component={VenuesList} />
-              <Route exact path='/newgame' component={GameDetail} />
-              <Route exact path='/newgame/:venue' component={GameDetail} />
-              <Route exact path='/game/join/:id' render={() => <GamesList openModal={'payment-modal'} />} />
-              <Route exact path='/game/:id/edit' component={GameDetail} />} />
-              <Route exact path='/admin' component={AdminDashboard} />
-              <Route exact path='/admin/upload' component={Upload} />
-              <Route exact path='/reset/:token' component={PasswordReset} />
-              <Route exact path='/privacy' component={PrivacyPolicy} />
-              <Route exact path='/terms' component={TermsConditions} />
-              <Route exact path='/cancellation-policy' component={CancellationPolicy} />
-              <Route path='*' component={NotFound} />
+              <Route exact path="/" component={Home} />
+              <Route exact path="/login" component={LoginRegister} />
+              <Route exact path="/login/:id" component={LoginRegister} />
+              <Route exact path="/register" component={LoginRegister} />
+              <Route exact path="/profile" component={Profile} />
+              <Route exact path="/games" component={GamesList} />
+              <Route exact path="/venues" component={VenuesList} />
+              <Route exact path="/newgame" component={GameDetail} />
+              <Route exact path="/newgame/:venue" component={GameDetail} />
+              <Route
+                exact
+                path="/game/join/:id"
+                render={() => <GamesList openModal={'payment-modal'} />}
+              />
+              <Route exact path="/game/:id/edit" component={GameDetail} />} />
+              <Route exact path="/admin" component={AdminDashboard} />
+              <Route exact path="/admin/upload" component={Upload} />
+              <Route exact path="/reset/:token" component={PasswordReset} />
+              <Route exact path="/privacy" component={PrivacyPolicy} />
+              <Route exact path="/terms" component={TermsConditions} />
+              <Route
+                exact
+                path="/cancellation-policy"
+                component={CancellationPolicy}
+              />
+              <Route path="*" component={NotFound} />
             </Switch>
             <Footer />
           </ScrollToTop>
