@@ -8,7 +8,7 @@
   "dependencies": {
     "@distantbluesoftware/dbsutil": "^1.1.3",
     "@paypal/checkout-server-sdk": "^1.0.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "bcrypt-nodejs": "^0.0.3",
     "cors": "^2.8.4",
     "cron": "^1.4.1",
