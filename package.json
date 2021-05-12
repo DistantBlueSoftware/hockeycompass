@@ -21,7 +21,7 @@
     "moment-timezone": "^0.5.23",
     "mongoose": "^5.2.9",
     "nexmo": "^2.3.2",
-    "nodemailer": "^4.6.8",
+    "nodemailer": "^6.4.16",
     "nodemailer-mailgun-transport": "^1.4.0",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",
