@@ -18,7 +18,7 @@
     "heroku-ssl-redirect": "^0.0.4",
     "jwt-simple": "^0.5.1",
     "moment": "^2.22.2",
-    "moment-timezone": "^0.5.23",
+    "moment-timezone": "^0.5.35",
     "mongoose": "^5.2.9",
     "nexmo": "^2.3.2",
     "nodemailer": "^4.6.8",
